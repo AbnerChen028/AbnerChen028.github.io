@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://abnerchen028.github.io/"/>
-  <updated>2017-06-13T03:16:37.000Z</updated>
+  <updated>2017-09-25T14:22:20.000Z</updated>
   <id>https://abnerchen028.github.io/</id>
   
   <author>
@@ -16,57 +16,449 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="https://abnerchen028.github.io/2017/06/13/hello-world/"/>
-    <id>https://abnerchen028.github.io/2017/06/13/hello-world/</id>
-    <published>2017-06-13T03:16:37.000Z</published>
-    <updated>2017-06-13T03:16:37.000Z</updated>
+    <title>regix</title>
+    <link href="https://abnerchen028.github.io/2017/09/25/regix/"/>
+    <id>https://abnerchen028.github.io/2017/09/25/regix/</id>
+    <published>2017-09-25T14:14:27.000Z</published>
+    <updated>2017-09-25T14:22:20.000Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+    <content type="html"><![CDATA[<p>#正则表达式学习笔记</p>
+<p><a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">学习地址</a></p>
+<h2 id="1-元字符"><a href="#1-元字符" class="headerlink" title="1.元字符"></a>1.元字符</h2><p>常用元字符表达</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">元字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">.</td>
+<td>匹配除换行符意外的任意字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\w</td>
+<td>匹配字幕或数字或下划线或汉字</td>
+</tr>
+<tr>
+<td style="text-align:center">\s</td>
+<td>匹配任意的空白符</td>
+</tr>
+<tr>
+<td style="text-align:center">\d</td>
+<td>匹配数字</td>
+</tr>
+<tr>
+<td style="text-align:center">\b</td>
+<td>匹配单词的开始或结束</td>
+</tr>
+<tr>
+<td style="text-align:center">^</td>
+<td>匹配字符串的开始</td>
+</tr>
+<tr>
+<td style="text-align:center">$</td>
+<td>匹配字符串的结束</td>
+</tr>
+</tbody>
+</table>
+<p>###关键词 <code>\b</code><br>该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符号或者换行来分隔的，但是\b并不匹配这些单词分隔字符中的任何一个，它只匹配一个位置。</p>
+<ul>
+<li>查找一个词</li>
+</ul>
+<p>例如：查找<code>hi</code>关键词<br>表达式： <code>hi</code></p>
+<ul>
+<li>精确查找一个词，不会查询出<code>him</code>、<code>history</code>等关键词</li>
+</ul>
+<p>例如：精确查找<code>hi</code>关键词<br>表达式： <code>\bhi\b</code></p>
+<p>###关键词 <code>*</code></p>
+<ul>
+<li>例如表达式：<code>\bhi\b.*\bLucy\b</code>表示<strong>先是一个单词hi,然后是任意个任意字符(但不能是换行)，最后是Lucy这个单词。</strong></li>
+</ul>
+<p>###关键词 <code>\d</code></p>
+<p><code>\d</code>表示匹配数字（0～9），后面可以通过大括号表示长度。</p>
+<ul>
+<li>匹配一个表示号码的字符串<br>表达式：<code>0\d\d-\d\d\d\d\d\d\d\d</code><br>表示以0开头，后面跟两个数字，接着是一个连接符<code>-</code>，后面是8位的数字。<br>该表达式也可以使用如下表示：<code>0\d{2}-\d{8}</code></li>
+</ul>
+<p>###字符转义<br>如果要查找的字符串本身还有元字符的情况下需要用到转义，这里的转移和iOS一直，直接使用转义符<code>\</code>来实现。例如要查找<code>abc.com</code>，那么语法应该为<code>abc\.com</code>。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><ul>
+<li><p><code>\ba\w*\b</code>:匹配以字母<code>a</code>开头的单词。 先是以字母开头，然后是任意数量的字符或者数字。</p>
+</li>
+<li><p><code>\d+</code>： 表示匹配一个或者多个连续的数字，这里<code>+</code>和<code>*</code>类似，不同的是<code>*</code>匹配任意次，可以为0，而<code>+</code>则匹配至少一次。</p>
+</li>
+<li><p><code>\b\w{6}\b</code>:匹配刚好长度为6的单词。</p>
+</li>
+<li><p><code>^\d{5,12}$</code>:长度介于5～12的数字</p>
+</li>
+</ul>
+<h2 id="2-重复"><a href="#2-重复" class="headerlink" title="2.重复"></a>2.重复</h2><p>前面已经结合元字符了解过部分表示重复的表达式了。这里做一个小总结</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">语法</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">*</td>
+<td style="text-align:left">重复零次或多次</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td style="text-align:left">重复一次或多次</td>
+</tr>
+<tr>
+<td style="text-align:left">?</td>
+<td style="text-align:left">重复零次或一次</td>
+</tr>
+<tr>
+<td style="text-align:left">{n}</td>
+<td style="text-align:left">重复n次</td>
+</tr>
+<tr>
+<td style="text-align:left">{n,}</td>
+<td style="text-align:left">重复n次或更多次</td>
+</tr>
+<tr>
+<td style="text-align:left">{n,m}</td>
+<td style="text-align:left">重复n到m次</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-字符类"><a href="#3-字符类" class="headerlink" title="3.字符类"></a>3.字符类</h2><p>除了系统预留的字母数字字符集合的元字符，我们还可以自定义集合。例如，我们要匹配元音字母就可以如下方式表示:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[aeiou]</div></pre></td></tr></table></figure>
+<p>如果要匹配标点符号就可以用下面的方式表达：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[,.!]</div></pre></td></tr></table></figure>
+<p>也可以制定一个符号的范围：<code>[0-9]</code>代表的含义等同于<code>\d</code><br><code>[a-z0-9A-Z]</code>也等用于<code>\w</code></p>
+<p>复杂表达式解读：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\(?0\d&#123;2&#125;[) -]?\d&#123;8&#125;</div></pre></td></tr></table></figure>
+<p>首先，开头转义符<code>\</code>,<code>?</code>表示可能出现零次或者一次，也就是说<code>(</code>符号可能出现。后面是字符<code>0</code>。接着是两位数字。后面是一个集合<code>[)-]</code>，但是后面的<code>?</code>表示有可能出现，最后是8位数字。这样可以匹配到的数据格式如下:</p>
+<ul>
+<li>(010)12345678</li>
+<li>010-12345678</li>
+<li>01012345678</li>
+</ul>
+<h2 id="4-分支条件"><a href="#4-分支条件" class="headerlink" title="4.分支条件"></a>4.分支条件</h2><p>在我们正常的编程中存在if … else 和 switch 语法来匹配不同条件下的实现，在正则中也存在分支编程。在字符类中，复杂表达式的解读中会存在一个问题，就是该正则表达式会匹配到<code>0102345678</code> 或者 <code>010-12345678</code>这类的不正确格式。为防止此类问题的出现我们就可以通过分支语法来实现。</p>
+<ul>
+<li><code>0\d{2}-\d{8}|0\d{3}-\d{7}</code>:表示可以匹配<code>010-12345678</code>，也可以匹配<code>0123-1234567</code>类型的数据。</li>
+<li><code>\(?0\d{2}\)?[- ]?\d{8}|0\d{2}[- ]?\d{8}</code>：该语法是对第三部分表达式的完善。</li>
+</ul>
+<p>注意：使用分支语法的时候，从左到右，匹配到某个分支之后，后面的分支不在匹配。</p>
+<h2 id="5-分组"><a href="#5-分组" class="headerlink" title="5.分组"></a>5.分组</h2><p>例如要匹配一个IP地址，简单的我们可以通过以下表达式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(\d&#123;1,3&#125;\.)&#123;3&#125;\d&#123;1,3&#125;</div></pre></td></tr></table></figure>
+<p>这个表达式可以匹配出一个IP地址。但是，也可能匹配出<code>123.234.345.456</code>这类非正确IP地址来，也会将<code>1.2.3.4</code>这类的IP给遗漏，这里我们就需要使用分组来实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">((2[0-4]\d|25[0-5]|[01]?\d\d?)\.)&#123;3&#125;(2[0-4]\d|25[0-5]|[01]?\d\d?)</div></pre></td></tr></table></figure>
+<p>下面来解读该语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(2[0-4]\d|25[0-5]|[01]?\d\d?)\.</div></pre></td></tr></table></figure>
+<p>首先，该语句为三个分支：</p>
+<ul>
+<li>开头为<code>2</code>的情况下，第二位可以为<code>0～4</code>，第三位随意。</li>
+<li>开头为<code>25</code>的情况下，地三位可以为<code>0～5</code>。</li>
+<li>开头为 <code>0</code>或<code>1</code>的情，第二位随意，第三位可选。或者第一位是空，第二位<code>0~9</code>,第三位为空。</li>
+</ul>
+<p>这样，这个数字就被限定在了<code>0~255</code>之间。然后循环三次，再添加一位不带<code>.</code>，就能保证匹配出来的IP是正确的。</p>
+<h2 id="6-反义"><a href="#6-反义" class="headerlink" title="6.反义"></a>6.反义</h2><p>在查询不属于某个能简单定义的字符类的字符的时候，比如要想查询除了数字意外的语句，就能用到反义了。</p>
+<p>常见的反义代码</p>
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\W</td>
+<td>匹配任意不是字母、数字、下划线、汉字的字符</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任意不是空白字符的字符</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配任意非数字的字符</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>匹配除了单词开头或结束的位置</td>
+</tr>
+<tr>
+<td>[\^x]</td>
+<td>匹配除x以外的任意字符 <strong>备注</strong></td>
+</tr>
+<tr>
+<td>[\^aeiou]</td>
+<td>匹配除了aeiou以外的任意字符 <strong>备注</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong>：在使用的时候请去掉<code>\</code>，因为在<code>markdown</code>下会被默认解析为 [^x]</p>
+<p>##7.正则表达式在iOS开发中应用</p>
+<ul>
+<li>验证数据的有效性</li>
+</ul>
+<p>例如在iOS中，要检测用户注册输入的密码是否满足需求：<br>当前要求用户输入的密码包含数组和字母组合，长度为6～18位：</p>
+<p>首先为NSString写一个分类方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (BOOL)validataForPWD&#123;</div><div class="line">    NSString *regxp = @&quot;^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]&#123;6,18&#125;$&quot;;</div><div class="line">    NSPredicate *predicate = [NSPredicate predicateWithFormat:@&quot;SELF MATCHES %@&quot;,regxp];</div><div class="line">    return [predicate evaluateWithObject:self];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调用的时候使用下方法调用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BOOL result = [@&quot;cwtest123&quot; validataForPWD]</div></pre></td></tr></table></figure>
+<ul>
+<li><p>批量修改代码：<br>如果代码中需要批量修改的地方，可以借助<code>Xcode</code>中的查找查找替换功能完成：<br>例如，</p>
+</li>
+<li><p><del>数据筛选(iOS中为谓词)</del><br>一个数组peronArray中存储这多个<code>Person</code>对象，每一个<code>Person</code>对象有个年龄属性。<br>现在要筛选出年龄大于30的对象：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NSPredicate *pre = [NSPredicate predicateWithFormat:@&quot;self.age &gt; 30&quot;];</div><div class="line">NSArray *result = [personArray filteredArrayUsingPredicate:pre];</div></pre></td></tr></table></figure>
+<p>result中存储的即为年龄大于30的对象。</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      &lt;p&gt;#正则表达式学习笔记&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://deerchao.net/tutorials/regex/regex.htm&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;学习地址&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;1-元字符&quot;&gt;&lt;a h
     
     </summary>
+    
+      <category term="iOS开发" scheme="https://abnerchen028.github.io/categories/iOS%E5%BC%80%E5%8F%91/"/>
     
     
   </entry>
   
   <entry>
-    <title>测试一下博客</title>
-    <link href="https://abnerchen028.github.io/2017/05/10/%E5%BE%AE%E6%9C%8D%E7%AE%A1%E5%AE%B6%E9%83%A8%E7%BD%B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E8%A6%81%E6%B1%82/"/>
-    <id>https://abnerchen028.github.io/2017/05/10/微服管家部署环境配置要求/</id>
-    <published>2017-05-10T08:13:03.000Z</published>
-    <updated>2017-06-13T14:40:32.000Z</updated>
+    <title>Apple审核中的服务器IPv6解决</title>
+    <link href="https://abnerchen028.github.io/2017/07/10/iOSIPv6/"/>
+    <id>https://abnerchen028.github.io/2017/07/10/iOSIPv6/</id>
+    <published>2017-07-10T01:51:00.000Z</published>
+    <updated>2017-07-12T08:04:13.000Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="微服管家部署环境配置要求"><a href="#微服管家部署环境配置要求" class="headerlink" title="微服管家部署环境配置要求"></a>微服管家部署环境配置要求</h1><ol>
-<li><p>服务器配置：</p>
-<p> |版本|核心数|内存|磁盘大小|<br> |:-:|:-:|:-:|:-:|<br> |Windows Server / 2012 R2 x86_64 (64bit)|4核|8GB|500GB|<br><br></p>
+    <content type="html"><![CDATA[<p>苹果早在在2016年6月1号的时候支持<code>IPv6</code>，当时将<code>App</code>里面的第三方SDK升级了一下，然后在本地搭建了一个<code>IPv6</code>环境进行测试了一下没问题就认为OK了，直到最近提交市场审核才意识到没那么简单。搞了一个周，前两天项目顺利上线，遂记录下整个流程以备使用。这里不在阐述<code>iOS</code>端的<code>IPv6</code>的兼容，主要是服务器的兼容。</p>
+<p>目前服务器兼容<code>IPv6</code>大概有三种方法：</p>
+<ul>
+<li>服务器配置真实<code>IPv6</code>地址；</li>
+<li>通过<code>IPv6</code>隧道来实现<code>IPv6</code>的访问。可参考<a href="http://www.jianshu.com/p/6de46c07f040" target="_blank" rel="external">博客</a>；</li>
+<li>通过带有<code>IPv6</code>地址的服务器做一个反向代理，将数据转移到自己真实的服务器上。</li>
+</ul>
+<p>由于国内的网络环境，使用第一种方式显得不切实际。第二种方式基本上都是使用的<code>HE</code>隧道来搭建，免费便捷，但是需要服务器去配合。我们自己使用的是第三种方式，所有的东西都是自己的，用着比较放心。实现的思路是购买一个带有<code>IPv6</code>的<code>VPS</code>，通过<code>nginx</code>反向代理将<code>VPS</code>上的数据解析到真实的<code>IPv4</code>服务器上，以满足<code>Apple</code>审核的要求。</p>
+<h1 id="服务器设置"><a href="#服务器设置" class="headerlink" title="服务器设置"></a>服务器设置</h1><h2 id="1-购买服务器"><a href="#1-购买服务器" class="headerlink" title="1. 购买服务器"></a>1. 购买服务器</h2><p>第一步购买一个带有<code>IPv6</code>地址的<code>VPS</code>，我选择的是搬瓦工<code>VPS</code>，推荐<a href="https://bwh1.net/cart.php?a=confproduct&amp;i=2" target="_blank" rel="external">配置</a>，购买时候务必看清是否支持<code>IPv6</code>：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998316138233.jpg" alt=""><br>然后选择购买的时长和服务器位置，最后点击加入购物车。然后进入购物车，在支付之前可以到网上搜索一下优惠码，还能优惠6%左右。</p>
+<h2 id="2-添加IPv6"><a href="#2-添加IPv6" class="headerlink" title="2. 添加IPv6"></a>2. 添加<code>IPv6</code></h2><p>购买之后选择在首页选择<code>Client Area</code> -&gt; <code>Services</code> -&gt; <code>My Services</code>，可以看到自己购买的额服务器，然后点击<code>Kiwivm Control Panel</code>，进入管理界面。选择<code>IPv6 Addresses</code>：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998402174133.jpg" alt=""><br>然后根据提示添加<code>IPv6</code>即可。</p>
+<h2 id="3-安装nginx"><a href="#3-安装nginx" class="headerlink" title="3. 安装nginx"></a>3. 安装<code>nginx</code></h2><p>控制面板自带的<code>Shell</code>用着相当费劲，不建议使用。强烈推荐使用<code>iTerm</code>或者<code>Terminal</code>。<code>ssh</code>登录账号密码以及端口号在<code>Main controls</code>中查看。<br><code>nginx</code>以<code>1.7.4</code>版本为例。</p>
+<p>首先安装变异工具以及库文件，<code>VPS</code>默认不带这些配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install gcc gcc-c++  pcre-devel  openssl-devel</div></pre></td></tr></table></figure>
+<p>下载<code>nginx</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget http://nginx.org/download/nginx-1.7.4.tar.gz</div></pre></td></tr></table></figure>
+<p>解压文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zxvf nginx-1.7.4.tar.gz</div></pre></td></tr></table></figure>
+<p>进入安装包目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd  nginx-1.7.4</div></pre></td></tr></table></figure>
+<p>编译nginx：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-ipv6</div></pre></td></tr></table></figure>
+<p>安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<p>安装完毕之后通过命令查看版本号：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/local/nginx/sbin/nginx -v</div></pre></td></tr></table></figure>
+<p>如图所示，表示安装成功<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998438446371.jpg" alt=""></p>
+<p>通过你的IP地址访问：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998439691945.jpg" alt=""></p>
+<h2 id="4-配置服务器"><a href="#4-配置服务器" class="headerlink" title="4. 配置服务器"></a>4. 配置服务器</h2><p>进入配置文件夹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/nginx/conf</div></pre></td></tr></table></figure>
+<p>打开配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi nginx.conf</div></pre></td></tr></table></figure>
+<p>配置如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998449552219.jpg" alt=""><br>其中，第一个为自己<code>VPS</code>的<code>IPv6</code>，第二个为<code>VPS</code>的<code>IPv4</code>，当然也可以只配置<code>IPv6</code>。都配置的话方便验证配置，此时通过<code>IPv4</code>访问效果：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998454036652.jpg" alt=""><br>显示不再是<code>nginx</code>的欢迎界面，说明此时已经转移到自己的真实服务器上了。（我们公司服务器使用的<code>windows</code>的<code>IIS</code>，根据自己公司的实际情况会有不同的提示）</p>
+<p><code>location</code>里面的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">location / &#123;</div><div class="line">      proxy_pass http://国内真实服务器IPv4地址:80;</div><div class="line">      proxy_set_header HOST $host;</div><div class="line">      proxy_set_header X-Real-IP $remote_addr;</div><div class="line">      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>这里只是配置的是<code>http</code>，如果项目中使用了<code>https</code>，可以在下面https配置中添加同样的配置即可。</p>
+<h1 id="添加一个AAAA解析"><a href="#添加一个AAAA解析" class="headerlink" title="添加一个AAAA解析"></a>添加一个AAAA解析</h1><p>最后一步是为项目域名添加一个<code>AAAA</code>解析，地址为<code>VPS</code>的<code>IPv6</code>地址。然后通过<a href="http://ipv6-test.com/validate.php" target="_blank" rel="external">IPv6测试</a>进行<code>IPv6</code>兼容性测试，效果如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998466475702.jpg" alt=""><br>说明已经通过测试，此时说明服务器完成了<code>IPv6</code>的兼容。</p>
+<h1 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h1><p><code>IPv6</code>的兼容需要从两个方面去处理，首要的就是<code>App</code>端，如果不涉及底层网络的话只要保证使用的SDK为新版本基本没有问题，至于相容性都可以在其官网上查询到。另外，一块就是服务器的兼容。由于<code>VPS</code>基本集中在美国，在网络环境上会有一个延迟，由于我们的项目中使用了大量的H5和原生交互的地方，导致加载Web的超时被拒。我们的做法就是在提交审核的时候进行一个简单的说明。如果允许的话还是建议购买中国周边的服务器来做中转。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;苹果早在在2016年6月1号的时候支持&lt;code&gt;IPv6&lt;/code&gt;，当时将&lt;code&gt;App&lt;/code&gt;里面的第三方SDK升级了一下，然后在本地搭建了一个&lt;code&gt;IPv6&lt;/code&gt;环境进行测试了一下没问题就认为OK了，直到最近提交市场审核才意识到没那么简单。
+    
+    </summary>
+    
+      <category term="iOS开发" scheme="https://abnerchen028.github.io/categories/iOS%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="Apple审核" scheme="https://abnerchen028.github.io/tags/Apple%E5%AE%A1%E6%A0%B8/"/>
+    
+      <category term="IPv6" scheme="https://abnerchen028.github.io/tags/IPv6/"/>
+    
+      <category term="服务器" scheme="https://abnerchen028.github.io/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+      <category term="nginx" scheme="https://abnerchen028.github.io/tags/nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS端HTTPS中间人攻击</title>
+    <link href="https://abnerchen028.github.io/2017/05/23/https/"/>
+    <id>https://abnerchen028.github.io/2017/05/23/https/</id>
+    <published>2017-05-23T12:55:58.000Z</published>
+    <updated>2017-06-23T14:22:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/publicKeyCrytography.png" alt="publicKeyCrytography"><br>（图片来自网络）</p>
+<p>此处，Alice表示Client端，Bob表示Server端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个秘钥就是以后用来通信的钥匙。这样服务器端收到公钥加密的秘钥时就可以用私钥来解公钥从而获得秘钥。这样的话客户端和服务器端都获得了秘钥，信息交流相对是安全的。</p>
+<p>所谓的中间人攻击，证的过程中，出现了一个“中间人”拦截我们的信息，他有意想要知道你们的消息。我们将这个中间人称为Mallory。当服务器第一次给客户端发送公钥的时候，途径Mallory。Mallory知道你要进行密钥交换了，它把公钥扣了下来，假装自己是客户端，伪造了一个伪秘钥（对称加密产生的），然后用服务器发来的公钥加密了伪秘钥发还给服务器，这样服务器以为和客户端完成了密钥交换，实际上服务器是和Mallory完成了密钥交换（获得了伪秘钥）。同时Mallory假扮成服务器自行用非对称加密产生伪公钥和伪私钥，与客户端进行秘钥交换，拿到客户端发送过来的秘钥。现在客户端拿着秘钥，M拿着秘钥和为伪秘钥，服务器拿着伪秘钥，详细过程如图所示：<br><img src="http://orhh9hlxq.bkt.clouddn.com/man-in-the-middleAttack.png" alt="man-in-the-middleAttack"><br>（图片来自网络）</p>
+<p>目前各类网络工具去抓取分析数据的原理基本均是采用中间人攻击的方法来实现。下图为使用<code>Charles</code>抓取汽车之家<code>HTTPS</code>接口数据数据：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14981030708039.jpg" alt=""></p>
+<p>对于iOS开发者角度，防止中间人攻击可以从两个方面着手：</p>
+<p>第一是通讯内容本身加密，无论是走<code>http</code>还是<code>https</code>，<code>request</code>和<code>response</code>的内容本身都要先做一次加密，这样即使<code>https</code>的流量被破解，攻击者还需要再攻破一层加密算法。我们一般使用 <code>AES256</code> 对内容做加密，这里<code>AES</code>密钥的管理也有两种方式，其一是在客户端使用固定的密钥，为了加大破解的难度，我们可以对密钥本身做多次加密处理，使用时再在内存里解密出来真正的密钥。其二是每次会话都使用不同的密钥，原理类似 <code>Forward Secrecy</code>，即使流量被记录，将来被暴力破解，也能极大的增加攻击者破解的时间成本。如果为<code>Apple</code>的一个接口：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14981109907155.jpg" alt=""></p>
+<p>第二种就是大家所熟知的 ssl pinning。在客户端进行代码层面的证书校验，校验方式也有两种，一是证书本身校验，而是公钥校验。这两种方式对应到 AFNetworking 中的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">enum &#123;</div><div class="line">     AFSSLPinningModeNone,</div><div class="line">     AFSSLPinningModePublicKey,</div><div class="line">     AFSSLPinningModeCertificate,</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>证书校验是文件级别的校验，客户端只信任若干个证书文件，这些证书文件是和客户端一起打包发布的，这种处理方式要面对的一个问题证书过期问题，为了避免证书过期导致的校验失败，客户端和服务器之间需要额外存在一个证书更新机制，其实做起来也比较简单，只需要服务器下发一个特定的错误码，触发一个客户端的新证书下载流程即可。</p>
+<p>公钥校验模式可以免去上述的麻烦，公钥模式只校验证书中所包含的公钥是否匹配，即使证书过期了，只要服务器更新证书，保证公钥不变，依然能完成校验过程，但这个大前提是，服务器的公钥私钥对不能更换。</p>
+<p>比如，有些客户端做了<code>httpdns</code>，<code>http</code>请求里是<code>IP</code>地址而非域名，这样自然无法通过证书校验环节中的域名匹配，这种时候，我们需要干预证书校验的环节，比如<code>AFNetworking</code>允许我们设置<code>validatesDomainName</code>，<code>NSURLSession</code>也提供如下方法让我们对证书校验过程做一些特殊处理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler;</div></pre></td></tr></table></figure>
+<p>目前在我们项目中，采用的是第一种方案，将参数根据时间戳来加密字段，使所有字段均为不可见的状态。如果抛开<code>HTTPS</code>，在项目中数据传递也必须进行相应的保护机制，对数据进行加密或者验证是必不可少的一步。</p>
+<p>参考资料：<br><a href="https://zhuanlan.zhihu.com/p/26916851" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/26916851</a><br><a href="http://www.jianshu.com/p/56fc18937d09" target="_blank" rel="external">http://www.jianshu.com/p/56fc18937d09</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：&lt;br&gt;&lt;img src=&quot;http://orhh9hlxq.bkt.clouddn.com/publicKeyCrytography.png&quot; alt=&quot;publicKeyCrytography&quot;&gt;&lt;br&gt;（图片
+    
+    </summary>
+    
+      <category term="iOS开发" scheme="https://abnerchen028.github.io/categories/iOS%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="https" scheme="https://abnerchen028.github.io/tags/https/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS中的文件上传</title>
+    <link href="https://abnerchen028.github.io/2016/06/22/uploadfiles/"/>
+    <id>https://abnerchen028.github.io/2016/06/22/uploadfiles/</id>
+    <published>2016-06-22T14:36:58.000Z</published>
+    <updated>2017-07-10T01:36:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>由于种种原因，之前向服务器上传头像的时候是通过将图片转换成<code>Base64</code>字符串进行传递的。这种方法有很大弊端：</p>
+<ul>
+<li>图片数据转换成<code>Base64</code>数据的时候需要占用大量的资源。转换的过程会出现内存和CPU达到一个较大峰值。在一些低端机上会出现失败的情况，此种情况在安卓端显得尤为严重。</li>
+<li>另外，后台在存储的时候才用的是数据和资源分离的方案，有专门的图片服务器来负责处理和保存。在<code>App</code>服务器和图片服务器之间进行保存和传递的时候总是出现失败的情况。为了降低失败率移动端尽最大可能压缩图片，这样又导致另一个问题，图片严重失真，无法满足需求。</li>
+</ul>
+<p>基于以上两点，研究采用新的方式来上传文件。</p>
+<p>经研究，文件的上传，可以通过两中方式，也就是<code>content-type</code>类型：</p>
+<ul>
+<li>multipart/form-data</li>
+<li>application/x-www-form-urlencoded</li>
+</ul>
+<h1 id="1-multipart-form-data"><a href="#1-multipart-form-data" class="headerlink" title="1. multipart/form-data"></a>1. <code>multipart/form-data</code></h1><p><code>multipart/form-data</code>并非原始<code>HTTP</code>协议中支持的上传方法，属于<code>HTTP</code>客户端的一个扩展。常用在邮件上，可以一次向服务器上传多个附件。</p>
+<h2 id="使用AFNetworking上传方法："><a href="#使用AFNetworking上传方法：" class="headerlink" title="使用AFNetworking上传方法："></a>使用<code>AFNetworking</code>上传方法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> [manager POST:url parameters:nil constructingBodyWithBlock:^(id&lt;AFMultipartFormData&gt;  _Nonnull formData) &#123;</div><div class="line">        </div><div class="line">        // serverName：服务器接收使用的文件名,具体和后台协商</div><div class="line">        // Client.jpg: 本地上传使用的文件名</div><div class="line">        // application/octet-stream : 服务器接收需要类型（此处表示不指定类型）</div><div class="line">        [formData appendPartWithFileData:UIImageJPEGRepresentation([UIImage imageNamed:@&quot;1&quot;], 1.0) name:@&quot;serverName&quot; fileName:@&quot;Client.jpg&quot; mimeType:@&quot;application/octet-stream&quot;];</div><div class="line">        </div><div class="line">&#125; progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">    </div><div class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</div><div class="line">        </div><div class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</div><div class="line">        </div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>要传递多个资源，只需要在<code>^(id&lt;AFMultipartFormData&gt;  _Nonnull formData){}</code>中添加多个资源即可。</p>
+<p>如果服务器返回<code>code=200</code>错误,描述为：</p>
+<blockquote>
+<p>NSLocalizedDescription=Request failed: unacceptable content-type: text/plain}</p>
+</blockquote>
+<p>可以通过以下方法设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@&quot;application/json&quot;, @&quot;text/json&quot;, @&quot;text/javascript&quot;,@&quot;text/html&quot;,@&quot;text/plain&quot;, nil];</div></pre></td></tr></table></figure>
+<p>使用<code>Charles</code>查看请求内容，请求头信息如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980355211864.jpg" alt=""></p>
+<p>若需要分析更详细内容可以使用<code>Wireshark</code>来分析。</p>
+<p>开始向服务器上传文件的时候才用的是这种方式，发现到服务器无法进行解码。拿到服务器上的文件使用<code>vi</code>打开分析如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980361286591.jpg" alt=""><br>将这些信息删除以后，文件就可以正常打开了。但是，我在向服务器提交比较的数据时候，比如一个<code>pdf</code>和<code>mp3</code>文件一样带有这些信息，依然可以正常打开，此处留下一个疑问。<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980364611641.jpg" alt=""></p>
+<h1 id="2-application-x-www-form-urlencoded"><a href="#2-application-x-www-form-urlencoded" class="headerlink" title="2. application/x-www-form-urlencoded"></a>2. <code>application/x-www-form-urlencoded</code></h1><p>使用类型为上传文件的默认方式：</p>
+<p>使用<code>AFNetworing</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">NSURL *url = [NSURL URLWithString:@&quot;http://192.168.2.51:5006/ashx/UploadHandler.ashx&quot;];</div><div class="line">    </div><div class="line">NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];</div><div class="line">request.HTTPMethod = @&quot;POST&quot;;</div><div class="line">    </div><div class="line">NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@&quot;111&quot; ofType:@&quot;mp3&quot;]];</div><div class="line">        </div><div class="line">[[manager uploadTaskWithRequest:request fromData:data progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;,@(uploadProgress.fractionCompleted));</div><div class="line">&#125; completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) &#123;</div><div class="line">       </div><div class="line">    if (error) &#123;</div><div class="line">          NSLog(@&quot;error - %@&quot;,error);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;responseObject - %@&quot;,responseObject);</div><div class="line">    &#125;</div><div class="line">&#125;] resume];</div></pre></td></tr></table></figure>
+<p>使用原生<code>NSURLSession</code>方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];</div><div class="line">self.session = session;</div><div class="line">    </div><div class="line">[[session uploadTaskWithRequest:request fromData:data] resume];</div></pre></td></tr></table></figure>
+<p>在代理中监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error;</div><div class="line"></div><div class="line">- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge</div><div class="line">                                             completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler;</div><div class="line"></div><div class="line">- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session NS_AVAILABLE_IOS(7_0);</div></pre></td></tr></table></figure>
+<p>使用<code>Charles</code>查看网络请求头如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980390941948.jpg" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在后台给出具体的实施方案之后，结合上面两种方法来实现文件上传，即可轻松实现文件的上传。如果后台无法给出具体的是哪种方案，建议先尝试第二种方案。<br>另外，还是建议后台采用第一种方案来实现。可以一次性传递多个资源，而后者则无法达到。第二种方案要实现多图上传的话只能通过多线程循环调用来实现。在这一点上，还是第一种比较优雅一些。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;由于种种原因，之前向服务器上传头像的时候是通过将图片转换成&lt;code&gt;Base64&lt;/code&gt;字符串进行传递的。这种方法有很大弊端：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;图片数据转换成&lt;code&gt;Base64&lt;/code&gt;数据的时候需要占用大量的资源。转换的过程会出现内存和CPU达
+    
+    </summary>
+    
+      <category term="iOS开发" scheme="https://abnerchen028.github.io/categories/iOS%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="文件上传" scheme="https://abnerchen028.github.io/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Xcode模拟器无法联网问题的解决</title>
+    <link href="https://abnerchen028.github.io/2015/10/15/XcodeSimulatorNetError/"/>
+    <id>https://abnerchen028.github.io/2015/10/15/XcodeSimulatorNetError/</id>
+    <published>2015-10-15T13:09:39.000Z</published>
+    <updated>2017-06-23T14:03:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>今天在使用Xcode调试的时候发现不能够连接到服务器了，数据返回的<code>code</code>为<code>502</code>。<br>开始使用的时候以为是断网了但实际发现Mac是可以连接网络的。然后更换另一个项目另一个项目也无法连接到服务器。所以怀疑是项目服务器出了问题（公司所有的开发接口均为内网地址），但同事的却都可以连接到服务器。并且，我打开模拟器带的Safir的时候发现什么也打不开了。这说明我这里网络出现了问题。</p>
+<h1 id="解决方法一"><a href="#解决方法一" class="headerlink" title="解决方法一"></a>解决方法一</h1><p>关闭模拟器，重新运行项目，无法联网，方法失败。</p>
+<p>复位模拟器，重新运行项目，无法联网，方法失败。</p>
+<p>重启Mac，重新运行项目，无法联网，方法失败。</p>
+<h1 id="解决方法二"><a href="#解决方法二" class="headerlink" title="解决方法二"></a>解决方法二</h1><p>换一个思路，既然是网络出现的问题，就查看网络设置。<br>打开 <code>网络便好设置</code>,<code>ip</code> 和 <code>DNS</code> 都没问题,查看代理的时候出现了问题，如图:</p>
+<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_3.png" alt=""></p>
+<p>将选中的两项选勾掉，再次运行，成功连接服务器！</p>
+<p>分析的得知，由于工作需要，在本地配置了<code>XX-Net</code>代理软件(决非广告)，在配置属性的时候，选择了全局代理：</p>
+<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_6.png" alt=""></p>
+<p>然后将属性改为自动代理以后网络的设置：</p>
+<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_7.png" alt=""></p>
+<p>再次运行项目，联网正常！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h1&gt;&lt;p&gt;今天在使用Xcode调试的时候发现不能够连接到服务器了，数据返回的&lt;code&gt;code&lt;/code&gt;为&lt;code&gt;502&lt;/
+    
+    </summary>
+    
+      <category term="iOS开发" scheme="https://abnerchen028.github.io/categories/iOS%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="模拟器" scheme="https://abnerchen028.github.io/tags/%E6%A8%A1%E6%8B%9F%E5%99%A8/"/>
+    
+      <category term="联网失败" scheme="https://abnerchen028.github.io/tags/%E8%81%94%E7%BD%91%E5%A4%B1%E8%B4%A5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>个人搭建博客经历</title>
+    <link href="https://abnerchen028.github.io/2015/09/19/PersonFirst/"/>
+    <id>https://abnerchen028.github.io/2015/09/19/PersonFirst/</id>
+    <published>2015-09-19T08:03:45.000Z</published>
+    <updated>2017-06-23T14:03:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>个人搭建的第一个博客终于算是成型了，总体感受还是比较简单的，而且体验也不错。</p>
+<p>之前考虑过使用<code>Wordpress</code>来建站。经过考察感觉没有太大的必要，要使用<code>Wordpress</code>来建站的话，需要有自己的空间，而且需要<code>Apache</code>+<code>MySQL</code>+<code>PHP</code>。在阿里云上使用<code>XAMPP</code>已经搭建了一套服务，但是那个只是自己搞的一个测试服务器。在没有指导的情况下经常将服务器搞瘫痪。所以稳妥一点，借助<code>GitHub Pages</code>的平台最一个稳定的<code>Blog</code>吧。另外，现在有大量的<code>Blog</code>网站网站都有着不错的体验，但是和<code>Pages</code>相比又缺少一些自由。</p>
+<p>搭建<code>GitHub Pages</code>并不难，网上很多教程，这里给出一个<a href="http://www.jianshu.com/p/f66103553c45" target="_blank" rel="external">教程</a>。</p>
+<p>这里说一下我遇到的几个问题：</p>
+<ol>
+<li>搭建完毕后点击<code>分类</code>和<code>关于</code>会进入<code>404</code>页面。此处建议在跟目录上放一个自定义的<code>404</code>页面。命名为：<code>404.html</code>。</li>
+<li><p>分类页面不会自动生成。需要自己创建：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo new page categories</div></pre></td></tr></table></figure>
+<p> 然后进入到<code>Hexo/source/categories/</code>，在<code>index.md</code>中添加以下信息：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: categories</div><div class="line">type: &quot;categories&quot;</div><div class="line">comments: false</div><div class="line">---</div></pre></td></tr></table></figure>
+<p> 同理创建关于界面：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo new page about</div></pre></td></tr></table></figure>
 </li>
-<li><p>关系型数据库</p>
-<p> |版本|核心数|内存|磁盘大小|<br> |—|—|—|—|—|—|<br> |SQL Server 2008R2|4核|4096M|100GB|<br><br></p>
+<li><p>每次写完<code>Blog</code>，都需要一系列的操作。创建一个脚本文件，一个操作实现发布：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">hexo clean</div><div class="line">hexo generate</div><div class="line">cp -R public/* .deploy/xxx.github.io</div><div class="line">cd .deploy/xxx.github.io</div><div class="line"></div><div class="line">git add .</div><div class="line">git commit -m &quot;update&quot; </div><div class="line">git push   origin master</div></pre></td></tr></table></figure>
+<p> 上面的<code>xxx.github.io</code>填写自己的<code>Pages</code>地址。 </p>
 </li>
 </ol>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;微服管家部署环境配置要求&quot;&gt;&lt;a href=&quot;#微服管家部署环境配置要求&quot; class=&quot;headerlink&quot; title=&quot;微服管家部署环境配置要求&quot;&gt;&lt;/a&gt;微服管家部署环境配置要求&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;服务器配置：&lt;/p&gt;
-&lt;p&gt; |版本|核心
+      &lt;p&gt;个人搭建的第一个博客终于算是成型了，总体感受还是比较简单的，而且体验也不错。&lt;/p&gt;
+&lt;p&gt;之前考虑过使用&lt;code&gt;Wordpress&lt;/code&gt;来建站。经过考察感觉没有太大的必要，要使用&lt;code&gt;Wordpress&lt;/code&gt;来建站的话，需要有自己的空间，而且需要
     
     </summary>
     
+      <category term="杂谈" scheme="https://abnerchen028.github.io/categories/%E6%9D%82%E8%B0%88/"/>
+    
+    
+      <category term="感想" scheme="https://abnerchen028.github.io/tags/%E6%84%9F%E6%83%B3/"/>
     
   </entry>
   
