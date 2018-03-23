@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/15205885505253.jpg">
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/15210861083686.jpg">
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/15216002731583.png">
-<meta property="og:updated_time" content="2018-03-23T08:54:21.115Z">
+<meta property="og:updated_time" content="2018-03-23T09:10:30.763Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS自动化探索">
 <meta name="twitter:description" content="前提持续集成（CI）是帮助开发人员提高工作效率并编写更高质量代码的绝佳工具。每次推送提交时，自动运行测试、打包等。每个人都可以看到代码库更改的结果，并采取措施更快更轻松地进行集成。  分析关于自动化，现在有很多成熟的方案，各有优缺点，为什么我们选择使用GitLab来做自动化,下面一一分析。 Jenkins应该是最为古老的一款自动化工具，基于Java书写，在安装时候需要依赖jdk环境。跨平台、灵活自">
@@ -335,18 +335,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS开发</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS开发/工具/" itemprop="url" rel="index">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
                     <span itemprop="name">工具</span>
                   </a>
                 </span>
@@ -453,51 +442,25 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Auth: AbnerChen</div><div class="line">Message: This is change note.</div><div class="line">Date: Mon Mar 19 16:29:07 2018 +0800</div></pre></td></tr></table></figure>
 <p>其中<code>firimToken</code>为<a href="https://fir.im/" target="_blank" rel="external">firim</a>提供的<code>token</code>。<code>explist.plist</code>文件为打包配置文件，包含打包模式、证书信息等。如果不太清楚可以通过<code>Xcode 9</code>打一个包，及与<code>ipa</code>同文件夹的<code>ExportOptions.plist</code>文件。<code>only</code>选项可指定分支。</p>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在学习配置该自动化平台的时候遇到如下问题，希望能够帮助大家少走弯路：</p>
-<ol>
-<li><p>脚本验证</p>
-<p> 写<code>yml</code>需要严格按照规范来书写，否则就会导致<code>yaml invalid</code>的错误。 如果不确定是否符合规范可以到<a href="https://gitlab.com/ci/lint" target="_blank" rel="external">GitLab Lint</a>上进行校验。</p>
-</li>
-<li><p>运行环境</p>
-<p> 在配置<code>runner</code>的时候最好根据自己的系统去配置。在开始的时候，由于<code>tags</code>这块个人是随意填写的，比如：<code>iOS</code>、<code>test</code>等，在真正执行的时候，发现<code>runner</code>是执行于<code>docker</code>中，<code>docker</code>肯定是没有<code>Xcode</code>环境的，然后出现了如下错误：</p>
- <figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Running with gitlab-runner <span class="number">10.5</span>.<span class="number">0</span> (<span class="number">80</span>b03db9)</div><div class="line">on docker-auto-scale <span class="number">72989761</span></div><div class="line">Using Docker executor with image <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Pulling docker image <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Using docker image  <span class="symbol">sha256:</span>bae0455cb2b9010f134a2da3a1fba9d217506beec2d41950d151e12a3112c418 <span class="keyword">for</span> <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Running on runner-<span class="number">72989761</span>-project-<span class="number">5648111</span>-concurrent-<span class="number">0</span> via runner-<span class="number">72989761</span>-srm-<span class="number">1520251087</span>-<span class="number">3515</span>c6ac...</div><div class="line">Cloning repository...</div><div class="line">Cloning into <span class="string">'/builds/abnerchen/CIDemo'</span>...</div><div class="line">Checking out c69c33c6 as master...</div><div class="line">Skipping Git submodules setup</div><div class="line">$ xcodebuild clean -workspace CIDemo.xcworkspace -scheme CIDemo</div><div class="line">/bin/<span class="symbol">bash:</span> line <span class="number">61</span>: <span class="symbol">xcodebuild:</span> command <span class="keyword">not</span> found</div><div class="line"><span class="symbol">ERROR:</span> Job <span class="symbol">failed:</span> exit code <span class="number">1</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>运行条件</p>
-<p>其实还是因为<code>Tags</code>的问题， 在配置<code>runner</code>在过程中，有这样一步：</p>
+<h3 id="脚本验证"><a href="#脚本验证" class="headerlink" title="脚本验证"></a>脚本验证</h3><p>写<code>yml</code>需要严格按照规范来书写，否则就会导致<code>yaml invalid</code>的错误。 如果不确定是否符合规范可以到<a href="https://gitlab.com/ci/lint" target="_blank" rel="external">GitLab Lint</a>上进行校验。</p>
+<h3 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h3><p>在配置<code>runner</code>的时候最好根据自己的系统去配置。在开始的时候，由于<code>tags</code>这块个人是随意填写的，比如：<code>iOS</code>、<code>test</code>等，在真正执行的时候，发现<code>runner</code>是执行于<code>docker</code>中，<code>docker</code>肯定是没有<code>Xcode</code>环境的，然后出现了如下错误：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Running with gitlab-runner <span class="number">10.5</span>.<span class="number">0</span> (<span class="number">80</span>b03db9)</div><div class="line">on docker-auto-scale <span class="number">72989761</span></div><div class="line">Using Docker executor with image <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Pulling docker image <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Using docker image  <span class="symbol">sha256:</span>bae0455cb2b9010f134a2da3a1fba9d217506beec2d41950d151e12a3112c418 <span class="keyword">for</span> <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Running on runner-<span class="number">72989761</span>-project-<span class="number">5648111</span>-concurrent-<span class="number">0</span> via runner-<span class="number">72989761</span>-srm-<span class="number">1520251087</span>-<span class="number">3515</span>c6ac...</div><div class="line">Cloning repository...</div><div class="line">Cloning into <span class="string">'/builds/abnerchen/CIDemo'</span>...</div><div class="line">Checking out c69c33c6 as master...</div><div class="line">Skipping Git submodules setup</div><div class="line">$ xcodebuild clean -workspace CIDemo.xcworkspace -scheme CIDemo</div><div class="line">/bin/<span class="symbol">bash:</span> line <span class="number">61</span>: <span class="symbol">xcodebuild:</span> command <span class="keyword">not</span> found</div><div class="line"><span class="symbol">ERROR:</span> Job <span class="symbol">failed:</span> exit code <span class="number">1</span></div></pre></td></tr></table></figure>
+<h3 id="运行条件"><a href="#运行条件" class="headerlink" title="运行条件"></a>运行条件</h3><p>其实还是因为<code>Tags</code>的问题， 在配置<code>runner</code>在过程中，有这样一步：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Whether to run untagged jobs [true/false]</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<pre><code>此处默认是`false`，如果这里选择了默认，而`yml`文件里面`tags`设置和此处`runner`的`tags`设置不一致的情况下也会报错：无法找到合适`runner`运行该`job`。
-</code></pre><ol>
-<li><p>等待中状态处理</p>
-<p> 等待中一般可以分为多种情况</p>
+<p>此处默认是<code>false</code>，如果这里选择了默认，而<code>yml</code>文件里面<code>tags</code>设置和此处<code>runner</code>的<code>tags</code>设置不一致的情况下也会报错：无法找到合适<code>runner</code>运行该<code>job</code>。</p>
+<h3 id="等待中状态处理"><a href="#等待中状态处理" class="headerlink" title="等待中状态处理"></a>等待中状态处理</h3><p>等待中一般可以分为多种情况</p>
 <ul>
 <li>本项目上次执行任务未完成 隔断时间刷新一下可以看到最新状态</li>
 <li><p>在执行其他项目任务，此时任务被阻塞，处理方法，重启<code>runner</code>:</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gitlab-runner restart</div></pre></td></tr></table></figure>
 </li>
 </ul>
-</li>
-</ol>
-<ol>
-<li><p><code>scheme</code>找不到</p>
-<p> 在<code>Xcode</code>中操作: 依次选择 <code>Product</code> &gt; <code>Scheme</code> &gt; <code>Manage Schemes</code>，在你要处理的<code>Scheme</code>的<code>shared</code>状态选中。引用官网的一张图片：<br> <img src="http://orhh9hlxq.bkt.clouddn.com/15216002731583.png" alt=""></p>
-</li>
-</ol>
-<ol>
-<li><p>日志文件过长</p>
-<blockquote>
+<h3 id="scheme找不到"><a href="#scheme找不到" class="headerlink" title="scheme找不到"></a><code>scheme</code>找不到</h3><p>在<code>Xcode</code>中操作: 依次选择 <code>Product</code> &gt; <code>Scheme</code> &gt; <code>Manage Schemes</code>，在你要处理的<code>Scheme</code>的<code>shared</code>状态选中。引用官网的一张图片：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15216002731583.png" alt=""></p>
+<h3 id="日志文件过长"><a href="#日志文件过长" class="headerlink" title="日志文件过长"></a>日志文件过长</h3><blockquote>
 <p>Job’s log exceeded limit of 4194304 bytes.</p>
 </blockquote>
-<p> 此错误最简单的方法是将日志文件重定向到一个文件里面。<br> 例如：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- xcodebuild archive -workspace $&#123;PROJECT_NAME&#125;.xcworkspace -scheme $&#123;PROJECT_SCHEME&#125; -archivePath $&#123;OUT_PATH&#125;/$&#123;PROJECT_NAME&#125; &gt; archive.log</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
-<li>其他问题随时再更新。</li>
-</ol>
-<!--# 总结
-
-自动化是一个成熟团队工作的一个部分，开发人员将精力专注到业务上。-->
+<p>此错误最简单的方法是将日志文件重定向到一个文件里面。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- xcodebuild archive -workspace $&#123;PROJECT_NAME&#125;.xcworkspace -scheme $&#123;PROJECT_SCHEME&#125; -archivePath $&#123;OUT_PATH&#125;/$&#123;PROJECT_NAME&#125; &gt; archive.log</div></pre></td></tr></table></figure>
 <hr>
 <p><br></p>
 <p>参考资料：</p>
@@ -651,7 +614,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -704,7 +667,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前提"><span class="nav-number">1.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins"><span class="nav-number">2.1.</span> <span class="nav-text">Jenkins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastlane"><span class="nav-number">2.2.</span> <span class="nav-text">fastlane</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitLab-CI"><span class="nav-number">2.3.</span> <span class="nav-text">GitLab-CI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工作流程"><span class="nav-number">3.</span> <span class="nav-text">工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitLab-CI中的概念"><span class="nav-number">3.1.</span> <span class="nav-text">GitLab-CI中的概念:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab-ci-yml"><span class="nav-number">3.1.1.</span> <span class="nav-text">.gitlab-ci.yml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pipeline"><span class="nav-number">3.1.2.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stages"><span class="nav-number">3.1.3.</span> <span class="nav-text">Stages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gitlab-runner"><span class="nav-number">3.1.4.</span> <span class="nav-text">Gitlab-runner</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行流程"><span class="nav-number">3.2.</span> <span class="nav-text">执行流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装与使用"><span class="nav-number">4.</span> <span class="nav-text">安装与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitLab安装"><span class="nav-number">4.1.</span> <span class="nav-text">GitLab安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Runner安装："><span class="nav-number">4.1.1.</span> <span class="nav-text">Runner安装：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fir-im-cli-安装"><span class="nav-number">4.1.2.</span> <span class="nav-text">fir.im-cli 安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">4.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">4.3.</span> <span class="nav-text">注意事项</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前提"><span class="nav-number">1.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins"><span class="nav-number">2.1.</span> <span class="nav-text">Jenkins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastlane"><span class="nav-number">2.2.</span> <span class="nav-text">fastlane</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitLab-CI"><span class="nav-number">2.3.</span> <span class="nav-text">GitLab-CI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工作流程"><span class="nav-number">3.</span> <span class="nav-text">工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitLab-CI中的概念"><span class="nav-number">3.1.</span> <span class="nav-text">GitLab-CI中的概念:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab-ci-yml"><span class="nav-number">3.1.1.</span> <span class="nav-text">.gitlab-ci.yml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pipeline"><span class="nav-number">3.1.2.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stages"><span class="nav-number">3.1.3.</span> <span class="nav-text">Stages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gitlab-runner"><span class="nav-number">3.1.4.</span> <span class="nav-text">Gitlab-runner</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行流程"><span class="nav-number">3.2.</span> <span class="nav-text">执行流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装与使用"><span class="nav-number">4.</span> <span class="nav-text">安装与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitLab安装"><span class="nav-number">4.1.</span> <span class="nav-text">GitLab安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Runner安装："><span class="nav-number">4.1.1.</span> <span class="nav-text">Runner安装：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fir-im-cli-安装"><span class="nav-number">4.1.2.</span> <span class="nav-text">fir.im-cli 安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">4.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">4.3.</span> <span class="nav-text">注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本验证"><span class="nav-number">4.3.1.</span> <span class="nav-text">脚本验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行环境"><span class="nav-number">4.3.2.</span> <span class="nav-text">运行环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行条件"><span class="nav-number">4.3.3.</span> <span class="nav-text">运行条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#等待中状态处理"><span class="nav-number">4.3.4.</span> <span class="nav-text">等待中状态处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scheme找不到"><span class="nav-number">4.3.5.</span> <span class="nav-text">scheme找不到</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志文件过长"><span class="nav-number">4.3.6.</span> <span class="nav-text">日志文件过长</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
