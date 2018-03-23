@@ -1,0 +1,913 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="KVC,ValueForKeyPath," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Abner Chen" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="KVC中的集合运算符当使用KVC中的valueForKeyPath方法时，可以在路径中嵌入一个集合运算。一个集合运算符前面用@符号开头。 集合运算符组成一个完整的集合运算符包含三个部分，如图所示：  一个完整的集合运算符号分三个部分：  Left Key path Collection operator Right Key path  如果要集合对象使用该方法(例如:NSArray)可以直接省略L">
+<meta name="keywords" content="KVC,ValueForKeyPath">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KVC中的集合运算符">
+<meta property="og:url" content="https://abnerchen028.github.io/2018/01/24/valueForKeyPath/index.html">
+<meta property="og:site_name" content="Abner Chen">
+<meta property="og:description" content="KVC中的集合运算符当使用KVC中的valueForKeyPath方法时，可以在路径中嵌入一个集合运算。一个集合运算符前面用@符号开头。 集合运算符组成一个完整的集合运算符包含三个部分，如图所示：  一个完整的集合运算符号分三个部分：  Left Key path Collection operator Right Key path  如果要集合对象使用该方法(例如:NSArray)可以直接省略L">
+<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/15166984161285.jpg">
+<meta property="og:updated_time" content="2018-01-24T08:34:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KVC中的集合运算符">
+<meta name="twitter:description" content="KVC中的集合运算符当使用KVC中的valueForKeyPath方法时，可以在路径中嵌入一个集合运算。一个集合运算符前面用@符号开头。 集合运算符组成一个完整的集合运算符包含三个部分，如图所示：  一个完整的集合运算符号分三个部分：  Left Key path Collection operator Right Key path  如果要集合对象使用该方法(例如:NSArray)可以直接省略L">
+<meta name="twitter:image" content="http://orhh9hlxq.bkt.clouddn.com/15166984161285.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://abnerchen028.github.io/2018/01/24/valueForKeyPath/"/>
+
+
+
+
+
+  <title> KVC中的集合运算符 | Abner Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7e8ebd2e2ad74059479ce3f86f766bc6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Abner Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Coding Coding Coding !</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://abnerchen028.github.io/2018/01/24/valueForKeyPath/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Abner Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/imgs/16740864.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Abner Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                KVC中的集合运算符
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T16:29:51+08:00">
+                2018-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/24/valueForKeyPath/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/24/valueForKeyPath/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="KVC中的集合运算符"><a href="#KVC中的集合运算符" class="headerlink" title="KVC中的集合运算符"></a>KVC中的集合运算符</h1><p>当使用<code>KVC</code>中的<code>valueForKeyPath</code>方法时，可以在路径中嵌入一个集合运算。一个集合运算符前面用<code>@</code>符号开头。</p>
+<h1 id="集合运算符组成"><a href="#集合运算符组成" class="headerlink" title="集合运算符组成"></a>集合运算符组成</h1><p>一个完整的集合运算符包含三个部分，如图所示：</p>
+<p><img src="http://orhh9hlxq.bkt.clouddn.com/15166984161285.jpg" alt=""></p>
+<p>一个完整的集合运算符号分三个部分：</p>
+<ul>
+<li>Left Key path</li>
+<li>Collection operator</li>
+<li>Right Key path</li>
+</ul>
+<p>如果要集合对象使用该方法(例如:<code>NSArray</code>)可以直接省略<code>Left Key path</code>。<code>Right Key path</code>用来制定操作的属性。除了<code>@count</code>以外的所有集合运算符都需要指定一个正确的<code>KeyPath</code>。</p>
+<h1 id="集合运算符分类"><a href="#集合运算符分类" class="headerlink" title="集合运算符分类"></a>集合运算符分类</h1><p>集合运算符根据功能不同可分为三种：</p>
+<h2 id="聚合运算符"><a href="#聚合运算符" class="headerlink" title="聚合运算符"></a>聚合运算符</h2><p>聚合运算符以某种方式合并一个集合中的对象，并返回一个大概匹配<code>Right Key path</code>属性的对象。当不存在<code>Right Key path</code>属性时候默认返回<code>@count</code>属性。</p>
+<h2 id="数组运算符"><a href="#数组运算符" class="headerlink" title="数组运算符"></a>数组运算符</h2><p>数组运算符返回一个NSArray实例，该实例包含指定集合中的一些对象子集。</p>
+<h2 id="嵌套运算符"><a href="#嵌套运算符" class="headerlink" title="嵌套运算符"></a>嵌套运算符</h2><p>嵌套运算符处理包含其他集合的集合，并根据操作符返回一个以某种方式组合嵌套集合的对象的NSArray或NSSet实例。</p>
+<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p>首先创建一个交易对象:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Transaction</span> : <span class="title">NSObject</span></span></div><div class="line"> </div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>) <span class="built_in">NSString</span>* payee;   <span class="comment">// 收款人</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>) <span class="built_in">NSNumber</span>* amount;  <span class="comment">// 金额</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>) <span class="built_in">NSDate</span>* date;      <span class="comment">// 日期</span></div><div class="line"> </div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>一个包含多个交易对象的数组，包含以下数据:</p>
+<table>
+<thead>
+<tr>
+<th>payee</th>
+<th>amount</th>
+<th>date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Green Power</td>
+<td>$120.00</td>
+<td>Dec 1, 2015</td>
+</tr>
+<tr>
+<td>Green Power</td>
+<td>$160.00</td>
+<td>Jan 1, 2016</td>
+</tr>
+<tr>
+<td>Car Loan</td>
+<td>$180.00</td>
+<td>Feb 1, 2016</td>
+</tr>
+<tr>
+<td>Car Loan</td>
+<td>$220.00</td>
+<td>Jan 15, 2016</td>
+</tr>
+<tr>
+<td>General Cable</td>
+<td>$260.00</td>
+<td>Feb 15, 2016</td>
+</tr>
+</tbody>
+</table>
+<h2 id="聚合运算"><a href="#聚合运算" class="headerlink" title="聚合运算"></a>聚合运算</h2><p>聚合运算符可以在数组或属性集上工作，产生反映集合某些方面的单个值。</p>
+<h3 id="avg-平均数"><a href="#avg-平均数" class="headerlink" title="avg 平均数"></a>avg 平均数</h3><p>当指定@avg运算符时，valueForKeyPath：读取由集合中每个元素<code>Right Key path</code>指定的属性，将其转换为double（将nil值替换为0），并计算这些元素的算术平均值。 然后它返回存储在NSNumber实例中的结果。</p>
+<p>具体代码如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSNumber</span> *avg = [transactions valueForKeyPath:<span class="string">@"@avg.amount"</span>];</div></pre></td></tr></table></figure>
+<p>执行结果：<code>188</code>。</p>
+<h3 id="count"><a href="#count" class="headerlink" title="count"></a>count</h3><p>当您指定@count运算符时，valueForKeyPath：返回NSNumber实例中集合中的对象数。如果存在，<code>Right Key path</code>将被忽略。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSNumber</span> *count = [transactions valueForKeyPath:<span class="string">@"@count"</span>];</div></pre></td></tr></table></figure>
+<p>执行结果： <code>5</code>。</p>
+<h3 id="max-min-sum"><a href="#max-min-sum" class="headerlink" title="max / min / sum"></a>max / min / sum</h3><p>当指定@max运算符时，valueForKeyPath：在由<code>Right Key path</code>指定的属性中搜索并返回最大值，具体通过<code>compare：</code>方法对指定的属性进行排序。 因此，<code>Right Key path</code>指示的属性必须实现了<code>compare:</code>方法。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSDate</span> *latestDate = [transactions valueForKeyPath:<span class="string">@"@max.date"</span>];</div></pre></td></tr></table></figure>
+<p>此时将获取到最后一个对象的date。相同的原理还有<code>min</code>、<code>sum</code>。</p>
+<h2 id="数组运算符-1"><a href="#数组运算符-1" class="headerlink" title="数组运算符"></a>数组运算符</h2><p>数组运算符计算后返回一个特定包含原数组中部分对象的数组。</p>
+<h3 id="distinctUnionOfObjects"><a href="#distinctUnionOfObjects" class="headerlink" title="distinctUnionOfObjects"></a>distinctUnionOfObjects</h3><p>取出<code>Right Key path</code>中的值，并做去重处理，返回处理之后的数组：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *unionOfObjects = [transactions valueForKeyPath:<span class="string">@"@distinctUnionOfObjects.payee"</span>];</div></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Car Loan"</span>,</div><div class="line">    <span class="string">"General Cable"</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<h3 id="unionOfObjects"><a href="#unionOfObjects" class="headerlink" title="unionOfObjects"></a>unionOfObjects</h3><p>其作用与<code>distinctUnionOfObjects</code>类似，只是不会做去重处理:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *unionOfObjects = [transactions valueForKeyPath:<span class="string">@"@unionOfObjects.payee"</span>];</div></pre></td></tr></table></figure>
+<p>执行结果:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Car Loan"</span>,</div><div class="line">    <span class="string">"Car Loan"</span>,</div><div class="line">    <span class="string">"General Cable"</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<h2 id="嵌套操作符"><a href="#嵌套操作符" class="headerlink" title="嵌套操作符"></a>嵌套操作符</h2><p>嵌套操作符和数组运算符很相似，只是该操作符用于嵌套层。</p>
+<p>创建<code>transactions2</code>临时数据：</p>
+<table>
+<thead>
+<tr>
+<th>payee</th>
+<th>amount</th>
+<th>date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Green Power - 2</td>
+<td>$220.00</td>
+<td>Dec 1, 2015</td>
+</tr>
+<tr>
+<td>Green Power - 2</td>
+<td>$260.00</td>
+<td>Jan 1, 2016</td>
+</tr>
+<tr>
+<td>Car Loan - 2</td>
+<td>$280.00</td>
+<td>Feb 1, 2016</td>
+</tr>
+<tr>
+<td>Car Loan - 2</td>
+<td>$320.00</td>
+<td>Jan 15, 2016</td>
+</tr>
+<tr>
+<td>General Cable - 2</td>
+<td>$360.00</td>
+<td>Feb 15, 2016</td>
+</tr>
+</tbody>
+</table>
+<h3 id="distinctUnionOfArrays"><a href="#distinctUnionOfArrays" class="headerlink" title="distinctUnionOfArrays"></a>distinctUnionOfArrays</h3><p>执行以下代码：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *arrays = @[transactions, transactions2];</div><div class="line"><span class="built_in">NSArray</span> *collectedDistinctPayees = [arrays valueForKeyPath:<span class="string">@"@distinctUnionOfArrays.payee"</span>];</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(</div><div class="line">    <span class="string">"General Cable"</span>,</div><div class="line">    <span class="string">"Green Power - 2"</span>,</div><div class="line">    <span class="string">"General Cable - 2"</span>,</div><div class="line">    <span class="string">"Car Loan - 2"</span>,</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Car Loan"</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<p>单层的嵌套<code>valueForKeyPath</code>可以将所有<code>payee</code>取出并做去重处理。但是对于多层嵌套又如何那：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *arrays = @[@[transactions, transactions2], transactions];</div><div class="line"><span class="built_in">NSArray</span> *collectedDistinctPayees = [arrays valueForKeyPath:<span class="string">@"@distinctUnionOfArrays.payee"</span>];</div></pre></td></tr></table></figure>
+<p>执行结果如下:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">(</div><div class="line">    <span class="string">"General Cable"</span>,</div><div class="line">        (</div><div class="line">        <span class="string">"Green Power"</span>,</div><div class="line">        <span class="string">"Green Power"</span>,</div><div class="line">        <span class="string">"Car Loan"</span>,</div><div class="line">        <span class="string">"Car Loan"</span>,</div><div class="line">        <span class="string">"General Cable"</span></div><div class="line">        ),</div><div class="line">        (</div><div class="line">        <span class="string">"Green Power - 2"</span>,</div><div class="line">        <span class="string">"Green Power - 2"</span>,</div><div class="line">        <span class="string">"Car Loan - 2"</span>,</div><div class="line">        <span class="string">"Car Loan - 2"</span>,</div><div class="line">        <span class="string">"General Cable - 2"</span></div><div class="line">        ),</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Car Loan"</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<p>可以看出<code>valueForKeyPath</code>将数组最外层中的<code>payee</code>参数取出并做了去重处理，但是对于内层数据却没有去重。</p>
+<h3 id="unionOfArrays"><a href="#unionOfArrays" class="headerlink" title="unionOfArrays"></a>unionOfArrays</h3><p>执行以下代码：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *arrays = @[transactions, transactions2];</div><div class="line"><span class="built_in">NSArray</span> *unionOfArrays = [arrays valueForKeyPath:<span class="string">@"@unionOfArrays.payee"</span>];</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Car Loan"</span>,</div><div class="line">    <span class="string">"Car Loan"</span>,</div><div class="line">    <span class="string">"General Cable"</span>,</div><div class="line">    <span class="string">"Green Power - 2"</span>,</div><div class="line">    <span class="string">"Green Power - 2"</span>,</div><div class="line">    <span class="string">"Car Loan - 2"</span>,</div><div class="line">    <span class="string">"Car Loan - 2"</span>,</div><div class="line">    <span class="string">"General Cable - 2"</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<p>该方法直接将数组中的<code>transaction</code>对象中的<code>payee</code>全部取出。</p>
+<p>对于多层嵌套:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *arrays = @[@[transactions, transactions2], transactions];</div><div class="line"><span class="built_in">NSArray</span> *unionOfArrays = [arrays valueForKeyPath:<span class="string">@"@unionOfArrays.payee"</span>];</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">(</div><div class="line">        (</div><div class="line">        <span class="string">"Green Power"</span>,</div><div class="line">        <span class="string">"Green Power"</span>,</div><div class="line">        <span class="string">"Car Loan"</span>,</div><div class="line">        <span class="string">"Car Loan"</span>,</div><div class="line">        <span class="string">"General Cable"</span></div><div class="line">        ),</div><div class="line">        (</div><div class="line">        <span class="string">"Green Power - 2"</span>,</div><div class="line">        <span class="string">"Green Power - 2"</span>,</div><div class="line">        <span class="string">"Car Loan - 2"</span>,</div><div class="line">        <span class="string">"Car Loan - 2"</span>,</div><div class="line">        <span class="string">"General Cable - 2"</span></div><div class="line">        ),</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Green Power"</span>,</div><div class="line">    <span class="string">"Car Loan"</span>,</div><div class="line">    <span class="string">"Car Loan"</span>,</div><div class="line">    <span class="string">"General Cable"</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<p><code>unionOfArrays.payee</code>按照文件夹的顺序将<code>payeee</code>参数取出。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><ul>
+<li>聚合运算类可以对数据进行计算，例如平均数、总数、最大、最小计算等。其中最大最小值的获取需要属性实现<code>compare:</code>方法。 其他方法需要属性是Number型数据。</li>
+<li>数组运算符中，<code>distinctUnionOfObjects</code>可以获取到数组中的对象属性全部取出并且做去重处理。假如数组两层嵌套用该方法不会将嵌套中的数据做去重处理。<code>unionOfObjects</code>只会取出数组中的数据不做去重处理。</li>
+<li>嵌套操作符<code>distinctUnionOfArrays</code>可以是对<code>distinctUnionOfObjects</code>方法的一个完善。对于两层嵌套数据可以取出属性并做去重处理，对于多于两层的嵌套，内部数据将不再做去重去里。在这里<code>unionOfObjects</code>和<code>unionOfArrays</code>处理结果一致。</li>
+</ul>
+<p>Demo：<a href="https://github.com/AbnerChen028/ValueForKeyPath.git" target="_blank" rel="external">Github</a></p>
+<p>参考：<a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/KeyValueCoding/CollectionOperators.html#//apple_ref/doc/uid/20002176-SW3" target="_blank" rel="external">Key-Value Coding Programming Guide</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/KVC/" rel="tag"># KVC</a>
+          
+            <a href="/tags/ValueForKeyPath/" rel="tag"># ValueForKeyPath</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/02/loadinitialize/" rel="next" title="iOS开发中的 load 和 initialize 方法">
+                <i class="fa fa-chevron-left"></i> iOS开发中的 load 和 initialize 方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/23/gitlab-ci/" rel="prev" title="iOS自动化探索">
+                iOS自动化探索 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=1eafef7fbbb07"></script>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/imgs/16740864.jpeg"
+               alt="Abner Chen" />
+          <p class="site-author-name" itemprop="name">Abner Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#KVC中的集合运算符"><span class="nav-number">1.</span> <span class="nav-text">KVC中的集合运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集合运算符组成"><span class="nav-number">2.</span> <span class="nav-text">集合运算符组成</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集合运算符分类"><span class="nav-number">3.</span> <span class="nav-text">集合运算符分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合运算符"><span class="nav-number">3.1.</span> <span class="nav-text">聚合运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组运算符"><span class="nav-number">3.2.</span> <span class="nav-text">数组运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌套运算符"><span class="nav-number">3.3.</span> <span class="nav-text">嵌套运算符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例"><span class="nav-number">4.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合运算"><span class="nav-number">4.1.</span> <span class="nav-text">聚合运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#avg-平均数"><span class="nav-number">4.1.1.</span> <span class="nav-text">avg 平均数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count"><span class="nav-number">4.1.2.</span> <span class="nav-text">count</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#max-min-sum"><span class="nav-number">4.1.3.</span> <span class="nav-text">max / min / sum</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组运算符-1"><span class="nav-number">4.2.</span> <span class="nav-text">数组运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#distinctUnionOfObjects"><span class="nav-number">4.2.1.</span> <span class="nav-text">distinctUnionOfObjects</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unionOfObjects"><span class="nav-number">4.2.2.</span> <span class="nav-text">unionOfObjects</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌套操作符"><span class="nav-number">4.3.</span> <span class="nav-text">嵌套操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#distinctUnionOfArrays"><span class="nav-number">4.3.1.</span> <span class="nav-text">distinctUnionOfArrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unionOfArrays"><span class="nav-number">4.3.2.</span> <span class="nav-text">unionOfArrays</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Abner Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://abner-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://abnerchen028.github.io/2018/01/24/valueForKeyPath/';
+          this.page.identifier = '2018/01/24/valueForKeyPath/';
+          this.page.title = 'KVC中的集合运算符';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://abner-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

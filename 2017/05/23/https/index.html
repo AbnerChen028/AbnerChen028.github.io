@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/man-in-the-middleAttack.png">
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/14981030708039.jpg">
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/14981109907155.jpg">
-<meta property="og:updated_time" content="2017-06-23T14:22:50.000Z">
+<meta property="og:updated_time" content="2017-12-26T02:03:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS端HTTPS中间人攻击">
 <meta name="twitter:description" content="通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：（图片来自网络） 此处，Alice表示Client端，Bob表示Server端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个">
@@ -383,7 +383,7 @@
 
       
         <p>通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/publicKeyCrytography.png" alt="publicKeyCrytography"><br>（图片来自网络）</p>
-<p>此处，Alice表示Client端，Bob表示Server端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个秘钥就是以后用来通信的钥匙。这样服务器端收到公钥加密的秘钥时就可以用私钥来解公钥从而获得秘钥。这样的话客户端和服务器端都获得了秘钥，信息交流相对是安全的。</p>
+<p>此处，Alice表示<code>Client</code>端，Bob表示<code>Server</code>端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个秘钥就是以后用来通信的钥匙。这样服务器端收到公钥加密的秘钥时就可以用私钥来解公钥从而获得秘钥。这样的话客户端和服务器端都获得了秘钥，信息交流相对是安全的。</p>
 <p>所谓的中间人攻击，证的过程中，出现了一个“中间人”拦截我们的信息，他有意想要知道你们的消息。我们将这个中间人称为Mallory。当服务器第一次给客户端发送公钥的时候，途径Mallory。Mallory知道你要进行密钥交换了，它把公钥扣了下来，假装自己是客户端，伪造了一个伪秘钥（对称加密产生的），然后用服务器发来的公钥加密了伪秘钥发还给服务器，这样服务器以为和客户端完成了密钥交换，实际上服务器是和Mallory完成了密钥交换（获得了伪秘钥）。同时Mallory假扮成服务器自行用非对称加密产生伪公钥和伪私钥，与客户端进行秘钥交换，拿到客户端发送过来的秘钥。现在客户端拿着秘钥，M拿着秘钥和为伪秘钥，服务器拿着伪秘钥，详细过程如图所示：<br><img src="http://orhh9hlxq.bkt.clouddn.com/man-in-the-middleAttack.png" alt="man-in-the-middleAttack"><br>（图片来自网络）</p>
 <p>目前各类网络工具去抓取分析数据的原理基本均是采用中间人攻击的方法来实现。下图为使用<code>Charles</code>抓取汽车之家<code>HTTPS</code>接口数据数据：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14981030708039.jpg" alt=""></p>
 <p>对于iOS开发者角度，防止中间人攻击可以从两个方面着手：</p>
@@ -438,8 +438,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/22/uploadfiles/" rel="next" title="iOS中的文件上传">
-                <i class="fa fa-chevron-left"></i> iOS中的文件上传
+              <a href="/2017/03/26/symbolicatecrash/" rel="next" title="使用symbolicatecrash分析crash文件">
+                <i class="fa fa-chevron-left"></i> 使用symbolicatecrash分析crash文件
               </a>
             
           </div>
@@ -522,7 +522,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -533,7 +533,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -544,7 +544,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -593,7 +593,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

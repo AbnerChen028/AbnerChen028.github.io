@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/14980361286591.jpg">
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/14980364611641.jpg">
 <meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/14980390941948.jpg">
-<meta property="og:updated_time" content="2017-07-10T01:36:06.000Z">
+<meta property="og:updated_time" content="2017-12-26T03:48:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS中的文件上传">
 <meta name="twitter:description" content="由于种种原因，之前向服务器上传头像的时候是通过将图片转换成Base64字符串进行传递的。这种方法有很大弊端：  图片数据转换成Base64数据的时候需要占用大量的资源。转换的过程会出现内存和CPU达到一个较大峰值。在一些低端机上会出现失败的情况，此种情况在安卓端显得尤为严重。 另外，后台在存储的时候才用的是数据和资源分离的方案，有专门的图片服务器来负责处理和保存。在App服务器和图片服务器之间进行">
@@ -384,7 +384,7 @@
       
         <p>由于种种原因，之前向服务器上传头像的时候是通过将图片转换成<code>Base64</code>字符串进行传递的。这种方法有很大弊端：</p>
 <ul>
-<li>图片数据转换成<code>Base64</code>数据的时候需要占用大量的资源。转换的过程会出现内存和CPU达到一个较大峰值。在一些低端机上会出现失败的情况，此种情况在安卓端显得尤为严重。</li>
+<li>图片数据转换成<code>Base64</code>数据的时候需要占用大量的资源。转换的过程会出现内存和<code>CPU</code>达到一个较大峰值。在一些低端机上会出现失败的情况，此种情况在安卓端显得尤为严重。</li>
 <li>另外，后台在存储的时候才用的是数据和资源分离的方案，有专门的图片服务器来负责处理和保存。在<code>App</code>服务器和图片服务器之间进行保存和传递的时候总是出现失败的情况。为了降低失败率移动端尽最大可能压缩图片，这样又导致另一个问题，图片严重失真，无法满足需求。</li>
 </ul>
 <p>基于以上两点，研究采用新的方式来上传文件。</p>
@@ -393,8 +393,8 @@
 <li>multipart/form-data</li>
 <li>application/x-www-form-urlencoded</li>
 </ul>
-<h1 id="1-multipart-form-data"><a href="#1-multipart-form-data" class="headerlink" title="1. multipart/form-data"></a>1. <code>multipart/form-data</code></h1><p><code>multipart/form-data</code>并非原始<code>HTTP</code>协议中支持的上传方法，属于<code>HTTP</code>客户端的一个扩展。常用在邮件上，可以一次向服务器上传多个附件。</p>
-<h2 id="使用AFNetworking上传方法："><a href="#使用AFNetworking上传方法：" class="headerlink" title="使用AFNetworking上传方法："></a>使用<code>AFNetworking</code>上传方法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> [manager POST:url parameters:nil constructingBodyWithBlock:^(id&lt;AFMultipartFormData&gt;  _Nonnull formData) &#123;</div><div class="line">        </div><div class="line">        // serverName：服务器接收使用的文件名,具体和后台协商</div><div class="line">        // Client.jpg: 本地上传使用的文件名</div><div class="line">        // application/octet-stream : 服务器接收需要类型（此处表示不指定类型）</div><div class="line">        [formData appendPartWithFileData:UIImageJPEGRepresentation([UIImage imageNamed:@&quot;1&quot;], 1.0) name:@&quot;serverName&quot; fileName:@&quot;Client.jpg&quot; mimeType:@&quot;application/octet-stream&quot;];</div><div class="line">        </div><div class="line">&#125; progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">    </div><div class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</div><div class="line">        </div><div class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</div><div class="line">        </div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h1 id="multipart-form-data"><a href="#multipart-form-data" class="headerlink" title="multipart/form-data"></a><code>multipart/form-data</code></h1><p><code>multipart/form-data</code>并非原始<code>HTTP</code>协议中支持的上传方法，属于<code>HTTP</code>客户端的一个扩展。常用在邮件上，可以一次向服务器上传多个附件。</p>
+<h2 id="使用AFNetworking上传方法"><a href="#使用AFNetworking上传方法" class="headerlink" title="使用AFNetworking上传方法"></a>使用<code>AFNetworking</code>上传方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> [manager POST:url parameters:nil constructingBodyWithBlock:^(id&lt;AFMultipartFormData&gt;  _Nonnull formData) &#123;</div><div class="line">        </div><div class="line">        // serverName：服务器接收使用的文件名,具体和后台协商</div><div class="line">        // Client.jpg: 本地上传使用的文件名</div><div class="line">        // application/octet-stream : 服务器接收需要类型（此处表示不指定类型）</div><div class="line">        [formData appendPartWithFileData:UIImageJPEGRepresentation([UIImage imageNamed:@&quot;1&quot;], 1.0) name:@&quot;serverName&quot; fileName:@&quot;Client.jpg&quot; mimeType:@&quot;application/octet-stream&quot;];</div><div class="line">        </div><div class="line">&#125; progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">    </div><div class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</div><div class="line">        </div><div class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</div><div class="line">        </div><div class="line">&#125;];</div></pre></td></tr></table></figure>
 <p>要传递多个资源，只需要在<code>^(id&lt;AFMultipartFormData&gt;  _Nonnull formData){}</code>中添加多个资源即可。</p>
 <p>如果服务器返回<code>code=200</code>错误,描述为：</p>
 <blockquote>
@@ -405,11 +405,9 @@
 <p>使用<code>Charles</code>查看请求内容，请求头信息如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980355211864.jpg" alt=""></p>
 <p>若需要分析更详细内容可以使用<code>Wireshark</code>来分析。</p>
 <p>开始向服务器上传文件的时候才用的是这种方式，发现到服务器无法进行解码。拿到服务器上的文件使用<code>vi</code>打开分析如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980361286591.jpg" alt=""><br>将这些信息删除以后，文件就可以正常打开了。但是，我在向服务器提交比较的数据时候，比如一个<code>pdf</code>和<code>mp3</code>文件一样带有这些信息，依然可以正常打开，此处留下一个疑问。<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980364611641.jpg" alt=""></p>
-<h1 id="2-application-x-www-form-urlencoded"><a href="#2-application-x-www-form-urlencoded" class="headerlink" title="2. application/x-www-form-urlencoded"></a>2. <code>application/x-www-form-urlencoded</code></h1><p>使用类型为上传文件的默认方式：</p>
-<p>使用<code>AFNetworing</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">NSURL *url = [NSURL URLWithString:@&quot;http://192.168.2.51:5006/ashx/UploadHandler.ashx&quot;];</div><div class="line">    </div><div class="line">NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];</div><div class="line">request.HTTPMethod = @&quot;POST&quot;;</div><div class="line">    </div><div class="line">NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@&quot;111&quot; ofType:@&quot;mp3&quot;]];</div><div class="line">        </div><div class="line">[[manager uploadTaskWithRequest:request fromData:data progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;,@(uploadProgress.fractionCompleted));</div><div class="line">&#125; completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) &#123;</div><div class="line">       </div><div class="line">    if (error) &#123;</div><div class="line">          NSLog(@&quot;error - %@&quot;,error);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;responseObject - %@&quot;,responseObject);</div><div class="line">    &#125;</div><div class="line">&#125;] resume];</div></pre></td></tr></table></figure>
-<p>使用原生<code>NSURLSession</code>方式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];</div><div class="line">self.session = session;</div><div class="line">    </div><div class="line">[[session uploadTaskWithRequest:request fromData:data] resume];</div></pre></td></tr></table></figure>
+<h1 id="application-x-www-form-urlencoded"><a href="#application-x-www-form-urlencoded" class="headerlink" title="application/x-www-form-urlencoded"></a><code>application/x-www-form-urlencoded</code></h1><p>使用类型为上传文件的默认方式：</p>
+<h2 id="使用AFNetworing"><a href="#使用AFNetworing" class="headerlink" title="使用AFNetworing"></a>使用<code>AFNetworing</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">NSURL *url = [NSURL URLWithString:@&quot;http://192.168.2.51:5006/ashx/UploadHandler.ashx&quot;];</div><div class="line">    </div><div class="line">NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];</div><div class="line">request.HTTPMethod = @&quot;POST&quot;;</div><div class="line">    </div><div class="line">NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@&quot;111&quot; ofType:@&quot;mp3&quot;]];</div><div class="line">        </div><div class="line">[[manager uploadTaskWithRequest:request fromData:data progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;,@(uploadProgress.fractionCompleted));</div><div class="line">&#125; completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) &#123;</div><div class="line">       </div><div class="line">    if (error) &#123;</div><div class="line">          NSLog(@&quot;error - %@&quot;,error);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;responseObject - %@&quot;,responseObject);</div><div class="line">    &#125;</div><div class="line">&#125;] resume];</div></pre></td></tr></table></figure>
+<h2 id="使用原生NSURLSession方式："><a href="#使用原生NSURLSession方式：" class="headerlink" title="使用原生NSURLSession方式："></a>使用原生<code>NSURLSession</code>方式：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];</div><div class="line">self.session = session;</div><div class="line">    </div><div class="line">[[session uploadTaskWithRequest:request fromData:data] resume];</div></pre></td></tr></table></figure>
 <p>在代理中监听：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error;</div><div class="line"></div><div class="line">- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge</div><div class="line">                                             completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler;</div><div class="line"></div><div class="line">- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session NS_AVAILABLE_IOS(7_0);</div></pre></td></tr></table></figure>
 <p>使用<code>Charles</code>查看网络请求头如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980390941948.jpg" alt=""></p>
@@ -456,8 +454,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/10/15/XcodeSimulatorNetError/" rel="next" title="Xcode模拟器无法联网问题的解决">
-                <i class="fa fa-chevron-left"></i> Xcode模拟器无法联网问题的解决
+              <a href="/2016/05/09/webview/" rel="next" title="UIWebView／WKWebView 加载多种数据">
+                <i class="fa fa-chevron-left"></i> UIWebView／WKWebView 加载多种数据
               </a>
             
           </div>
@@ -466,8 +464,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/05/23/https/" rel="prev" title="iOS端HTTPS中间人攻击">
-                iOS端HTTPS中间人攻击 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/12/locationoptimize/" rel="prev" title="地图开发中的定位优化">
+                地图开发中的定位优化 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -549,7 +547,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -560,7 +558,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -571,7 +569,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -613,7 +611,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-multipart-form-data"><span class="nav-number">1.</span> <span class="nav-text">1. multipart/form-data</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用AFNetworking上传方法："><span class="nav-number">1.1.</span> <span class="nav-text">使用AFNetworking上传方法：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-application-x-www-form-urlencoded"><span class="nav-number">2.</span> <span class="nav-text">2. application/x-www-form-urlencoded</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#multipart-form-data"><span class="nav-number">1.</span> <span class="nav-text">multipart/form-data</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用AFNetworking上传方法"><span class="nav-number">1.1.</span> <span class="nav-text">使用AFNetworking上传方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#application-x-www-form-urlencoded"><span class="nav-number">2.</span> <span class="nav-text">application/x-www-form-urlencoded</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用AFNetworing"><span class="nav-number">2.1.</span> <span class="nav-text">使用AFNetworing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用原生NSURLSession方式："><span class="nav-number">2.2.</span> <span class="nav-text">使用原生NSURLSession方式：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -636,7 +634,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
