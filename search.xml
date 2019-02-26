@@ -3,122 +3,11 @@
   
     
     <entry>
-      <title><![CDATA[iOS自动化探索]]></title>
-      <url>/2018/02/23/gitlab-ci/</url>
-      <content type="html"><![CDATA[<h1 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h1><p>持续集成（CI）是帮助开发人员提高工作效率并编写更高质量代码的绝佳工具。每次推送提交时，自动运行测试、打包等。每个人都可以看到代码库更改的结果，并采取措施更快更轻松地进行集成。</p>
-<p><br></p>
-<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>关于自动化，现在有很多成熟的方案，各有优缺点，为什么我们选择使用GitLab来做自动化,下面一一分析。</p>
-<h2 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h2><p>应该是最为古老的一款自动化工具，基于<code>Java</code>书写，在安装时候需要依赖<code>jdk</code>环境。跨平台、灵活自由、丰富的第三方插件，应该说是这款自动化工具最大的特点。但是各种环境配置以及插件使用真的是比较复杂，在之前的工作中，我们将该服务装到一台单独的<code>Mac</code>系统上来运行。通过插件hook到<code>git</code>的变化触发构建操作。这里有个小插曲，在安装<code>Jenkins</code>的时候<code>jdk</code>安装的<code>1.9</code>版本的。但是该服务器需要安装一个<code>VPN</code>工具，依赖<code>jre</code>环境，而不小心安装成<code>jre 8</code>了导致<code>Jenkins</code>无法启动。这里从<a href="https://www.zhihu.com/question/20317448" target="_blank" rel="external">知乎</a>查了一下<code>jdk</code>和<code>jre</code>区别：前者支持Java开发，后者支撑Java运行。<code>jre</code>的大版本号和<code>jdk</code>小版本号如果不保持一致将会导致冲突。目前项目比较紧急，前期大量的配置和调试工作过于复杂，暂时就忽略了该方案。</p>
-<h2 id="fastlane"><a href="#fastlane" class="headerlink" title="fastlane"></a>fastlane</h2><p><a href="https://github.com/fastlane/fastlane" target="_blank" rel="external">fastlane</a>为Github上一个开源项目，目前已经有20000+的Star。<code>fastlane</code>基于<code>Ruby</code>的一款自动化工具，已经将大部分功能封装成简单的函数，除此之外，也可以安装其他插件。这里有一个比较完善的<a href="https://whlsxl.github.io/" target="_blank" rel="external">文章</a>来讲述<code>fastlane</code>，个人认为这个工具较Jenkins而言更现代化、更完善。但是相对封装完善，其弊端就是没有jenkins自由，适用场景没有<code>Jenkins</code>全面。</p>
-<h2 id="GitLab-CI"><a href="#GitLab-CI" class="headerlink" title="GitLab-CI"></a>GitLab-CI</h2><p><code>GitLab-CI</code>是<code>GitLab</code>提供的一套自动化方案。在<code>GitLab 8.1</code>开始，就默认集成了<code>CI</code>的功能。目前在公司内部使用的也是<code>GitLab</code>环境。在配置方面就就能减少很多时间，另外语法简单，具体执行功能可以直接通过<code>shell</code>脚本去执行。相比Jenkins而言少了大量配置工作，相比<code>fastlane</code>又比较自由。每次执行相当于执行一个流程任务，可能分为多个部分，而每次代码的提交或者合并操作都会触发。</p>
-<h1 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h1><h2 id="GitLab-CI中的概念"><a href="#GitLab-CI中的概念" class="headerlink" title="GitLab-CI中的概念:"></a><code>GitLab-CI</code>中的概念:</h2><h3 id="gitlab-ci-yml"><a href="#gitlab-ci-yml" class="headerlink" title=".gitlab-ci.yml"></a>.gitlab-ci.yml</h3><p>项目中的配置文件，具体的自动化过程中就是根据这部分配置去执行相应的任务。具体格式可以参考<a href="https://docs.gitlab.com/ce/ci/yaml/" target="_blank" rel="external">yaml文档</a>。常用的部分以下：</p>
-<ul>
-<li>image and services：使用指定的docker环境或者服务列表</li>
-<li>before_script: 在脚本之前执行的任务</li>
-<li>after_script: 在脚本之后执行的任务</li>
-<li>variables: 变量，要求必须为key-value形式</li>
-<li>stages: 执行步骤</li>
-<li>cache: 用于缓存</li>
-</ul>
-<h3 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h3><p>相当于一次构建任务，内部可以包含多个步骤，每次代码提交或者合并将会触发。这个构建任务可能包含clean、archive、export等过程。</p>
-<h3 id="Stages"><a href="#Stages" class="headerlink" title="Stages"></a>Stages</h3><p>可以看作为一个执行步骤，及上一步中说的clean或archive等。</p>
-<h3 id="Gitlab-runner"><a href="#Gitlab-runner" class="headerlink" title="Gitlab-runner"></a>Gitlab-runner</h3><p><code>Gitlab-runner</code>是<code>.gitlab-ci.yml</code>脚本的运行器，<code>Gitlab-runner</code>是基于<code>Gitlab-CI</code>的<code>API</code>进行构建的相互隔离的机器（或虚拟机）。<code>GitLab Runner</code> 不需要和<code>Gitlab</code>安装在同一台机器上，但是考虑到<code>GitLab Runner</code>的资源消耗问题和安全问题，也不建议这两者安装在同一台机器上。目前我们是将Runner安装到开发机器上。</p>
-<h2 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h2><p><code>GitLab-CI</code>其工作流程：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15205885505253.jpg" alt=""></p>
-<p>在每次提交或者合并代码的时候自动触发<code>Pipline</code>事件，而每次执行的步骤和数量有<code>.gitlab-ci.yml</code>决定。</p>
-<h1 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h1><p>环境说明:</p>
-<ul>
-<li>GitLab Server: v10.0</li>
-<li>GitLab-Runner: <ul>
-<li>mac OS: 10.13</li>
-<li>Xcode: 9.2</li>
-</ul>
-</li>
-</ul>
-<h2 id="GitLab安装"><a href="#GitLab安装" class="headerlink" title="GitLab安装"></a><code>GitLab</code>安装</h2><p><code>GitLab</code>安装可以参考前期<a href="http://ccoding.cc/2017/01/23/gitlab/" target="_blank" rel="external">文章</a>。</p>
-<h3 id="Runner安装："><a href="#Runner安装：" class="headerlink" title="Runner安装："></a>Runner安装：</h3><p><code>Runner</code>可以通过源码编译安装，也可以直接下载编译好的部分，这里采用第二种。</p>
-<ol>
-<li><p>下载<code>Runner</code>：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo curl --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-darwin-amd64</div></pre></td></tr></table></figure>
-</li>
-<li><p>赋予执行权限:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo chmod +x /usr/local/bin/gitlab-runner</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
-<li><p><a href="https://docs.gitlab.com/runner/register/index.html" target="_blank" rel="external">注册</a><code>gitlab-runner</code></p>
-<p> 此处以<code>macOS</code>为例，根据提示安装如下：</p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">// 输入命令</div><div class="line">gitlab-runner register</div><div class="line"></div><div class="line">// 提示</div><div class="line">Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com )</div><div class="line">// 输入GitLab的服务器，比如官方地址</div><div class="line">https://gitlab.com</div><div class="line"></div><div class="line">// 提示</div><div class="line">Please enter the gitlab-ci token for this runner</div><div class="line">// 项目token，可以在gitlab项目设置-&gt;CI/CD-&gt;Runners settings来查看</div><div class="line">xxx</div><div class="line"></div><div class="line">// 提示</div><div class="line">Please enter the gitlab-ci tags for this runner (comma separated):</div><div class="line">// 这里根据根据自己的系统环境配置</div><div class="line">macos_10-13, xcode_9-2, ios_11-2</div><div class="line"></div><div class="line">// 提示</div><div class="line">Whether to run untagged jobs [true/false]:</div><div class="line">// 如果没有tag的任务是否需要执行 默认否</div><div class="line">[false]: false</div><div class="line"></div><div class="line">// 提示 </div><div class="line">Whether to lock Runner to current project [true/false]:</div><div class="line">// 指定当前runner只能运行该项目</div><div class="line">[true]: true</div><div class="line"></div><div class="line">// 提示</div><div class="line">Please enter the executor: ssh, docker+machine, docker-ssh+machine, kubernetes, docker, parallels, virtualbox, docker-ssh, shell:</div><div class="line">// 默认执行命令类型</div><div class="line">shell</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
-<li><p>注册完毕，启动当前runner</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gitlab-runner install</div><div class="line">gitlab-runner start</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>此时你可以在<code>GitLab</code>项目配置页面看到已经运行的<code>Runner</code>:</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/15210861083686.jpg" alt="-w457"></p>
-<h3 id="fir-im-cli-安装"><a href="#fir-im-cli-安装" class="headerlink" title="fir.im-cli 安装"></a>fir.im-cli 安装</h3><p>用于脚本上传ipa文件，具体安装可以参考：<a href="https://github.com/FIRHQ/fir-cli/blob/master/doc/install.md" target="_blank" rel="external">GitHub</a></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>创建<code>yml</code>文件:</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">before_script:</span></div><div class="line">  </div><div class="line"></div><div class="line"><span class="symbol">variables:</span></div><div class="line">  <span class="symbol">PROJECT_NAME:</span> <span class="string">'CIDemo'</span></div><div class="line">  <span class="symbol">PROJECT_SCHEME:</span> <span class="string">'CIDemo'</span></div><div class="line">  <span class="symbol">PROJECT_TEST_SCHEME:</span> <span class="string">'CIDemoTests'</span></div><div class="line">  <span class="symbol">OUT_PATH:</span> <span class="string">"build"</span></div><div class="line"></div><div class="line"><span class="symbol">stages:</span></div><div class="line">  - build</div><div class="line">  - archive</div><div class="line"></div><div class="line"><span class="symbol">build_project:</span></div><div class="line">  <span class="symbol">stage:</span> build</div><div class="line">  <span class="symbol">script:</span></div><div class="line"></div><div class="line">    - xcodebuild clean -workspace $&#123;PROJECT_NAME&#125;.xcworkspace -scheme $&#123;PROJECT_SCHEME&#125;</div><div class="line">    - xcodebuild test -workspace $&#123;PROJECT_NAME&#125;.xcworkspace -scheme $&#123;PROJECT_TEST_SCHEME&#125; -destination <span class="string">'platform=iOS Simulator,name=iPhone 6s,OS=11.2'</span>  -allowProvisioningUpdates </div><div class="line">  <span class="symbol">tags:</span></div><div class="line">    - ios_11-<span class="number">2</span></div><div class="line">    - xcode_9-<span class="number">2</span></div><div class="line">    - macos_1<span class="number">0</span>-<span class="number">13</span></div><div class="line"></div><div class="line">  <span class="symbol">only:</span></div><div class="line">    - master</div><div class="line"></div><div class="line"><span class="symbol">archive_project:</span></div><div class="line">  <span class="symbol">stage:</span> archive</div><div class="line">  <span class="symbol">script:</span></div><div class="line">   </div><div class="line">    - pod install</div><div class="line">    - xcodebuild archive -workspace $&#123;PROJECT_NAME&#125;.xcworkspace -scheme $&#123;PROJECT_SCHEME&#125; -archivePath $&#123;OUT_PATH&#125;/$&#123;PROJECT_NAME&#125;</div><div class="line">    - xcodebuild -exportArchive -archivePath $&#123;OUT_PATH&#125;/$&#123;PROJECT_SCHEME&#125;.xcarchive -exportPath $&#123;OUT_PATH&#125;/$&#123;PROJECT_NAME&#125; -exportOptionsPlist explist.plist</div><div class="line"></div><div class="line">    - chmod <span class="number">777</span> change.sh</div><div class="line">    - ./change.sh</div><div class="line">    - fir login firimToken</div><div class="line">    - fir publish $&#123;OUT_PATH&#125;/$&#123;PROJECT_NAME&#125;/$&#123;PROJECT_SCHEME&#125;.ipa -Q --password=<span class="number">9987</span> --changelog=<span class="string">'changelog.log'</span></div><div class="line">  <span class="symbol">tags:</span></div><div class="line">    - ios_11-<span class="number">2</span></div><div class="line">    - xcode_9-<span class="number">2</span></div><div class="line">    - macos_1<span class="number">0</span>-<span class="number">13</span></div><div class="line">  <span class="symbol">only:</span></div><div class="line">    - master</div></pre></td></tr></table></figure>
-<p>其中<code>change.sh</code>脚本为处理本次打包更新的内容, 用于<code>fir.im</code>显示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">#author: AbnerChen</div><div class="line">#说明：生成当前提交的信息</div><div class="line"></div><div class="line">## rm changelog.log</div><div class="line">git log -1 --pretty=format:&quot;Auth: %an&quot;  &gt;&gt; changelog.log</div><div class="line">echo &gt;&gt;  changelog.log</div><div class="line">git log -1 --pretty=format:&quot;Message: %s&quot; &gt;&gt; changelog.log</div><div class="line">echo &gt;&gt;  changelog.log</div><div class="line">git log -1 --pretty=format:&quot;Date: %ad&quot;  &gt;&gt; changelog.log</div></pre></td></tr></table></figure>
-<p>大概的格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Auth: AbnerChen</div><div class="line">Message: This is change note.</div><div class="line">Date: Mon Mar 19 16:29:07 2018 +0800</div></pre></td></tr></table></figure>
-<p>其中<code>firimToken</code>为<a href="https://fir.im/" target="_blank" rel="external">firim</a>提供的<code>token</code>。<code>explist.plist</code>文件为打包配置文件，包含打包模式、证书信息等。如果不太清楚可以通过<code>Xcode 9</code>打一个包，及与<code>ipa</code>同文件夹的<code>ExportOptions.plist</code>文件。<code>only</code>选项可指定分支。</p>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在学习配置该自动化平台的时候遇到如下问题，希望能够帮助大家少走弯路：</p>
-<h3 id="脚本验证"><a href="#脚本验证" class="headerlink" title="脚本验证"></a>脚本验证</h3><p>写<code>yml</code>需要严格按照规范来书写，否则就会导致<code>yaml invalid</code>的错误。 如果不确定是否符合规范可以到<a href="https://gitlab.com/ci/lint" target="_blank" rel="external">GitLab Lint</a>上进行校验。</p>
-<h3 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h3><p>在配置<code>runner</code>的时候最好根据自己的系统去配置。在开始的时候，由于<code>tags</code>这块个人是随意填写的，比如：<code>iOS</code>、<code>test</code>等，在真正执行的时候，发现<code>runner</code>是执行于<code>docker</code>中，<code>docker</code>肯定是没有<code>Xcode</code>环境的，然后出现了如下错误：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Running with gitlab-runner <span class="number">10.5</span>.<span class="number">0</span> (<span class="number">80</span>b03db9)</div><div class="line">on docker-auto-scale <span class="number">72989761</span></div><div class="line">Using Docker executor with image <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Pulling docker image <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Using docker image  <span class="symbol">sha256:</span>bae0455cb2b9010f134a2da3a1fba9d217506beec2d41950d151e12a3112c418 <span class="keyword">for</span> <span class="symbol">ruby:</span><span class="number">2.5</span> ...</div><div class="line">Running on runner-<span class="number">72989761</span>-project-<span class="number">5648111</span>-concurrent-<span class="number">0</span> via runner-<span class="number">72989761</span>-srm-<span class="number">1520251087</span>-<span class="number">3515</span>c6ac...</div><div class="line">Cloning repository...</div><div class="line">Cloning into <span class="string">'/builds/abnerchen/CIDemo'</span>...</div><div class="line">Checking out c69c33c6 as master...</div><div class="line">Skipping Git submodules setup</div><div class="line">$ xcodebuild clean -workspace CIDemo.xcworkspace -scheme CIDemo</div><div class="line">/bin/<span class="symbol">bash:</span> line <span class="number">61</span>: <span class="symbol">xcodebuild:</span> command <span class="keyword">not</span> found</div><div class="line"><span class="symbol">ERROR:</span> Job <span class="symbol">failed:</span> exit code <span class="number">1</span></div></pre></td></tr></table></figure>
-<h3 id="运行条件"><a href="#运行条件" class="headerlink" title="运行条件"></a>运行条件</h3><p>其实还是因为<code>Tags</code>的问题， 在配置<code>runner</code>在过程中，有这样一步：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Whether to run untagged jobs [true/false]</div></pre></td></tr></table></figure>
-<p>此处默认是<code>false</code>，如果这里选择了默认，而<code>yml</code>文件里面<code>tags</code>设置和此处<code>runner</code>的<code>tags</code>设置不一致的情况下也会报错：无法找到合适<code>runner</code>运行该<code>job</code>。</p>
-<h3 id="等待中状态处理"><a href="#等待中状态处理" class="headerlink" title="等待中状态处理"></a>等待中状态处理</h3><p>等待中一般可以分为多种情况</p>
-<ul>
-<li>本项目上次执行任务未完成 隔断时间刷新一下可以看到最新状态</li>
-<li><p>在执行其他项目任务，此时任务被阻塞，处理方法，重启<code>runner</code>:</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gitlab-runner restart</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="scheme找不到"><a href="#scheme找不到" class="headerlink" title="scheme找不到"></a><code>scheme</code>找不到</h3><p>在<code>Xcode</code>中操作: 依次选择 <code>Product</code> &gt; <code>Scheme</code> &gt; <code>Manage Schemes</code>，在你要处理的<code>Scheme</code>的<code>shared</code>状态选中。引用官网的一张图片：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15216002731583.png" alt=""></p>
-<h3 id="日志文件过长"><a href="#日志文件过长" class="headerlink" title="日志文件过长"></a>日志文件过长</h3><blockquote>
-<p>Job’s log exceeded limit of 4194304 bytes.</p>
-</blockquote>
-<p>此错误最简单的方法是将日志文件重定向到一个文件里面。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- xcodebuild archive -workspace $&#123;PROJECT_NAME&#125;.xcworkspace -scheme $&#123;PROJECT_SCHEME&#125; -archivePath $&#123;OUT_PATH&#125;/$&#123;PROJECT_NAME&#125; &gt; archive.log</div></pre></td></tr></table></figure>
-<hr>
-<p><br></p>
-<p>参考资料：</p>
-<ul>
-<li>GitLab-CI：<a href="https://about.gitlab.com/features/gitlab-ci-cd/" target="_blank" rel="external">https://about.gitlab.com/features/gitlab-ci-cd/</a></li>
-<li>GitLab-runner: <a href="https://docs.gitlab.com/runner/" target="_blank" rel="external">https://docs.gitlab.com/runner/</a></li>
-<li>GitLab-yml: <a href="https://docs.gitlab.com/ee/ci/yaml/" target="_blank" rel="external">https://docs.gitlab.com/ee/ci/yaml/</a></li>
-<li>fir-cli: <a href="https://github.com/FIRHQ/fir-cli/" target="_blank" rel="external">https://github.com/FIRHQ/fir-cli/</a></li>
-</ul>
-]]></content>
-      
-        <categories>
-            
-            <category> 工具 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> gitlab-ci </tag>
-            
-            <tag> 自动化 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[KVC中的集合运算符]]></title>
       <url>/2018/01/24/valueForKeyPath/</url>
       <content type="html"><![CDATA[<h1 id="KVC中的集合运算符"><a href="#KVC中的集合运算符" class="headerlink" title="KVC中的集合运算符"></a>KVC中的集合运算符</h1><p>当使用<code>KVC</code>中的<code>valueForKeyPath</code>方法时，可以在路径中嵌入一个集合运算。一个集合运算符前面用<code>@</code>符号开头。</p>
 <h1 id="集合运算符组成"><a href="#集合运算符组成" class="headerlink" title="集合运算符组成"></a>集合运算符组成</h1><p>一个完整的集合运算符包含三个部分，如图所示：</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/15166984161285.jpg" alt=""></p>
+<p><img src="http://img.jessieedu.com/15166984161285.jpg" alt=""></p>
 <p>一个完整的集合运算符号分三个部分：</p>
 <ul>
 <li>Left Key path</li>
@@ -333,16 +222,16 @@
 </blockquote>
 <h1 id="Load-amp-Initalize-类与类别的关系"><a href="#Load-amp-Initalize-类与类别的关系" class="headerlink" title="Load &amp; Initalize 类与类别的关系"></a>Load &amp; Initalize 类与类别的关系</h1><p>分别为类<code>Person</code>、<code>Father</code>、<code>Son</code>创建两个分类<code>test1</code>、<code>test2</code>，并且实现<code>+load</code>、<code>+initialize</code>方法。</p>
 <h3 id="load方法与类别的关系"><a href="#load方法与类别的关系" class="headerlink" title="load方法与类别的关系"></a>load方法与类别的关系</h3><p><code>Complie Sources</code>排列顺序与打印结果:</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/15143397037228.jpg" alt=""></p>
+<p><img src="http://img.jessieedu.com/15143397037228.jpg" alt=""></p>
 <p>此处结果与<code>Apple</code>文档一致：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In addition:</div><div class="line"></div><div class="line">  *  A class’s +load method is called after all of its superclasses’ +load methods.</div><div class="line"></div><div class="line">  *  A category +load method is called after the class’s own +load method.</div></pre></td></tr></table></figure>
 <p>先执行父类<code>load</code>方法再执行子类方法，先执行本类中的方法再执行分类中的方法。而分类中的<code>load</code>方法恰恰相反，先执行子类分类的<code>load</code>方法再执行父类的分类方法。</p>
-<p>当调整<code>Complie Sources</code>里文件顺序之后：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15143401263131.jpg" alt=""></p>
+<p>当调整<code>Complie Sources</code>里文件顺序之后：<br><img src="http://img.jessieedu.com/15143401263131.jpg" alt=""></p>
 <p>发现分类中的执行顺序为最后加载的先执行。</p>
 <h3 id="Initalize-类与类别的关系"><a href="#Initalize-类与类别的关系" class="headerlink" title="Initalize 类与类别的关系"></a>Initalize 类与类别的关系</h3><p><code>Complie Sources</code>排列顺序与打印结果:</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/15143408478145.jpg" alt=""></p>
+<p><img src="http://img.jessieedu.com/15143408478145.jpg" alt=""></p>
 <p>分类中重写了<code>initalize</code>方法之后，覆盖了原方法，这一结果与普通对象方法一致，分类中的优先级高于原方法。</p>
-<p>当调整<code>Complie Sources</code>里文件顺序之后：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15143420477709.jpg" alt=""></p>
+<p>当调整<code>Complie Sources</code>里文件顺序之后：<br><img src="http://img.jessieedu.com/15143420477709.jpg" alt=""></p>
 <p>排序靠下的被打印，与<code>load</code>方法保持一致。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
 <li>两个方法都不需要主动调用父类的方法。但是<code>+load</code>的方法不会在子类没有实现的情况下调用父类的该方法，而<code>+initialize</code>方法会调用。</li>
@@ -582,8 +471,8 @@
 <li>通过带有<code>IPv6</code>地址的服务器做一个代理，将数据转移到自己真实的服务器上。</li>
 </ul>
 <p>由于国内的网络环境，使用第一种方式显得不切实际。第二种方式基本上都是使用的<code>HE</code>隧道来搭建，免费便捷，但是需要服务器去配合。我们自己使用的是第三种方式，所有的东西都是自己的，用着比较放心。实现的思路是购买一个带有<code>IPv6</code>的<code>VPS</code>，通过<code>nginx</code>代理将<code>VPS</code>上的数据解析到真实的<code>IPv4</code>服务器上，以满足<code>Apple</code>审核的要求。</p>
-<h1 id="服务器设置"><a href="#服务器设置" class="headerlink" title="服务器设置"></a>服务器设置</h1><h2 id="购买服务器"><a href="#购买服务器" class="headerlink" title="购买服务器"></a>购买服务器</h2><p>第一步购买一个带有<code>IPv6</code>地址的<code>VPS</code>，我选择的是搬瓦工<code>VPS</code>，推荐<a href="https://bwh1.net/cart.php?a=confproduct&amp;i=2" target="_blank" rel="external">配置</a>，购买时候务必看清是否支持<code>IPv6</code>：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998316138233.jpg" alt=""><br>然后选择购买的时长和服务器位置，最后点击加入购物车。然后进入购物车，在支付之前可以到网上搜索一下优惠码，还能优惠6%左右。</p>
-<h2 id="添加IPv6"><a href="#添加IPv6" class="headerlink" title="添加IPv6"></a>添加<code>IPv6</code></h2><p>购买之后选择在首页选择<code>Client Area</code> -&gt; <code>Services</code> -&gt; <code>My Services</code>，可以看到自己购买的额服务器，然后点击<code>Kiwivm Control Panel</code>，进入管理界面。选择<code>IPv6 Addresses</code>：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998402174133.jpg" alt=""><br>然后根据提示添加<code>IPv6</code>即可。</p>
+<h1 id="服务器设置"><a href="#服务器设置" class="headerlink" title="服务器设置"></a>服务器设置</h1><h2 id="购买服务器"><a href="#购买服务器" class="headerlink" title="购买服务器"></a>购买服务器</h2><p>第一步购买一个带有<code>IPv6</code>地址的<code>VPS</code>，我选择的是搬瓦工<code>VPS</code>，推荐<a href="https://bwh1.net/cart.php?a=confproduct&amp;i=2" target="_blank" rel="external">配置</a>，购买时候务必看清是否支持<code>IPv6</code>：<br><img src="http://img.jessieedu.com/14998316138233.jpg" alt=""><br>然后选择购买的时长和服务器位置，最后点击加入购物车。然后进入购物车，在支付之前可以到网上搜索一下优惠码，还能优惠6%左右。</p>
+<h2 id="添加IPv6"><a href="#添加IPv6" class="headerlink" title="添加IPv6"></a>添加<code>IPv6</code></h2><p>购买之后选择在首页选择<code>Client Area</code> -&gt; <code>Services</code> -&gt; <code>My Services</code>，可以看到自己购买的额服务器，然后点击<code>Kiwivm Control Panel</code>，进入管理界面。选择<code>IPv6 Addresses</code>：<br><img src="http://img.jessieedu.com/14998402174133.jpg" alt=""><br>然后根据提示添加<code>IPv6</code>即可。</p>
 <h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装<code>nginx</code></h2><p>控制面板自带的<code>Shell</code>用着相当费劲，不建议使用。强烈推荐使用<code>iTerm</code>或者<code>Terminal</code>。<code>ssh</code>登录账号密码以及端口号在<code>Main controls</code>中查看。<br><code>nginx</code>以<code>1.7.4</code>版本为例。</p>
 <p>首先安装变异工具以及库文件，<code>VPS</code>默认不带这些配置：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install gcc gcc-c++  pcre-devel  openssl-devel</div></pre></td></tr></table></figure>
@@ -599,17 +488,17 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
 <p>安装完毕之后通过命令查看版本号：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/local/nginx/sbin/nginx -v</div></pre></td></tr></table></figure>
-<p>如图所示，表示安装成功<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998438446371.jpg" alt=""></p>
-<p>通过你的IP地址访问：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998439691945.jpg" alt=""></p>
+<p>如图所示，表示安装成功<br><img src="http://img.jessieedu.com/14998438446371.jpg" alt=""></p>
+<p>通过你的IP地址访问：<br><img src="http://img.jessieedu.com/14998439691945.jpg" alt=""></p>
 <h2 id="配置服务器"><a href="#配置服务器" class="headerlink" title="配置服务器"></a>配置服务器</h2><p>进入配置文件夹</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/nginx/conf</div></pre></td></tr></table></figure>
 <p>打开配置文件:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi nginx.conf</div></pre></td></tr></table></figure>
-<p>配置如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998449552219.jpg" alt=""><br>其中，第一个为自己<code>VPS</code>的<code>IPv6</code>，第二个为<code>VPS</code>的<code>IPv4</code>，当然也可以只配置<code>IPv6</code>。都配置的话方便验证配置，此时通过<code>IPv4</code>访问效果：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998454036652.jpg" alt=""><br>显示不再是<code>nginx</code>的欢迎界面，说明此时已经转移到自己的真实服务器上了。（我们公司服务器使用的<code>windows</code>的<code>IIS</code>，根据自己公司的实际情况会有不同的提示）</p>
+<p>配置如下：<br><img src="http://img.jessieedu.com/14998449552219.jpg" alt=""><br>其中，第一个为自己<code>VPS</code>的<code>IPv6</code>，第二个为<code>VPS</code>的<code>IPv4</code>，当然也可以只配置<code>IPv6</code>。都配置的话方便验证配置，此时通过<code>IPv4</code>访问效果：<br><img src="http://img.jessieedu.com/14998454036652.jpg" alt=""><br>显示不再是<code>nginx</code>的欢迎界面，说明此时已经转移到自己的真实服务器上了。（我们公司服务器使用的<code>windows</code>的<code>IIS</code>，根据自己公司的实际情况会有不同的提示）</p>
 <p><code>location</code>里面的内容：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">location / &#123;</div><div class="line">      proxy_pass http://国内真实服务器IPv4地址:80;</div><div class="line">      proxy_set_header HOST $host;</div><div class="line">      proxy_set_header X-Real-IP $remote_addr;</div><div class="line">      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <p>这里只是配置的是<code>http</code>，如果项目中使用了<code>https</code>，可以在下面https配置中添加同样的配置即可。</p>
-<h1 id="添加一个AAAA解析"><a href="#添加一个AAAA解析" class="headerlink" title="添加一个AAAA解析"></a>添加一个AAAA解析</h1><p>最后一步是为项目域名添加一个<code>AAAA</code>解析，地址为<code>VPS</code>的<code>IPv6</code>地址。然后通过<a href="http://ipv6-test.com/validate.php" target="_blank" rel="external">IPv6测试</a>进行<code>IPv6</code>兼容性测试，效果如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14998466475702.jpg" alt=""><br>说明已经通过测试，此时说明服务器完成了<code>IPv6</code>的兼容。</p>
+<h1 id="添加一个AAAA解析"><a href="#添加一个AAAA解析" class="headerlink" title="添加一个AAAA解析"></a>添加一个AAAA解析</h1><p>最后一步是为项目域名添加一个<code>AAAA</code>解析，地址为<code>VPS</code>的<code>IPv6</code>地址。然后通过<a href="http://ipv6-test.com/validate.php" target="_blank" rel="external">IPv6测试</a>进行<code>IPv6</code>兼容性测试，效果如下：<br><img src="http://img.jessieedu.com/14998466475702.jpg" alt=""><br>说明已经通过测试，此时说明服务器完成了<code>IPv6</code>的兼容。</p>
 <h1 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h1><p><code>IPv6</code>的兼容需要从两个方面去处理，首要的就是<code>App</code>端，如果不涉及底层网络的话只要保证使用的SDK为新版本基本没有问题，至于相容性都可以在其官网上查询到。另外，一块就是服务器的兼容。由于<code>VPS</code>基本集中在美国，在网络环境上会有一个延迟，由于我们的项目中使用了大量的H5和原生交互的地方，导致加载Web的超时被拒。我们的做法就是在提交审核的时候进行一个简单的说明。如果允许的话还是建议购买中国周边的服务器来做中转。</p>
 ]]></content>
       
@@ -637,12 +526,12 @@
     <entry>
       <title><![CDATA[iOS端HTTPS中间人攻击]]></title>
       <url>/2017/05/23/https/</url>
-      <content type="html"><![CDATA[<p>通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/publicKeyCrytography.png" alt="publicKeyCrytography"><br>（图片来自网络）</p>
+      <content type="html"><![CDATA[<p>通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：<br><img src="http://img.jessieedu.com/publicKeyCrytography.png" alt="publicKeyCrytography"><br>（图片来自网络）</p>
 <p>此处，Alice表示<code>Client</code>端，Bob表示<code>Server</code>端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个秘钥就是以后用来通信的钥匙。这样服务器端收到公钥加密的秘钥时就可以用私钥来解公钥从而获得秘钥。这样的话客户端和服务器端都获得了秘钥，信息交流相对是安全的。</p>
-<p>所谓的中间人攻击，证的过程中，出现了一个“中间人”拦截我们的信息，他有意想要知道你们的消息。我们将这个中间人称为Mallory。当服务器第一次给客户端发送公钥的时候，途径Mallory。Mallory知道你要进行密钥交换了，它把公钥扣了下来，假装自己是客户端，伪造了一个伪秘钥（对称加密产生的），然后用服务器发来的公钥加密了伪秘钥发还给服务器，这样服务器以为和客户端完成了密钥交换，实际上服务器是和Mallory完成了密钥交换（获得了伪秘钥）。同时Mallory假扮成服务器自行用非对称加密产生伪公钥和伪私钥，与客户端进行秘钥交换，拿到客户端发送过来的秘钥。现在客户端拿着秘钥，M拿着秘钥和为伪秘钥，服务器拿着伪秘钥，详细过程如图所示：<br><img src="http://orhh9hlxq.bkt.clouddn.com/man-in-the-middleAttack.png" alt="man-in-the-middleAttack"><br>（图片来自网络）</p>
-<p>目前各类网络工具去抓取分析数据的原理基本均是采用中间人攻击的方法来实现。下图为使用<code>Charles</code>抓取汽车之家<code>HTTPS</code>接口数据数据：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14981030708039.jpg" alt=""></p>
+<p>所谓的中间人攻击，证的过程中，出现了一个“中间人”拦截我们的信息，他有意想要知道你们的消息。我们将这个中间人称为Mallory。当服务器第一次给客户端发送公钥的时候，途径Mallory。Mallory知道你要进行密钥交换了，它把公钥扣了下来，假装自己是客户端，伪造了一个伪秘钥（对称加密产生的），然后用服务器发来的公钥加密了伪秘钥发还给服务器，这样服务器以为和客户端完成了密钥交换，实际上服务器是和Mallory完成了密钥交换（获得了伪秘钥）。同时Mallory假扮成服务器自行用非对称加密产生伪公钥和伪私钥，与客户端进行秘钥交换，拿到客户端发送过来的秘钥。现在客户端拿着秘钥，M拿着秘钥和为伪秘钥，服务器拿着伪秘钥，详细过程如图所示：<br><img src="http://img.jessieedu.com/man-in-the-middleAttack.png" alt="man-in-the-middleAttack"><br>（图片来自网络）</p>
+<p>目前各类网络工具去抓取分析数据的原理基本均是采用中间人攻击的方法来实现。下图为使用<code>Charles</code>抓取汽车之家<code>HTTPS</code>接口数据数据：<br><img src="http://img.jessieedu.com/14981030708039.jpg" alt=""></p>
 <p>对于iOS开发者角度，防止中间人攻击可以从两个方面着手：</p>
-<p>第一是通讯内容本身加密，无论是走<code>http</code>还是<code>https</code>，<code>request</code>和<code>response</code>的内容本身都要先做一次加密，这样即使<code>https</code>的流量被破解，攻击者还需要再攻破一层加密算法。我们一般使用 <code>AES256</code> 对内容做加密，这里<code>AES</code>密钥的管理也有两种方式，其一是在客户端使用固定的密钥，为了加大破解的难度，我们可以对密钥本身做多次加密处理，使用时再在内存里解密出来真正的密钥。其二是每次会话都使用不同的密钥，原理类似 <code>Forward Secrecy</code>，即使流量被记录，将来被暴力破解，也能极大的增加攻击者破解的时间成本。如果为<code>Apple</code>的一个接口：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14981109907155.jpg" alt=""></p>
+<p>第一是通讯内容本身加密，无论是走<code>http</code>还是<code>https</code>，<code>request</code>和<code>response</code>的内容本身都要先做一次加密，这样即使<code>https</code>的流量被破解，攻击者还需要再攻破一层加密算法。我们一般使用 <code>AES256</code> 对内容做加密，这里<code>AES</code>密钥的管理也有两种方式，其一是在客户端使用固定的密钥，为了加大破解的难度，我们可以对密钥本身做多次加密处理，使用时再在内存里解密出来真正的密钥。其二是每次会话都使用不同的密钥，原理类似 <code>Forward Secrecy</code>，即使流量被记录，将来被暴力破解，也能极大的增加攻击者破解的时间成本。如果为<code>Apple</code>的一个接口：<br><img src="http://img.jessieedu.com/14981109907155.jpg" alt=""></p>
 <p>第二种就是大家所熟知的 ssl pinning。在客户端进行代码层面的证书校验，校验方式也有两种，一是证书本身校验，而是公钥校验。这两种方式对应到 AFNetworking 中的代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">enum &#123;</div><div class="line">     AFSSLPinningModeNone,</div><div class="line">     AFSSLPinningModePublicKey,</div><div class="line">     AFSSLPinningModeCertificate,</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <p>证书校验是文件级别的校验，客户端只信任若干个证书文件，这些证书文件是和客户端一起打包发布的，这种处理方式要面对的一个问题证书过期问题，为了避免证书过期导致的校验失败，客户端和服务器之间需要额外存在一个证书更新机制，其实做起来也比较简单，只需要服务器下发一个特定的错误码，触发一个客户端的新证书下载流程即可。</p>
@@ -723,7 +612,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl: (6) Could not resolve host: packages.gitlab.com; 未知的错误</div></pre></td></tr></table></figure>
 <p>安装GitLab软件包。将<code>http：// gitlab.example.com</code>更改为您要访问您的GitLab实例的URL。安装将自动配置并启动该URL的GitLab。这里如果是内网的话建议直接给IP地址，或者映射一个域名地址。这一步需要从网上下载安装包，时间较长，耐心等待一下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo EXTERNAL_URL=&quot;http://192.168.10.6&quot; yum install -y gitlab-ce</div></pre></td></tr></table></figure>
-<p>安装完毕：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15151453149949.jpg" alt=""></p>
+<p>安装完毕：<br><img src="http://img.jessieedu.com/15151453149949.jpg" alt=""></p>
 <p>到此，就表示安装完毕了。</p>
 <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><ul>
 <li>如果发现无法在其他地址无法打开，可以先检查防火墙。</li>
@@ -734,7 +623,7 @@
       
         <categories>
             
-            <category> 工具 </category>
+            <category> iOS开发 </category>
             
         </categories>
         
@@ -762,8 +651,8 @@
 <p>其次是使用，最便捷的方法方法是通过终端进入到项目所在的文件夹，执行以下命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">appledoc --project-name 项目名 --project-company 公司名 ./</div></pre></td></tr></table></figure>
 <p>将“项目名”和“公司名”更换成实际的项目名和公司名即可。生成的文档位于以下路径：<br>/Users/YourUserName/Library/Developer/Shared/Documentation/DocSets/</p>
-<p>该路径也是苹果文档所在文件夹。结合<a href="http://www.sdifenzhou.com/dash331.html" target="_blank" rel="external">Dash</a>使用效果还是不错，如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15142021771020.jpg" alt=""></p>
-<p>如果我们也可以从DocSet中提取出Web版式的文档，如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15142021935236.jpg" alt=""></p>
+<p>该路径也是苹果文档所在文件夹。结合<a href="http://www.sdifenzhou.com/dash331.html" target="_blank" rel="external">Dash</a>使用效果还是不错，如图：<br><img src="http://img.jessieedu.com/15142021771020.jpg" alt=""></p>
+<p>如果我们也可以从DocSet中提取出Web版式的文档，如图：<br><img src="http://img.jessieedu.com/15142021935236.jpg" alt=""></p>
 <p>要添加更多参数可以使用以下命令进行分页查询</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">appledoc --help | more</div></pre></td></tr></table></figure>
 <p>当然，我们也可以将集成在Xcode中，在项目中添加一个targer，选择一个<code>Aggregate</code>模版，点击<code>Add Build Phase</code>按钮，添加一个<code>Run Script</code>，在此处添加一个自动化脚本，然后编译项目，即可自动安装进Xcode。脚本如下：</p>
@@ -778,7 +667,7 @@
       
         <categories>
             
-            <category> 工具 </category>
+            <category> iOS开发 </category>
             
         </categories>
         
@@ -914,15 +803,15 @@
 </blockquote>
 <p>可以通过以下方法设置：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@&quot;application/json&quot;, @&quot;text/json&quot;, @&quot;text/javascript&quot;,@&quot;text/html&quot;,@&quot;text/plain&quot;, nil];</div></pre></td></tr></table></figure>
-<p>使用<code>Charles</code>查看请求内容，请求头信息如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980355211864.jpg" alt=""></p>
+<p>使用<code>Charles</code>查看请求内容，请求头信息如下：<br><img src="http://img.jessieedu.com/14980355211864.jpg" alt=""></p>
 <p>若需要分析更详细内容可以使用<code>Wireshark</code>来分析。</p>
-<p>开始向服务器上传文件的时候才用的是这种方式，发现到服务器无法进行解码。拿到服务器上的文件使用<code>vi</code>打开分析如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980361286591.jpg" alt=""><br>将这些信息删除以后，文件就可以正常打开了。但是，我在向服务器提交比较的数据时候，比如一个<code>pdf</code>和<code>mp3</code>文件一样带有这些信息，依然可以正常打开，此处留下一个疑问。<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980364611641.jpg" alt=""></p>
+<p>开始向服务器上传文件的时候才用的是这种方式，发现到服务器无法进行解码。拿到服务器上的文件使用<code>vi</code>打开分析如下：<br><img src="http://img.jessieedu.com/14980361286591.jpg" alt=""><br>将这些信息删除以后，文件就可以正常打开了。但是，我在向服务器提交比较的数据时候，比如一个<code>pdf</code>和<code>mp3</code>文件一样带有这些信息，依然可以正常打开，此处留下一个疑问。<br><img src="http://img.jessieedu.com/14980364611641.jpg" alt=""></p>
 <h1 id="application-x-www-form-urlencoded"><a href="#application-x-www-form-urlencoded" class="headerlink" title="application/x-www-form-urlencoded"></a><code>application/x-www-form-urlencoded</code></h1><p>使用类型为上传文件的默认方式：</p>
 <h2 id="使用AFNetworing"><a href="#使用AFNetworing" class="headerlink" title="使用AFNetworing"></a>使用<code>AFNetworing</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">NSURL *url = [NSURL URLWithString:@&quot;http://192.168.2.51:5006/ashx/UploadHandler.ashx&quot;];</div><div class="line">    </div><div class="line">NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];</div><div class="line">request.HTTPMethod = @&quot;POST&quot;;</div><div class="line">    </div><div class="line">NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@&quot;111&quot; ofType:@&quot;mp3&quot;]];</div><div class="line">        </div><div class="line">[[manager uploadTaskWithRequest:request fromData:data progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;,@(uploadProgress.fractionCompleted));</div><div class="line">&#125; completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) &#123;</div><div class="line">       </div><div class="line">    if (error) &#123;</div><div class="line">          NSLog(@&quot;error - %@&quot;,error);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;responseObject - %@&quot;,responseObject);</div><div class="line">    &#125;</div><div class="line">&#125;] resume];</div></pre></td></tr></table></figure>
 <h2 id="使用原生NSURLSession方式："><a href="#使用原生NSURLSession方式：" class="headerlink" title="使用原生NSURLSession方式："></a>使用原生<code>NSURLSession</code>方式：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];</div><div class="line">self.session = session;</div><div class="line">    </div><div class="line">[[session uploadTaskWithRequest:request fromData:data] resume];</div></pre></td></tr></table></figure>
 <p>在代理中监听：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error;</div><div class="line"></div><div class="line">- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge</div><div class="line">                                             completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler;</div><div class="line"></div><div class="line">- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session NS_AVAILABLE_IOS(7_0);</div></pre></td></tr></table></figure>
-<p>使用<code>Charles</code>查看网络请求头如下：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14980390941948.jpg" alt=""></p>
+<p>使用<code>Charles</code>查看网络请求头如下：<br><img src="http://img.jessieedu.com/14980390941948.jpg" alt=""></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在后台给出具体的实施方案之后，结合上面两种方法来实现文件上传，即可轻松实现文件的上传。如果后台无法给出具体的是哪种方案，建议先尝试第二种方案。<br>另外，还是建议后台采用第一种方案来实现。可以一次性传递多个资源，而后者则无法达到。第二种方案要实现多图上传的话只能通过多线程循环调用来实现。在这一点上，还是第一种比较优雅一些。</p>
 ]]></content>
       
@@ -1352,12 +1241,12 @@
       <title><![CDATA[iOS中GCD的使用]]></title>
       <url>/2015/11/19/iOSGCD/</url>
       <content type="html"><![CDATA[<p>从<code>iOS4</code>时期，苹果引入了<code>GCD</code>技术，<code>GCD</code>(<code>Grand Central Dispatch</code>)是异步执行任务的技术之一。一般将应用程序中描述的线程管理用的代码在系统级中实现。开发者只需定义想执行的任务并追加到适当的<code>Dispatch Queue</code>中，<code>GCD</code>就能生成必要的线程并计划执行任务。而线程管理是作为系统的一部分来实现的，因此可统一管理，也可执行任务，这样大大提高了线程的效率。</p>
-<h1 id="多线程编程"><a href="#多线程编程" class="headerlink" title="多线程编程"></a>多线程编程</h1><p>在<code>iOS</code>开发中，前期<code>CPU</code>均为单核设计。 源码编译后的机器语言在<code>CPU</code>上顺序执行。即使在<code>Objective-C</code>中的<code>if</code>和<code>for</code>等控制语句或函数调用的情况下，执行命令列的地址只是远离当前的位置，在<code>CPU</code>上执行的<code>CPU</code>命令就好比一条无分叉的大道，其执行不会出现分歧。如图所示：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15110631212724.jpg" alt=""></p>
+<h1 id="多线程编程"><a href="#多线程编程" class="headerlink" title="多线程编程"></a>多线程编程</h1><p>在<code>iOS</code>开发中，前期<code>CPU</code>均为单核设计。 源码编译后的机器语言在<code>CPU</code>上顺序执行。即使在<code>Objective-C</code>中的<code>if</code>和<code>for</code>等控制语句或函数调用的情况下，执行命令列的地址只是远离当前的位置，在<code>CPU</code>上执行的<code>CPU</code>命令就好比一条无分叉的大道，其执行不会出现分歧。如图所示：<br><img src="http://img.jessieedu.com/15110631212724.jpg" alt=""></p>
 <p>这里所说的一个<code>CPU</code>执行的<code>CPU</code>命令列为一条无分叉路径即为“线程”。多线程即为同时有多条无分叉的执行路径。基本上一个<code>CPU</code>核一次只能执行的<code>CPU</code>命令始终为1，为了实现多线程技术，<code>iOS</code>的核心<code>XUN</code>内核在发生操作系事件时会切换执行路径，执行中路径的状态保存到各自路径专用的内存中，从切换目标路径专用的内存块中恢复<code>CPU</code>寄存器信息，继续执行切换路径的<code>CPU</code>命令列被称为“上下文切换”。由于使用多线程的程序可以在某个线程和其他线程之间反复多次进行上下文切换，因此看上起就像一个<code>CPU</code>核能够并列的执行多个线程一样。当在具有多个<code>CPU</code>核情况下，就真的是提供了多个<code>CPU</code>核心并行执行多个线程的技术了。</p>
 <p>但是，多线程编程在实际上很容易发生各种问题。例如数据竞争（多个线程同时操作数据，导致数据不一致，数据库最能体现这一状况）、死锁（停止等待事件的线程导致多个线程互相持续等待）、内存消耗过大（开启太多线程）。</p>
 <h1 id="GCD中的API"><a href="#GCD中的API" class="headerlink" title="GCD中的API"></a>GCD中的API</h1><h2 id="Dispatch-Queue"><a href="#Dispatch-Queue" class="headerlink" title="Dispatch Queue"></a>Dispatch Queue</h2><p>在Apple的官方文档中，开发者需要做的事件添加到合适的Dispatch Queue中，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dispatch_async(queue, ^&#123;</div><div class="line"></div><div class="line">    // 要做的事件            </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>在<code>Dispatch Queue</code>中，任务遵循<code>FIFO</code>的顺序执行处理。<br><img src="http://orhh9hlxq.bkt.clouddn.com/15110657305490.jpg" alt=""></p>
+<p>在<code>Dispatch Queue</code>中，任务遵循<code>FIFO</code>的顺序执行处理。<br><img src="http://img.jessieedu.com/15110657305490.jpg" alt=""></p>
 <p>但是在执行处理时存在两种<code>Dispath Queue</code>，如表所示：</p>
 <table>
 <thead>
@@ -1387,7 +1276,7 @@
 <li>当 <code>queue</code> 为 <code>DISPATCH_QUEUE_CONCURRENT</code>模式打印结果为</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">block1</div><div class="line">block4</div><div class="line">block3</div><div class="line">block2</div></pre></td></tr></table></figure>
-<p>当变量<code>queue</code>为<code>DISPATCH_QUEUE_SERIAL</code>时候，因为需要等待现在执行中的任务结束才能进入到下一个任务，所以会顺序执行。而<code>queue</code>为<code>DISPATCH_QUEUE_CONCURRENT</code>时，无论当前任务是否执行完毕都会进行下一个任务的处理，虽然不用等待结束处理并且可以并行执行多个任务，但执行的处理数量取决于当前的处理数量和当前系统状态。即iOS和OS X基于Dispatch Queue中的处理数、CPU核数以及CPU负荷等状态来决定并行执行的处理数。<code>DISPATCH_QUEUE_SERIAL</code>类型只在一个一个线程中执行任务，而<code>DISPATCH_QUEUE_CONCURRENT</code>类型将使用多个线程执行。但是多个<code>DISPATCH_QUEUE_SERIAL</code>类型的线程时可以并行执行的，并不公用同一个线程，如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15133934969884.jpg" alt=""></p>
+<p>当变量<code>queue</code>为<code>DISPATCH_QUEUE_SERIAL</code>时候，因为需要等待现在执行中的任务结束才能进入到下一个任务，所以会顺序执行。而<code>queue</code>为<code>DISPATCH_QUEUE_CONCURRENT</code>时，无论当前任务是否执行完毕都会进行下一个任务的处理，虽然不用等待结束处理并且可以并行执行多个任务，但执行的处理数量取决于当前的处理数量和当前系统状态。即iOS和OS X基于Dispatch Queue中的处理数、CPU核数以及CPU负荷等状态来决定并行执行的处理数。<code>DISPATCH_QUEUE_SERIAL</code>类型只在一个一个线程中执行任务，而<code>DISPATCH_QUEUE_CONCURRENT</code>类型将使用多个线程执行。但是多个<code>DISPATCH_QUEUE_SERIAL</code>类型的线程时可以并行执行的，并不公用同一个线程，如图：<br><img src="http://img.jessieedu.com/15133934969884.jpg" alt=""></p>
 <p>如果大量开辟线程，正如上文讨论大到的，回造成内存的大量消耗，引起大量的上下文切换，大幅降低系统的响应性能。在数据访问过程中造成大量锁和等待的问题。</p>
 <h2 id="dispatch-queue-create"><a href="#dispatch-queue-create" class="headerlink" title="dispatch_queue_create"></a>dispatch_queue_create</h2><p>创建线程的一种方式就是通过<code>GCD</code>中的<code>API</code>，生成<code>Serial Dispatch Queue</code>：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t serialQueue = dispatch_queue_create(&quot;com.chen.test&quot;, DISPATCH_QUEUE_SERIAL);</div></pre></td></tr></table></figure>
@@ -1447,7 +1336,7 @@
 <p>在<code>Dispatch Group</code>中也可以使用<code>dispatch_group_wait</code>函数仅等待全部任务执行结束止再往下执行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch_group_wait(group, DISPATCH_TIME_FOREVER);</div></pre></td></tr></table></figure>
 <p>第二个参数为<code>dispatch_time_t</code>类型的值，只要<code>Group</code>中的任务没有执行结束，就一直等待，中途无法取消。当返回值为0的时候，表明经过特定时间后全部任务执行完毕。这里的“等待”意味着一旦调用该函数，该函数就处于调用而不返回的状态。即，使当前的线程停止，经过指定时间或任务结束之后停止。造成一种卡死的假象。</p>
-<h2 id="dispatch-sync"><a href="#dispatch-sync" class="headerlink" title="dispatch_sync"></a>dispatch_sync</h2><p><code>dispatch_async</code>函数意味着“非同步”,即将指定的<code>Block</code>“非同步”的追加到指定的<code>Dispatch Queue</code>中，<code>dispatch_async</code>函数不做任何等待，原理如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15136914746503.jpg" alt=""></p>
+<h2 id="dispatch-sync"><a href="#dispatch-sync" class="headerlink" title="dispatch_sync"></a>dispatch_sync</h2><p><code>dispatch_async</code>函数意味着“非同步”,即将指定的<code>Block</code>“非同步”的追加到指定的<code>Dispatch Queue</code>中，<code>dispatch_async</code>函数不做任何等待，原理如图：<br><img src="http://img.jessieedu.com/15136914746503.jpg" alt=""></p>
 <p>而<code>dispatch_sync</code>函数在指定的处理执行结束之前，该函数不会返回。即<code>dispatch_group_wait</code>函数的简写版。在使用中应特别注意，容易引起死锁的问题：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">dispatch_sync(dispatch_get_main_queue(), ^&#123;</div><div class="line">           </div><div class="line">    NSLog(@&quot;block&quot;);</div><div class="line">&#125;);</div><div class="line">        </div><div class="line">NSLog(@&quot;finish&quot;);</div></pre></td></tr></table></figure>
 <p>该代码在<code>Main Dispatch Queue</code>中要执行指定的<code>Block</code>,并等待其执行结束。而其实在主线程中正在执行这些源代码，所以无法执行追加到<code>Main Dispatch Queue</code>的<code>Block</code>。</p>
@@ -1497,12 +1386,12 @@
 <p>复位模拟器，重新运行项目，无法联网，方法失败。</p>
 <p>重启Mac，重新运行项目，无法联网，方法失败。</p>
 <h1 id="解决方法二"><a href="#解决方法二" class="headerlink" title="解决方法二"></a>解决方法二</h1><p>换一个思路，既然是网络出现的问题，就查看网络设置。<br>打开 <code>网络便好设置</code>,<code>ip</code> 和 <code>DNS</code> 都没问题,查看代理的时候出现了问题，如图:</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_3.png" alt=""></p>
+<p><img src="http://img.jessieedu.com/Snip20160907_3.png" alt=""></p>
 <p>将选中的两项选勾掉，再次运行，成功连接服务器！</p>
 <p>分析的得知，由于工作需要，在本地配置了<code>XX-Net</code>代理软件(决非广告)，在配置属性的时候，选择了全局代理：</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_6.png" alt=""></p>
+<p><img src="http://img.jessieedu.com/Snip20160907_6.png" alt=""></p>
 <p>然后将属性改为自动代理以后网络的设置：</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_7.png" alt=""></p>
+<p><img src="http://img.jessieedu.com/Snip20160907_7.png" alt=""></p>
 <p>再次运行项目，联网正常！</p>
 ]]></content>
       
@@ -1568,7 +1457,7 @@
       <title><![CDATA[关于]]></title>
       <url>/about/index.html</url>
       <content type="html"><![CDATA[<p>Email：<a href="mailto:cw_028@163.com／" target="_blank" rel="external">@cw_028@163.com</a></p>
-<p>GitHub：<a href="https://github.com/AbnerChen028/" target="_blank" rel="external">@abnerchen028</a></p>
+<p>GitHub：<a href="https://github.com/AbnerChen028/" target="_blank" rel="external">@AbnerChen028</a></p>
 ]]></content>
     </entry>
     

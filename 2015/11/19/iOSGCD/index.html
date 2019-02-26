@@ -77,7 +77,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="abnerchen" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Abner Chen" type="application/atom+xml" />
 
 
 
@@ -94,17 +94,17 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS中GCD的使用">
 <meta property="og:url" content="https://abnerchen028.github.io/2015/11/19/iOSGCD/index.html">
-<meta property="og:site_name" content="abnerchen">
+<meta property="og:site_name" content="Abner Chen">
 <meta property="og:description" content="从iOS4时期，苹果引入了GCD技术，GCD(Grand Central Dispatch)是异步执行任务的技术之一。一般将应用程序中描述的线程管理用的代码在系统级中实现。开发者只需定义想执行的任务并追加到适当的Dispatch Queue中，GCD就能生成必要的线程并计划执行任务。而线程管理是作为系统的一部分来实现的，因此可统一管理，也可执行任务，这样大大提高了线程的效率。 多线程编程在iOS开">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/15110631212724.jpg">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/15110657305490.jpg">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/15133934969884.jpg">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/15136914746503.jpg">
-<meta property="og:updated_time" content="2017-12-26T03:16:23.000Z">
+<meta property="og:image" content="http://img.jessieedu.com/15110631212724.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/15110657305490.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/15133934969884.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/15136914746503.jpg">
+<meta property="og:updated_time" content="2019-02-26T07:20:31.244Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS中GCD的使用">
 <meta name="twitter:description" content="从iOS4时期，苹果引入了GCD技术，GCD(Grand Central Dispatch)是异步执行任务的技术之一。一般将应用程序中描述的线程管理用的代码在系统级中实现。开发者只需定义想执行的任务并追加到适当的Dispatch Queue中，GCD就能生成必要的线程并计划执行任务。而线程管理是作为系统的一部分来实现的，因此可统一管理，也可执行任务，这样大大提高了线程的效率。 多线程编程在iOS开">
-<meta name="twitter:image" content="http://orhh9hlxq.bkt.clouddn.com/15110631212724.jpg">
+<meta name="twitter:image" content="http://img.jessieedu.com/15110631212724.jpg">
 
 
 
@@ -138,7 +138,7 @@
 
 
 
-  <title> iOS中GCD的使用 | abnerchen </title>
+  <title> iOS中GCD的使用 | Abner Chen </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -184,7 +184,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">abnerchen</span>
+        <span class="site-title">Abner Chen</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -286,7 +286,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="abnerchen">
+      <meta itemprop="name" content="Abner Chen">
     </span>
 
     
@@ -383,12 +383,12 @@
 
       
         <p>从<code>iOS4</code>时期，苹果引入了<code>GCD</code>技术，<code>GCD</code>(<code>Grand Central Dispatch</code>)是异步执行任务的技术之一。一般将应用程序中描述的线程管理用的代码在系统级中实现。开发者只需定义想执行的任务并追加到适当的<code>Dispatch Queue</code>中，<code>GCD</code>就能生成必要的线程并计划执行任务。而线程管理是作为系统的一部分来实现的，因此可统一管理，也可执行任务，这样大大提高了线程的效率。</p>
-<h1 id="多线程编程"><a href="#多线程编程" class="headerlink" title="多线程编程"></a>多线程编程</h1><p>在<code>iOS</code>开发中，前期<code>CPU</code>均为单核设计。 源码编译后的机器语言在<code>CPU</code>上顺序执行。即使在<code>Objective-C</code>中的<code>if</code>和<code>for</code>等控制语句或函数调用的情况下，执行命令列的地址只是远离当前的位置，在<code>CPU</code>上执行的<code>CPU</code>命令就好比一条无分叉的大道，其执行不会出现分歧。如图所示：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15110631212724.jpg" alt=""></p>
+<h1 id="多线程编程"><a href="#多线程编程" class="headerlink" title="多线程编程"></a>多线程编程</h1><p>在<code>iOS</code>开发中，前期<code>CPU</code>均为单核设计。 源码编译后的机器语言在<code>CPU</code>上顺序执行。即使在<code>Objective-C</code>中的<code>if</code>和<code>for</code>等控制语句或函数调用的情况下，执行命令列的地址只是远离当前的位置，在<code>CPU</code>上执行的<code>CPU</code>命令就好比一条无分叉的大道，其执行不会出现分歧。如图所示：<br><img src="http://img.jessieedu.com/15110631212724.jpg" alt=""></p>
 <p>这里所说的一个<code>CPU</code>执行的<code>CPU</code>命令列为一条无分叉路径即为“线程”。多线程即为同时有多条无分叉的执行路径。基本上一个<code>CPU</code>核一次只能执行的<code>CPU</code>命令始终为1，为了实现多线程技术，<code>iOS</code>的核心<code>XUN</code>内核在发生操作系事件时会切换执行路径，执行中路径的状态保存到各自路径专用的内存中，从切换目标路径专用的内存块中恢复<code>CPU</code>寄存器信息，继续执行切换路径的<code>CPU</code>命令列被称为“上下文切换”。由于使用多线程的程序可以在某个线程和其他线程之间反复多次进行上下文切换，因此看上起就像一个<code>CPU</code>核能够并列的执行多个线程一样。当在具有多个<code>CPU</code>核情况下，就真的是提供了多个<code>CPU</code>核心并行执行多个线程的技术了。</p>
 <p>但是，多线程编程在实际上很容易发生各种问题。例如数据竞争（多个线程同时操作数据，导致数据不一致，数据库最能体现这一状况）、死锁（停止等待事件的线程导致多个线程互相持续等待）、内存消耗过大（开启太多线程）。</p>
 <h1 id="GCD中的API"><a href="#GCD中的API" class="headerlink" title="GCD中的API"></a>GCD中的API</h1><h2 id="Dispatch-Queue"><a href="#Dispatch-Queue" class="headerlink" title="Dispatch Queue"></a>Dispatch Queue</h2><p>在Apple的官方文档中，开发者需要做的事件添加到合适的Dispatch Queue中，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dispatch_async(queue, ^&#123;</div><div class="line"></div><div class="line">    // 要做的事件            </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>在<code>Dispatch Queue</code>中，任务遵循<code>FIFO</code>的顺序执行处理。<br><img src="http://orhh9hlxq.bkt.clouddn.com/15110657305490.jpg" alt=""></p>
+<p>在<code>Dispatch Queue</code>中，任务遵循<code>FIFO</code>的顺序执行处理。<br><img src="http://img.jessieedu.com/15110657305490.jpg" alt=""></p>
 <p>但是在执行处理时存在两种<code>Dispath Queue</code>，如表所示：</p>
 <table>
 <thead>
@@ -418,7 +418,7 @@
 <li>当 <code>queue</code> 为 <code>DISPATCH_QUEUE_CONCURRENT</code>模式打印结果为</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">block1</div><div class="line">block4</div><div class="line">block3</div><div class="line">block2</div></pre></td></tr></table></figure>
-<p>当变量<code>queue</code>为<code>DISPATCH_QUEUE_SERIAL</code>时候，因为需要等待现在执行中的任务结束才能进入到下一个任务，所以会顺序执行。而<code>queue</code>为<code>DISPATCH_QUEUE_CONCURRENT</code>时，无论当前任务是否执行完毕都会进行下一个任务的处理，虽然不用等待结束处理并且可以并行执行多个任务，但执行的处理数量取决于当前的处理数量和当前系统状态。即iOS和OS X基于Dispatch Queue中的处理数、CPU核数以及CPU负荷等状态来决定并行执行的处理数。<code>DISPATCH_QUEUE_SERIAL</code>类型只在一个一个线程中执行任务，而<code>DISPATCH_QUEUE_CONCURRENT</code>类型将使用多个线程执行。但是多个<code>DISPATCH_QUEUE_SERIAL</code>类型的线程时可以并行执行的，并不公用同一个线程，如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15133934969884.jpg" alt=""></p>
+<p>当变量<code>queue</code>为<code>DISPATCH_QUEUE_SERIAL</code>时候，因为需要等待现在执行中的任务结束才能进入到下一个任务，所以会顺序执行。而<code>queue</code>为<code>DISPATCH_QUEUE_CONCURRENT</code>时，无论当前任务是否执行完毕都会进行下一个任务的处理，虽然不用等待结束处理并且可以并行执行多个任务，但执行的处理数量取决于当前的处理数量和当前系统状态。即iOS和OS X基于Dispatch Queue中的处理数、CPU核数以及CPU负荷等状态来决定并行执行的处理数。<code>DISPATCH_QUEUE_SERIAL</code>类型只在一个一个线程中执行任务，而<code>DISPATCH_QUEUE_CONCURRENT</code>类型将使用多个线程执行。但是多个<code>DISPATCH_QUEUE_SERIAL</code>类型的线程时可以并行执行的，并不公用同一个线程，如图：<br><img src="http://img.jessieedu.com/15133934969884.jpg" alt=""></p>
 <p>如果大量开辟线程，正如上文讨论大到的，回造成内存的大量消耗，引起大量的上下文切换，大幅降低系统的响应性能。在数据访问过程中造成大量锁和等待的问题。</p>
 <h2 id="dispatch-queue-create"><a href="#dispatch-queue-create" class="headerlink" title="dispatch_queue_create"></a>dispatch_queue_create</h2><p>创建线程的一种方式就是通过<code>GCD</code>中的<code>API</code>，生成<code>Serial Dispatch Queue</code>：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t serialQueue = dispatch_queue_create(&quot;com.chen.test&quot;, DISPATCH_QUEUE_SERIAL);</div></pre></td></tr></table></figure>
@@ -478,7 +478,7 @@
 <p>在<code>Dispatch Group</code>中也可以使用<code>dispatch_group_wait</code>函数仅等待全部任务执行结束止再往下执行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch_group_wait(group, DISPATCH_TIME_FOREVER);</div></pre></td></tr></table></figure>
 <p>第二个参数为<code>dispatch_time_t</code>类型的值，只要<code>Group</code>中的任务没有执行结束，就一直等待，中途无法取消。当返回值为0的时候，表明经过特定时间后全部任务执行完毕。这里的“等待”意味着一旦调用该函数，该函数就处于调用而不返回的状态。即，使当前的线程停止，经过指定时间或任务结束之后停止。造成一种卡死的假象。</p>
-<h2 id="dispatch-sync"><a href="#dispatch-sync" class="headerlink" title="dispatch_sync"></a>dispatch_sync</h2><p><code>dispatch_async</code>函数意味着“非同步”,即将指定的<code>Block</code>“非同步”的追加到指定的<code>Dispatch Queue</code>中，<code>dispatch_async</code>函数不做任何等待，原理如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/15136914746503.jpg" alt=""></p>
+<h2 id="dispatch-sync"><a href="#dispatch-sync" class="headerlink" title="dispatch_sync"></a>dispatch_sync</h2><p><code>dispatch_async</code>函数意味着“非同步”,即将指定的<code>Block</code>“非同步”的追加到指定的<code>Dispatch Queue</code>中，<code>dispatch_async</code>函数不做任何等待，原理如图：<br><img src="http://img.jessieedu.com/15136914746503.jpg" alt=""></p>
 <p>而<code>dispatch_sync</code>函数在指定的处理执行结束之前，该函数不会返回。即<code>dispatch_group_wait</code>函数的简写版。在使用中应特别注意，容易引起死锁的问题：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">dispatch_sync(dispatch_get_main_queue(), ^&#123;</div><div class="line">           </div><div class="line">    NSLog(@&quot;block&quot;);</div><div class="line">&#125;);</div><div class="line">        </div><div class="line">NSLog(@&quot;finish&quot;);</div></pre></td></tr></table></figure>
 <p>该代码在<code>Main Dispatch Queue</code>中要执行指定的<code>Block</code>,并等待其执行结束。而其实在主线程中正在执行这些源代码，所以无法执行追加到<code>Main Dispatch Queue</code>的<code>Block</code>。</p>
@@ -638,7 +638,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -649,7 +649,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -660,7 +660,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -725,7 +725,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
