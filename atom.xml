@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://abnerchen028.github.io/"/>
-  <updated>2019-02-26T07:20:31.243Z</updated>
+  <updated>2019-02-27T08:13:11.426Z</updated>
   <id>https://abnerchen028.github.io/</id>
   
   <author>
@@ -14,6 +14,41 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从crash日志得到的一些收获</title>
+    <link href="https://abnerchen028.github.io/2019/02/26/jsonmodel/"/>
+    <id>https://abnerchen028.github.io/2019/02/26/jsonmodel/</id>
+    <published>2019-02-26T07:59:28.000Z</published>
+    <updated>2019-02-27T08:13:11.426Z</updated>
+    
+    <content type="html"><![CDATA[<!-- 阐述 -->
+<p>最近在公司的日志中发现一些 <code>crash</code> 信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-[__NSCFString longValue]: unrecognized selector sent to instance 0xxxxx</div><div class="line"></div><div class="line">-[__NSCFString charValue]: unrecognized selector sent to instance 0xxxxx</div></pre></td></tr></table></figure>
+<p>最终确认是在使用 <code>JSONModel</code> 在由 <code>JSON</code> 转 <code>Model</code>的时候出现的问题：</p>
+<!--  -->
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;!-- 阐述 --&gt;
+&lt;p&gt;最近在公司的日志中发现一些 &lt;code&gt;crash&lt;/code&gt; 信息：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;
+    
+    </summary>
+    
+      <category term="iOS开发" scheme="https://abnerchen028.github.io/categories/iOS%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="CPU" scheme="https://abnerchen028.github.io/tags/CPU/"/>
+    
+      <category term="32位" scheme="https://abnerchen028.github.io/tags/32%E4%BD%8D/"/>
+    
+      <category term="64位" scheme="https://abnerchen028.github.io/tags/64%E4%BD%8D/"/>
+    
+      <category term="JSONModel" scheme="https://abnerchen028.github.io/tags/JSONModel/"/>
+    
+  </entry>
   
   <entry>
     <title>KVC中的集合运算符</title>
@@ -280,7 +315,7 @@
     <link href="https://abnerchen028.github.io/2017/09/25/regix/"/>
     <id>https://abnerchen028.github.io/2017/09/25/regix/</id>
     <published>2017-09-25T14:14:27.000Z</published>
-    <updated>2017-12-26T03:49:01.330Z</updated>
+    <updated>2017-12-26T03:49:02.000Z</updated>
     
     <content type="html"><![CDATA[<p>#正则表达式学习笔记</p>
 <p><a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">学习地址</a></p>
@@ -591,7 +626,7 @@
     <link href="https://abnerchen028.github.io/2017/03/26/symbolicatecrash/"/>
     <id>https://abnerchen028.github.io/2017/03/26/symbolicatecrash/</id>
     <published>2017-03-26T14:40:48.000Z</published>
-    <updated>2017-12-26T05:45:32.599Z</updated>
+    <updated>2017-12-26T05:45:32.000Z</updated>
     
     <content type="html"><![CDATA[<p><code>symbolicatecrash</code>是Xcode自带的一个崩溃文件分析工具。在Xcode8中，可以在一下路径获取：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/Applications/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework/Versions/A/Resources/symbolicatecrash</div></pre></td></tr></table></figure>
@@ -724,7 +759,7 @@
     <link href="https://abnerchen028.github.io/2016/12/14/compileerror/"/>
     <id>https://abnerchen028.github.io/2016/12/14/compileerror/</id>
     <published>2016-12-14T03:22:20.000Z</published>
-    <updated>2017-12-26T03:28:42.158Z</updated>
+    <updated>2017-12-26T03:28:42.000Z</updated>
     
     <content type="html"><![CDATA[<p>今天接手一个新项目，由于使用的<code>CocoaPods</code>来管理第三方的，使用<code>pod install</code>命令之后打开项目发现如下警告：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/AFNetworking&apos;</div><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/FMDB&apos;</div><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/MBProgressHUD&apos;</div><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/PBKDF2-Wrapper&apos;</div><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/Reachability&apos;</div><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/SBJson&apos;</div><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/SFHFKeychainUtils&apos;</div><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/SQLCipher&apos;</div><div class="line">ld: warning: directory not found for option &apos;-L/Users/abnerchen/Library/Developer/Xcode/DerivedData/PioneerSalesApp-cvhvopmhxlvwrhazdwjzrhpbbwkd/Build/Products/Debug-iphonesimulator/Toast&apos;</div><div class="line">ld: library not found for -lAFNetworking</div><div class="line">clang: error: linker command failed with exit code 1 (use -v to see invocation)</div></pre></td></tr></table></figure>
@@ -758,7 +793,7 @@
     <link href="https://abnerchen028.github.io/2016/10/29/androidlayout/"/>
     <id>https://abnerchen028.github.io/2016/10/29/androidlayout/</id>
     <published>2016-10-29T03:33:09.000Z</published>
-    <updated>2017-12-26T06:19:36.626Z</updated>
+    <updated>2017-12-26T06:19:36.000Z</updated>
     
     <content type="html"><![CDATA[<p>最近在学习<code>android</code>开发，<code>android</code>中的布局相对于<code>iOS</code>中的布局比较简单，和<code>H5</code>中的布局比较相似，以下为学习笔记。</p>
 <h1 id="线性布局-LinearLayout"><a href="#线性布局-LinearLayout" class="headerlink" title="线性布局 LinearLayout"></a>线性布局 LinearLayout</h1><p>子控件水平布局或者垂直布局，可以通过<code>orientation</code>参数设置水平或者垂直分布。</p>
@@ -798,7 +833,7 @@
     <link href="https://abnerchen028.github.io/2016/08/12/locationoptimize/"/>
     <id>https://abnerchen028.github.io/2016/08/12/locationoptimize/</id>
     <published>2016-08-12T11:53:18.000Z</published>
-    <updated>2017-12-26T01:34:30.971Z</updated>
+    <updated>2017-12-26T01:34:30.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="定位漂移"><a href="#定位漂移" class="headerlink" title="定位漂移"></a>定位漂移</h1><p>百度地图在后台持续获取定位信息，并将定位信息绘制到百度地图上。由于在GPS信号很不好的情况下出现很严重的定位漂移，而百度并未提供去噪点功能，所以只有自己做优化。</p>
 <h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><p>在成功获取第一个定位点的时候获取到当前的定位点保存。在此获取的点与之前一个点比较，求出两点之间的距离以及速度。当速度非常大（考虑到有可能乘坐动车，大于90m/s）忽略该点，认为该点是一个漂一点，但是效果并不理想。另一个，当前移动距离小于定位精确值的时候忽略该点。认为该点是一个漂移点，这样的设置大大降低了漂移点的数量。但是从实际效果上来看还是会出现漂移点。从漂移点上来看，大部分漂移点都集中在刚刚启动定位功能时。此时的定位精确度比较低，此时，决定在第二版做如下处理</p>
@@ -884,7 +919,7 @@
     <link href="https://abnerchen028.github.io/2016/05/09/webview/"/>
     <id>https://abnerchen028.github.io/2016/05/09/webview/</id>
     <published>2016-05-09T05:46:38.000Z</published>
-    <updated>2017-12-26T06:26:03.271Z</updated>
+    <updated>2017-12-26T06:26:04.000Z</updated>
     
     <content type="html"><![CDATA[<p>在最近的项目中，有一个用户注册协议客户给的是<code>.doc</code>文件。</p>
 <p>在<code>iOS</code>中，<code>UIWebView</code>加载数据有三种方式：</p>
@@ -1008,7 +1043,7 @@
     <link href="https://abnerchen028.github.io/2016/03/26/qualifier/"/>
     <id>https://abnerchen028.github.io/2016/03/26/qualifier/</id>
     <published>2016-03-26T12:52:54.000Z</published>
-    <updated>2017-12-26T06:14:45.381Z</updated>
+    <updated>2017-12-26T06:14:46.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="weak-amp-strong"><a href="#weak-amp-strong" class="headerlink" title="weak &amp; strong"></a><code>weak</code> &amp; <code>strong</code></h1><p><code>weak</code>和<code>strong</code>修饰的均为对象类型。当一个对象不在有<code>strong</code>类型的指针指向它的时候，该对象会被释放。当无<code>strong</code>指针指向的时候，所有<code>weak</code>类型的指针都将被清除。</p>
 <h1 id="assign-amp-copy-amp-retain"><a href="#assign-amp-copy-amp-retain" class="headerlink" title="assign &amp; copy &amp; retain"></a><code>assign</code> &amp; <code>copy</code> &amp; <code>retain</code></h1><ul>
@@ -1115,7 +1150,7 @@
     <link href="https://abnerchen028.github.io/2016/03/26/pop/"/>
     <id>https://abnerchen028.github.io/2016/03/26/pop/</id>
     <published>2016-03-26T05:20:15.000Z</published>
-    <updated>2017-12-26T05:39:14.260Z</updated>
+    <updated>2017-12-26T05:39:14.000Z</updated>
     
     <content type="html"><![CDATA[<p><a href="https://github.com/facebook/pop" target="_blank" rel="external"><code>POP</code></a>是<code>Facebook</code>开源的一个动画库，该动画库基于<code>CADisplayLink</code>(Mac平台上使用的<code>CVDisplayLink</code>)实现的独立于<code>Core Animation</code>之外的动画库。以每秒60帧的速度渲染动画，所以看起来会非常流畅。</p>
 <p>创建一个<code>POP</code>动画需要六步，下面我们来逐一介绍：</p>
@@ -1221,7 +1256,7 @@
     <link href="https://abnerchen028.github.io/2016/02/26/calayer/"/>
     <id>https://abnerchen028.github.io/2016/02/26/calayer/</id>
     <published>2016-02-26T12:50:42.000Z</published>
-    <updated>2017-12-26T04:06:54.639Z</updated>
+    <updated>2017-12-26T04:06:54.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="CALayer"><a href="#CALayer" class="headerlink" title="CALayer"></a>CALayer</h1><p>在我们正常开发中，这个是使用最多的。通过<code>CALayer</code>可以设置边框以及圆角、阴影等属性，<code>Core Animation</code>动画就是添加在<code>CALayer</code>之上的效果.</p>
 <h1 id="CATextLayer"><a href="#CATextLayer" class="headerlink" title="CATextLayer"></a>CATextLayer</h1><p>通过<code>CATextLayer</code>可以封装自己的<code>Label</code>控件。</p>
@@ -1259,7 +1294,7 @@
     <link href="https://abnerchen028.github.io/2015/11/27/httpsauth/"/>
     <id>https://abnerchen028.github.io/2015/11/27/httpsauth/</id>
     <published>2015-11-27T12:01:00.000Z</published>
-    <updated>2017-12-27T04:04:54.206Z</updated>
+    <updated>2017-12-27T04:04:54.000Z</updated>
     
     <content type="html"><![CDATA[<ol>
 <li><p>浏览器发送一个连接请求给安全服务器。</p>
@@ -1479,47 +1514,6 @@
       <category term="模拟器" scheme="https://abnerchen028.github.io/tags/%E6%A8%A1%E6%8B%9F%E5%99%A8/"/>
     
       <category term="联网失败" scheme="https://abnerchen028.github.io/tags/%E8%81%94%E7%BD%91%E5%A4%B1%E8%B4%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>个人搭建博客经历</title>
-    <link href="https://abnerchen028.github.io/2015/09/19/PersonFirst/"/>
-    <id>https://abnerchen028.github.io/2015/09/19/PersonFirst/</id>
-    <published>2015-09-19T08:03:45.000Z</published>
-    <updated>2017-12-26T03:19:13.707Z</updated>
-    
-    <content type="html"><![CDATA[<p>个人搭建的第一个博客终于算是成型了，总体感受还是比较简单的，而且体验也不错。</p>
-<p>之前考虑过使用<code>Wordpress</code>来建站。经过考察感觉没有太大的必要，要使用<code>Wordpress</code>来建站的话，需要有自己的空间，而且需要<code>Apache</code>+<code>MySQL</code>+<code>PHP</code>。在阿里云上使用<code>XAMPP</code>已经搭建了一套服务，但是那个只是自己搞的一个测试服务器。在没有指导的情况下经常将服务器搞瘫痪。所以稳妥一点，借助<code>GitHub Pages</code>的平台最一个稳定的<code>Blog</code>吧。另外，现在有大量的<code>Blog</code>网站网站都有着不错的体验，但是和<code>Pages</code>相比又缺少一些自由。</p>
-<p>搭建<code>GitHub Pages</code>并不难，网上很多教程，这里给出一个<a href="http://www.jianshu.com/p/f66103553c45" target="_blank" rel="external">教程</a>。</p>
-<p>这里说一下我遇到的几个问题：</p>
-<ol>
-<li>搭建完毕后点击<code>分类</code>和<code>关于</code>会进入<code>404</code>页面。此处建议在跟目录上放一个自定义的<code>404</code>页面。命名为：<code>404.html</code>。</li>
-<li><p>分类页面不会自动生成。需要自己创建：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo new page categories</div></pre></td></tr></table></figure>
-<p> 然后进入到<code>Hexo/source/categories/</code>，在<code>index.md</code>中添加以下信息：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: categories</div><div class="line">type: &quot;categories&quot;</div><div class="line">comments: false</div><div class="line">---</div></pre></td></tr></table></figure>
-<p> 同理创建关于界面：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo new page about</div></pre></td></tr></table></figure>
-</li>
-<li><p>每次写完<code>Blog</code>，都需要一系列的操作。创建一个脚本文件，一个操作实现发布：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">hexo clean</div><div class="line">hexo generate</div><div class="line">cp -R public/* .deploy/xxx.github.io</div><div class="line">cd .deploy/xxx.github.io</div><div class="line"></div><div class="line">git add .</div><div class="line">git commit -m &quot;update&quot; </div><div class="line">git push   origin master</div></pre></td></tr></table></figure>
-<p> 上面的<code>xxx.github.io</code>填写自己的<code>Pages</code>地址。 </p>
-</li>
-</ol>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;个人搭建的第一个博客终于算是成型了，总体感受还是比较简单的，而且体验也不错。&lt;/p&gt;
-&lt;p&gt;之前考虑过使用&lt;code&gt;Wordpress&lt;/code&gt;来建站。经过考察感觉没有太大的必要，要使用&lt;code&gt;Wordpress&lt;/code&gt;来建站的话，需要有自己的空间，而且需要
-    
-    </summary>
-    
-      <category term="杂谈" scheme="https://abnerchen028.github.io/categories/%E6%9D%82%E8%B0%88/"/>
-    
-    
-      <category term="感想" scheme="https://abnerchen028.github.io/tags/%E6%84%9F%E6%83%B3/"/>
     
   </entry>
   

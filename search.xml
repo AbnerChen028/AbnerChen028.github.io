@@ -3,6 +3,37 @@
   
     
     <entry>
+      <title><![CDATA[从crash日志得到的一些收获]]></title>
+      <url>/2019/02/26/jsonmodel/</url>
+      <content type="html"><![CDATA[<!-- 阐述 -->
+<p>最近在公司的日志中发现一些 <code>crash</code> 信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-[__NSCFString longValue]: unrecognized selector sent to instance 0xxxxx</div><div class="line"></div><div class="line">-[__NSCFString charValue]: unrecognized selector sent to instance 0xxxxx</div></pre></td></tr></table></figure>
+<p>最终确认是在使用 <code>JSONModel</code> 在由 <code>JSON</code> 转 <code>Model</code>的时候出现的问题：</p>
+<!--  -->
+]]></content>
+      
+        <categories>
+            
+            <category> iOS开发 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> CPU </tag>
+            
+            <tag> 32位 </tag>
+            
+            <tag> 64位 </tag>
+            
+            <tag> JSONModel </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[KVC中的集合运算符]]></title>
       <url>/2018/01/24/valueForKeyPath/</url>
       <content type="html"><![CDATA[<h1 id="KVC中的集合运算符"><a href="#KVC中的集合运算符" class="headerlink" title="KVC中的集合运算符"></a>KVC中的集合运算符</h1><p>当使用<code>KVC</code>中的<code>valueForKeyPath</code>方法时，可以在路径中嵌入一个集合运算。一个集合运算符前面用<code>@</code>符号开头。</p>
@@ -1454,17 +1485,17 @@
   
     
     <entry>
+      <title><![CDATA[categories]]></title>
+      <url>/categories/index.html</url>
+      <content type="html"></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[关于]]></title>
       <url>/about/index.html</url>
       <content type="html"><![CDATA[<p>Email：<a href="mailto:cw_028@163.com／" target="_blank" rel="external">@cw_028@163.com</a></p>
 <p>GitHub：<a href="https://github.com/AbnerChen028/" target="_blank" rel="external">@AbnerChen028</a></p>
 ]]></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[categories]]></title>
-      <url>/categories/index.html</url>
-      <content type="html"></content>
     </entry>
     
   
