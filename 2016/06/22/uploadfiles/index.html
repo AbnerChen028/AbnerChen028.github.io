@@ -1,0 +1,807 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="文件上传," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Abner Chen" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="由于种种原因，之前向服务器上传头像的时候是通过将图片转换成Base64字符串进行传递的。这种方法有很大弊端：  图片数据转换成Base64数据的时候需要占用大量的资源。转换的过程会出现内存和CPU达到一个较大峰值。在一些低端机上会出现失败的情况，此种情况在安卓端显得尤为严重。 另外，后台在存储的时候才用的是数据和资源分离的方案，有专门的图片服务器来负责处理和保存。在App服务器和图片服务器之间进行">
+<meta name="keywords" content="文件上传">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS中的文件上传">
+<meta property="og:url" content="https://abnerchen028.github.io/2016/06/22/uploadfiles/index.html">
+<meta property="og:site_name" content="Abner Chen">
+<meta property="og:description" content="由于种种原因，之前向服务器上传头像的时候是通过将图片转换成Base64字符串进行传递的。这种方法有很大弊端：  图片数据转换成Base64数据的时候需要占用大量的资源。转换的过程会出现内存和CPU达到一个较大峰值。在一些低端机上会出现失败的情况，此种情况在安卓端显得尤为严重。 另外，后台在存储的时候才用的是数据和资源分离的方案，有专门的图片服务器来负责处理和保存。在App服务器和图片服务器之间进行">
+<meta property="og:image" content="http://img.jessieedu.com/14980355211864.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/14980361286591.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/14980364611641.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/14980390941948.jpg">
+<meta property="og:updated_time" content="2019-02-26T07:20:31.243Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS中的文件上传">
+<meta name="twitter:description" content="由于种种原因，之前向服务器上传头像的时候是通过将图片转换成Base64字符串进行传递的。这种方法有很大弊端：  图片数据转换成Base64数据的时候需要占用大量的资源。转换的过程会出现内存和CPU达到一个较大峰值。在一些低端机上会出现失败的情况，此种情况在安卓端显得尤为严重。 另外，后台在存储的时候才用的是数据和资源分离的方案，有专门的图片服务器来负责处理和保存。在App服务器和图片服务器之间进行">
+<meta name="twitter:image" content="http://img.jessieedu.com/14980355211864.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://abnerchen028.github.io/2016/06/22/uploadfiles/"/>
+
+
+
+
+
+  <title> iOS中的文件上传 | Abner Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7e8ebd2e2ad74059479ce3f86f766bc6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Abner Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Coding Coding Coding !</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://abnerchen028.github.io/2016/06/22/uploadfiles/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Abner Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/imgs/16740864.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Abner Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS中的文件上传
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-22T22:36:58+08:00">
+                2016-06-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/22/uploadfiles/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/06/22/uploadfiles/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>由于种种原因，之前向服务器上传头像的时候是通过将图片转换成<code>Base64</code>字符串进行传递的。这种方法有很大弊端：</p>
+<ul>
+<li>图片数据转换成<code>Base64</code>数据的时候需要占用大量的资源。转换的过程会出现内存和<code>CPU</code>达到一个较大峰值。在一些低端机上会出现失败的情况，此种情况在安卓端显得尤为严重。</li>
+<li>另外，后台在存储的时候才用的是数据和资源分离的方案，有专门的图片服务器来负责处理和保存。在<code>App</code>服务器和图片服务器之间进行保存和传递的时候总是出现失败的情况。为了降低失败率移动端尽最大可能压缩图片，这样又导致另一个问题，图片严重失真，无法满足需求。</li>
+</ul>
+<p>基于以上两点，研究采用新的方式来上传文件。</p>
+<p>经研究，文件的上传，可以通过两中方式，也就是<code>content-type</code>类型：</p>
+<ul>
+<li>multipart/form-data</li>
+<li>application/x-www-form-urlencoded</li>
+</ul>
+<h1 id="multipart-form-data"><a href="#multipart-form-data" class="headerlink" title="multipart/form-data"></a><code>multipart/form-data</code></h1><p><code>multipart/form-data</code>并非原始<code>HTTP</code>协议中支持的上传方法，属于<code>HTTP</code>客户端的一个扩展。常用在邮件上，可以一次向服务器上传多个附件。</p>
+<h2 id="使用AFNetworking上传方法"><a href="#使用AFNetworking上传方法" class="headerlink" title="使用AFNetworking上传方法"></a>使用<code>AFNetworking</code>上传方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> [manager POST:url parameters:nil constructingBodyWithBlock:^(id&lt;AFMultipartFormData&gt;  _Nonnull formData) &#123;</div><div class="line">        </div><div class="line">        // serverName：服务器接收使用的文件名,具体和后台协商</div><div class="line">        // Client.jpg: 本地上传使用的文件名</div><div class="line">        // application/octet-stream : 服务器接收需要类型（此处表示不指定类型）</div><div class="line">        [formData appendPartWithFileData:UIImageJPEGRepresentation([UIImage imageNamed:@&quot;1&quot;], 1.0) name:@&quot;serverName&quot; fileName:@&quot;Client.jpg&quot; mimeType:@&quot;application/octet-stream&quot;];</div><div class="line">        </div><div class="line">&#125; progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">    </div><div class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</div><div class="line">        </div><div class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</div><div class="line">        </div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>要传递多个资源，只需要在<code>^(id&lt;AFMultipartFormData&gt;  _Nonnull formData){}</code>中添加多个资源即可。</p>
+<p>如果服务器返回<code>code=200</code>错误,描述为：</p>
+<blockquote>
+<p>NSLocalizedDescription=Request failed: unacceptable content-type: text/plain}</p>
+</blockquote>
+<p>可以通过以下方法设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@&quot;application/json&quot;, @&quot;text/json&quot;, @&quot;text/javascript&quot;,@&quot;text/html&quot;,@&quot;text/plain&quot;, nil];</div></pre></td></tr></table></figure>
+<p>使用<code>Charles</code>查看请求内容，请求头信息如下：<br><img src="http://img.jessieedu.com/14980355211864.jpg" alt=""></p>
+<p>若需要分析更详细内容可以使用<code>Wireshark</code>来分析。</p>
+<p>开始向服务器上传文件的时候才用的是这种方式，发现到服务器无法进行解码。拿到服务器上的文件使用<code>vi</code>打开分析如下：<br><img src="http://img.jessieedu.com/14980361286591.jpg" alt=""><br>将这些信息删除以后，文件就可以正常打开了。但是，我在向服务器提交比较的数据时候，比如一个<code>pdf</code>和<code>mp3</code>文件一样带有这些信息，依然可以正常打开，此处留下一个疑问。<br><img src="http://img.jessieedu.com/14980364611641.jpg" alt=""></p>
+<h1 id="application-x-www-form-urlencoded"><a href="#application-x-www-form-urlencoded" class="headerlink" title="application/x-www-form-urlencoded"></a><code>application/x-www-form-urlencoded</code></h1><p>使用类型为上传文件的默认方式：</p>
+<h2 id="使用AFNetworing"><a href="#使用AFNetworing" class="headerlink" title="使用AFNetworing"></a>使用<code>AFNetworing</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">NSURL *url = [NSURL URLWithString:@&quot;http://192.168.2.51:5006/ashx/UploadHandler.ashx&quot;];</div><div class="line">    </div><div class="line">NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];</div><div class="line">request.HTTPMethod = @&quot;POST&quot;;</div><div class="line">    </div><div class="line">NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@&quot;111&quot; ofType:@&quot;mp3&quot;]];</div><div class="line">        </div><div class="line">[[manager uploadTaskWithRequest:request fromData:data progress:^(NSProgress * _Nonnull uploadProgress) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;,@(uploadProgress.fractionCompleted));</div><div class="line">&#125; completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) &#123;</div><div class="line">       </div><div class="line">    if (error) &#123;</div><div class="line">          NSLog(@&quot;error - %@&quot;,error);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;responseObject - %@&quot;,responseObject);</div><div class="line">    &#125;</div><div class="line">&#125;] resume];</div></pre></td></tr></table></figure>
+<h2 id="使用原生NSURLSession方式："><a href="#使用原生NSURLSession方式：" class="headerlink" title="使用原生NSURLSession方式："></a>使用原生<code>NSURLSession</code>方式：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];</div><div class="line">self.session = session;</div><div class="line">    </div><div class="line">[[session uploadTaskWithRequest:request fromData:data] resume];</div></pre></td></tr></table></figure>
+<p>在代理中监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error;</div><div class="line"></div><div class="line">- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge</div><div class="line">                                             completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler;</div><div class="line"></div><div class="line">- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session NS_AVAILABLE_IOS(7_0);</div></pre></td></tr></table></figure>
+<p>使用<code>Charles</code>查看网络请求头如下：<br><img src="http://img.jessieedu.com/14980390941948.jpg" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在后台给出具体的实施方案之后，结合上面两种方法来实现文件上传，即可轻松实现文件的上传。如果后台无法给出具体的是哪种方案，建议先尝试第二种方案。<br>另外，还是建议后台采用第一种方案来实现。可以一次性传递多个资源，而后者则无法达到。第二种方案要实现多图上传的话只能通过多线程循环调用来实现。在这一点上，还是第一种比较优雅一些。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/文件上传/" rel="tag"># 文件上传</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/09/webview/" rel="next" title="UIWebView／WKWebView 加载多种数据">
+                <i class="fa fa-chevron-left"></i> UIWebView／WKWebView 加载多种数据
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/12/locationoptimize/" rel="prev" title="地图开发中的定位优化">
+                地图开发中的定位优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=1eafef7fbbb07"></script>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/imgs/16740864.jpeg"
+               alt="Abner Chen" />
+          <p class="site-author-name" itemprop="name">Abner Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#multipart-form-data"><span class="nav-number">1.</span> <span class="nav-text">multipart/form-data</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用AFNetworking上传方法"><span class="nav-number">1.1.</span> <span class="nav-text">使用AFNetworking上传方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#application-x-www-form-urlencoded"><span class="nav-number">2.</span> <span class="nav-text">application/x-www-form-urlencoded</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用AFNetworing"><span class="nav-number">2.1.</span> <span class="nav-text">使用AFNetworing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用原生NSURLSession方式："><span class="nav-number">2.2.</span> <span class="nav-text">使用原生NSURLSession方式：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Abner Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://abner-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://abnerchen028.github.io/2016/06/22/uploadfiles/';
+          this.page.identifier = '2016/06/22/uploadfiles/';
+          this.page.title = 'iOS中的文件上传';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://abner-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

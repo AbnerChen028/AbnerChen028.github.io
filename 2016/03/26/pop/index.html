@@ -1,0 +1,856 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="POP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Abner Chen" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="POP是Facebook开源的一个动画库，该动画库基于CADisplayLink(Mac平台上使用的CVDisplayLink)实现的独立于Core Animation之外的动画库。以每秒60帧的速度渲染动画，所以看起来会非常流畅。 创建一个POP动画需要六步，下面我们来逐一介绍： 选择一个动画方式：POP提供4种动画效果，POPBasicAnimation、POPSpringAnimation、">
+<meta name="keywords" content="POP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POP动画库简单使用">
+<meta property="og:url" content="https://abnerchen028.github.io/2016/03/26/pop/index.html">
+<meta property="og:site_name" content="Abner Chen">
+<meta property="og:description" content="POP是Facebook开源的一个动画库，该动画库基于CADisplayLink(Mac平台上使用的CVDisplayLink)实现的独立于Core Animation之外的动画库。以每秒60帧的速度渲染动画，所以看起来会非常流畅。 创建一个POP动画需要六步，下面我们来逐一介绍： 选择一个动画方式：POP提供4种动画效果，POPBasicAnimation、POPSpringAnimation、">
+<meta property="og:updated_time" content="2017-12-26T05:39:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="POP动画库简单使用">
+<meta name="twitter:description" content="POP是Facebook开源的一个动画库，该动画库基于CADisplayLink(Mac平台上使用的CVDisplayLink)实现的独立于Core Animation之外的动画库。以每秒60帧的速度渲染动画，所以看起来会非常流畅。 创建一个POP动画需要六步，下面我们来逐一介绍： 选择一个动画方式：POP提供4种动画效果，POPBasicAnimation、POPSpringAnimation、">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://abnerchen028.github.io/2016/03/26/pop/"/>
+
+
+
+
+
+  <title> POP动画库简单使用 | Abner Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7e8ebd2e2ad74059479ce3f86f766bc6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Abner Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Coding Coding Coding !</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://abnerchen028.github.io/2016/03/26/pop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Abner Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/imgs/16740864.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Abner Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                POP动画库简单使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-26T13:20:15+08:00">
+                2016-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/03/26/pop/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/03/26/pop/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/facebook/pop" target="_blank" rel="external"><code>POP</code></a>是<code>Facebook</code>开源的一个动画库，该动画库基于<code>CADisplayLink</code>(Mac平台上使用的<code>CVDisplayLink</code>)实现的独立于<code>Core Animation</code>之外的动画库。以每秒60帧的速度渲染动画，所以看起来会非常流畅。</p>
+<p>创建一个<code>POP</code>动画需要六步，下面我们来逐一介绍：</p>
+<h2 id="选择一个动画方式："><a href="#选择一个动画方式：" class="headerlink" title="选择一个动画方式："></a>选择一个动画方式：</h2><p><code>POP</code>提供4种动画效果，<code>POPBasicAnimation</code>、<code>POPSpringAnimation</code>、<code>POPDecayAnimation</code>、<code>POPCustomAnimation</code>。这些动画效果可以基于<code>CALayer</code>、<code>CAShapeLayer</code>、<code>NSLayoutConstraint</code>、<code>UIView</code>、<code>UIScrollView</code>、<code>UITableView</code>、<code>UINavigationBar</code>、<code>UITabBar</code>等类。</p>
+<blockquote>
+<p><code>POPBasicAnimation</code>是一种基础动画，提供最基本的动画效果。接口方面和<code>CABasicAniamtion</code>很相似，使用可以提供初始值<code>fromValue</code>，这个 终点值<code>toValue</code>，动画时长<code>duration</code>以及决定动画节奏的<code>timingFunction</code>。其创建方式：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation]; // 创建动画</div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>POPSpringAnimation</code> 弹簧动画是<code>Bezier</code>曲线无法表述的，所以无法使用<code>PopBasicAniamtion</code>来实现。<code>PopSpringAnimation</code>便是专门用来实现弹簧动画的</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *springAnimation = [POPSpringAnimation animation];</div><div class="line">springAnimation.velocity=@(1000); // change of value units per second每秒都改变属性</div><div class="line">springAnimation.springBounciness=14; // value between 0-20 default at 4值的范围是0~20 默认为4</div><div class="line">springAnimation.springSpeed=3; // value between 0-20 default at 4</div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>POPDecayAnimation</code>基于<code>Bezier</code>曲线的<code>timingFuntion</code>,同样无法表述<code>Decay Aniamtion</code>，所以<code>Pop</code>就单独实现了一个 <code>PopDecayAnimation</code>，用于衰减动画。衰减动画一个很常见的地方就是 <code>UIScrollView</code> 滑动松开后的减速当滑动手势结束时，根据结束的加速度，给衰减动画一个初始的<code>velocity</code>，用来决定衰减的时长。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPDecayAnimation *decayAnimation=[POPDecayAnimation animation];</div><div class="line">decayAnimation.velocity=@(233); //change of value units per second</div><div class="line">decayAnimation.deceleration=.833; //range of 0 to 1</div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>POPCustomAnimation</code>继承自<code>PopAnimation</code>用于创建自定义动画用的，通过<code>POPCustomAnimationBlock</code>类型的<code>block</code>进行初始化.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">typedef BOOL (^POPCustomAnimationBlock)(id target, POPCustomAnimation *animation);</div></pre></td></tr></table></figure>
+<p>此<code>block</code>会在界面的每一帧更新的时候被调用，创建者需要在<code>block</code>中根据当前<code>currentTime</code>和<code>elapsedTime</code>来决定如何更新<code>target</code>的相关属性，以实现特定的动画。当你需要结束动画的时候就在<code>block</code>中返回<code>NO</code>，否则返回<code>YES</code>。</p>
+<h2 id="选择你的动画属性"><a href="#选择你的动画属性" class="headerlink" title="选择你的动画属性"></a>选择你的动画属性</h2><p>在创建动画的时候，我们可以直接选择动画的属性，例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *anim = [POPBasicAnimation    animationWithPropertyNamed:kPOPLayerScaleXY]; // 这里修改的是视图的XY上的缩放属性</div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>View Properties</code> 视图属性：</p>
+</blockquote>
+<ul>
+<li>Alpha - kPOPViewAlpha</li>
+<li>Color - kPOPViewBackgroundColor</li>
+<li>Size - kPOPViewBounds</li>
+<li>Center - kPOPViewCenter</li>
+<li>Location &amp; Size - kPOPViewFrame</li>
+<li>Size - kPOPViewScaleXY</li>
+<li>Size(Scale) - kPOPViewSize</li>
+</ul>
+<blockquote>
+<p><code>Layer Properties</code> 层属性</p>
+</blockquote>
+<ul>
+<li>Color - kPOPLayerBackgroundColor</li>
+<li>Size - kPOPLayerBounds</li>
+<li>Size - kPOPLayerScaleXY</li>
+<li>Size - kPOPLayerSize</li>
+<li>Opacity - kPOPLayerOpacity</li>
+<li>Position - kPOPLayerPosition</li>
+<li>X Position - kPOPLayerPositionX</li>
+<li>Y Position - kPOPLayerPositionY</li>
+<li>Rotation - kPOPLayerRotation</li>
+<li>Color - kPOPLayerBackgroundColor</li>
+</ul>
+<h2 id="设置时间曲线"><a href="#设置时间曲线" class="headerlink" title="设置时间曲线"></a>设置时间曲线</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">    basicAnimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];</div><div class="line">// kCAMediaTimingFunctionLinear kCAMediaTimingFunctionEaseIn    kCAMediaTimingFunctionEaseOut kCAMediaTimingFunctionEaseInEaseOut // 时间类型显示</div></pre></td></tr></table></figure>
+<ul>
+<li>kCAMediaTimingFunctionLinear // 属性随时间均匀变化</li>
+<li>kCAMediaTimingFunctionEaseIn // 先慢后快</li>
+<li>kCAMediaTimingFunctionEaseOut // 先快后慢</li>
+<li>kCAMediaTimingFunctionEaseInEaseOut // S形变化</li>
+</ul>
+<p>该设置在<code>POPDecayAnimation</code>、<code>POPSpringAnimation</code>中是不起效果的。</p>
+<h2 id="设置属性变化值"><a href="#设置属性变化值" class="headerlink" title="设置属性变化值"></a>设置属性变化值</h2><h3 id="View-Properties"><a href="#View-Properties" class="headerlink" title="View Properties"></a>View Properties</h3><h4 id="Alpha-kPOPViewAlpha"><a href="#Alpha-kPOPViewAlpha" class="headerlink" title="Alpha - kPOPViewAlpha"></a>Alpha - kPOPViewAlpha</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty    propertyWithName:kPOPViewAlpha];</div><div class="line">basicAnimation.toValue= @(0); // scale from 0 to 1 缩放的范围0~1</div></pre></td></tr></table></figure>
+<h4 id="Color-kPOPViewBackgroundColor"><a href="#Color-kPOPViewBackgroundColor" class="headerlink" title="Color - kPOPViewBackgroundColor"></a>Color - kPOPViewBackgroundColor</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName:  kPOPLayerBackgroundColor];</div><div class="line">basicAnimation.toValue= [UIColor redColor];</div></pre></td></tr></table></figure>
+<h4 id="Size-kPOPViewBounds"><a href="#Size-kPOPViewBounds" class="headerlink" title="Size - kPOPViewBounds"></a>Size - kPOPViewBounds</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty    propertyWithName:kPOPViewBounds];</div><div class="line">basicAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(0, 0, 90, 190)]; //first 2 values dont matter</div></pre></td></tr></table></figure>
+<h4 id="Center-kPOPViewCenter"><a href="#Center-kPOPViewCenter" class="headerlink" title="Center - kPOPViewCenter"></a>Center - kPOPViewCenter</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty    propertyWithName:kPOPViewCenter];</div><div class="line">basicAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(200, 200)];</div></pre></td></tr></table></figure>
+<h4 id="Location-amp-Size-kPOPViewFrame"><a href="#Location-amp-Size-kPOPViewFrame" class="headerlink" title="Location &amp; Size - kPOPViewFrame"></a>Location &amp; Size - kPOPViewFrame</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty    propertyWithName:kPOPViewFrame];</div><div class="line">basicAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(140, 140, 140, 140)];</div></pre></td></tr></table></figure>
+<h4 id="Size-kPOPViewScaleXY"><a href="#Size-kPOPViewScaleXY" class="headerlink" title="Size - kPOPViewScaleXY"></a>Size - kPOPViewScaleXY</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty    propertyWithName:kPOPViewScaleXY];</div><div class="line">basicAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(3, 2)];</div></pre></td></tr></table></figure>
+<h4 id="Size-Scale-kPOPViewSize"><a href="#Size-Scale-kPOPViewSize" class="headerlink" title="Size(Scale) - kPOPViewSize"></a>Size(Scale) - kPOPViewSize</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewSize];</div><div class="line">basicAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(30, 200)];</div></pre></td></tr></table></figure>
+<h3 id="Layer-Properties"><a href="#Layer-Properties" class="headerlink" title="Layer Properties"></a>Layer Properties</h3><h4 id="Color-kPOPLayerBackgroundColor"><a href="#Color-kPOPLayerBackgroundColor" class="headerlink" title="Color - kPOPLayerBackgroundColor"></a>Color - kPOPLayerBackgroundColor</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerBackgroundColor];</div><div class="line">basicAnimation.toValue= [UIColor redColor];</div></pre></td></tr></table></figure>
+<h4 id="Size-kPOPLayerBounds"><a href="#Size-kPOPLayerBounds" class="headerlink" title="Size - kPOPLayerBounds"></a>Size - kPOPLayerBounds</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerBounds];</div><div class="line">basicAnimation.toValue= [NSValue valueWithCGRect:CGRectMake(0, 0, 90, 90)]; //first 2 values dont matter</div></pre></td></tr></table></figure>
+<h4 id="Size-kPOPLayerScaleXY"><a href="#Size-kPOPLayerScaleXY" class="headerlink" title="Size - kPOPLayerScaleXY"></a>Size - kPOPLayerScaleXY</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerScaleXY];</div><div class="line">basicAnimation.toValue= [NSValue valueWithCGSize:CGSizeMake(2, 1)];//increases width and height scales</div></pre></td></tr></table></figure>
+<h4 id="Size-kPOPLayerSize"><a href="#Size-kPOPLayerSize" class="headerlink" title="Size - kPOPLayerSize"></a>Size - kPOPLayerSize</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPBasicAnimation *basicAnimation = [POPBasicAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty    propertyWithName:kPOPLayerSize];</div><div class="line">basicAnimation.toValue= [NSValue valueWithCGSize:CGSizeMake(200, 200)];</div></pre></td></tr></table></figure>
+<h4 id="Opacity-kPOPLayerOpacity"><a href="#Opacity-kPOPLayerOpacity" class="headerlink" title="Opacity - kPOPLayerOpacity"></a>Opacity - kPOPLayerOpacity</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerOpacity];</div><div class="line">basicAnimation.toValue = @(0);</div></pre></td></tr></table></figure>
+<h4 id="Position-kPOPLayerPosition"><a href="#Position-kPOPLayerPosition" class="headerlink" title="Position - kPOPLayerPosition"></a>Position - kPOPLayerPosition</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerPosition];</div><div class="line">basicAnimation.toValue= [NSValue valueWithCGRect:CGRectMake(130, 130, 0, 0)];//last 2 values dont matter</div></pre></td></tr></table></figure>
+<h4 id="X-Position-kPOPLayerPositionX"><a href="#X-Position-kPOPLayerPositionX" class="headerlink" title="X Position - kPOPLayerPositionX"></a>X Position - kPOPLayerPositionX</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerPositionX];</div><div class="line">basicAnimation.toValue= @(240);</div></pre></td></tr></table></figure>
+<h4 id="Y-Position-kPOPLayerPositionY"><a href="#Y-Position-kPOPLayerPositionY" class="headerlink" title="Y Position - kPOPLayerPositionY"></a>Y Position - kPOPLayerPositionY</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *anim = [POPSpringAnimation animation];</div><div class="line">anim.property=[POPAnimatableProperty propertyWithName:kPOPLayerPositionY];</div><div class="line">anim.toValue = @(320);</div></pre></td></tr></table></figure>
+<h4 id="Rotation-kPOPLayerRotation"><a href="#Rotation-kPOPLayerRotation" class="headerlink" title="Rotation - kPOPLayerRotation"></a>Rotation - kPOPLayerRotation</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">POPSpringAnimation *basicAnimation = [POPSpringAnimation animation];</div><div class="line">basicAnimation.property = [POPAnimatableProperty propertyWithName: kPOPLayerRotation];</div><div class="line">basicAnimation.toValue= @(M_PI/4); //2 M_PI is an entire rotation</div></pre></td></tr></table></figure>
+<h2 id="设置代理和名字"><a href="#设置代理和名字" class="headerlink" title="设置代理和名字"></a>设置代理和名字</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">basicAnimation.name=@&quot;animationName&quot;; // 这个名字根据自己的需要来添加</div><div class="line">basicAnimation.delegate=self;</div></pre></td></tr></table></figure>
+<p>代理实现一下来监听动画执行状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Declare Delegate Protocol &lt;POPAnimatorDelegate&gt;声明代理协议</div><div class="line">Delegate Methods 代理方法 &lt;POPAnimatorDelegate&gt;</div><div class="line"></div><div class="line">- (void)animatorWillAnimate:(POPAnimator *)animator; // 将要执行动画的方法</div><div class="line">- (void)animatorDidAnimate:(POPAnimator *)animator;  // 执行完动画的方法</div></pre></td></tr></table></figure>
+<p>在这里我们就可以根据动画的执行状态做一些我们自己的业务了，当然我们同样可以通过<code>block</code>的方式来实现。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">anim.completionBlock = ^(POPAnimation *anim, BOOL finished) &#123;</div><div class="line">    if (finished) &#123;</div><div class="line">        // do something here</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>##6.选择动画的添加位置</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[self.tableView pop_addAnimation:basicAnimation     forKey:@&quot;WhatEverNameYouWant&quot;];</div></pre></td></tr></table></figure>
+<p>其实这一步的Key也就是我们上一步设置的Name属性，设置该名字以后，在代理方法中我们就可以根据Name值来区别动画，然后根据不同的动画执行我们需要的代码。</p>
+<hr>
+<p>总结：<code>Pop Animation</code>应用于<code>CALayer</code>时，在动画运行的任何时刻，<code>layer</code>和其<code>presentationLayer</code>的相关属性值始终保持一致，而<code>Core Animation</code>做不到。<code>Pop Animation</code>可以应用任何<code>NSObject</code>的对象，而<code>Core Aniamtion</code>必须是<code>CALayer</code>。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/POP/" rel="tag"># POP</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/26/calayer/" rel="next" title="CALayer简单使用">
+                <i class="fa fa-chevron-left"></i> CALayer简单使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/26/qualifier/" rel="prev" title="修饰词笔记">
+                修饰词笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=1eafef7fbbb07"></script>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/imgs/16740864.jpeg"
+               alt="Abner Chen" />
+          <p class="site-author-name" itemprop="name">Abner Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择一个动画方式："><span class="nav-number">1.</span> <span class="nav-text">选择一个动画方式：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择你的动画属性"><span class="nav-number">2.</span> <span class="nav-text">选择你的动画属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置时间曲线"><span class="nav-number">3.</span> <span class="nav-text">设置时间曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置属性变化值"><span class="nav-number">4.</span> <span class="nav-text">设置属性变化值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View-Properties"><span class="nav-number">4.1.</span> <span class="nav-text">View Properties</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Alpha-kPOPViewAlpha"><span class="nav-number">4.1.1.</span> <span class="nav-text">Alpha - kPOPViewAlpha</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Color-kPOPViewBackgroundColor"><span class="nav-number">4.1.2.</span> <span class="nav-text">Color - kPOPViewBackgroundColor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Size-kPOPViewBounds"><span class="nav-number">4.1.3.</span> <span class="nav-text">Size - kPOPViewBounds</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Center-kPOPViewCenter"><span class="nav-number">4.1.4.</span> <span class="nav-text">Center - kPOPViewCenter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Location-amp-Size-kPOPViewFrame"><span class="nav-number">4.1.5.</span> <span class="nav-text">Location & Size - kPOPViewFrame</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Size-kPOPViewScaleXY"><span class="nav-number">4.1.6.</span> <span class="nav-text">Size - kPOPViewScaleXY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Size-Scale-kPOPViewSize"><span class="nav-number">4.1.7.</span> <span class="nav-text">Size(Scale) - kPOPViewSize</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Properties"><span class="nav-number">4.2.</span> <span class="nav-text">Layer Properties</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Color-kPOPLayerBackgroundColor"><span class="nav-number">4.2.1.</span> <span class="nav-text">Color - kPOPLayerBackgroundColor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Size-kPOPLayerBounds"><span class="nav-number">4.2.2.</span> <span class="nav-text">Size - kPOPLayerBounds</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Size-kPOPLayerScaleXY"><span class="nav-number">4.2.3.</span> <span class="nav-text">Size - kPOPLayerScaleXY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Size-kPOPLayerSize"><span class="nav-number">4.2.4.</span> <span class="nav-text">Size - kPOPLayerSize</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Opacity-kPOPLayerOpacity"><span class="nav-number">4.2.5.</span> <span class="nav-text">Opacity - kPOPLayerOpacity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Position-kPOPLayerPosition"><span class="nav-number">4.2.6.</span> <span class="nav-text">Position - kPOPLayerPosition</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#X-Position-kPOPLayerPositionX"><span class="nav-number">4.2.7.</span> <span class="nav-text">X Position - kPOPLayerPositionX</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Y-Position-kPOPLayerPositionY"><span class="nav-number">4.2.8.</span> <span class="nav-text">Y Position - kPOPLayerPositionY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Rotation-kPOPLayerRotation"><span class="nav-number">4.2.9.</span> <span class="nav-text">Rotation - kPOPLayerRotation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置代理和名字"><span class="nav-number">5.</span> <span class="nav-text">设置代理和名字</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Abner Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://abner-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://abnerchen028.github.io/2016/03/26/pop/';
+          this.page.identifier = '2016/03/26/pop/';
+          this.page.title = 'POP动画库简单使用';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://abner-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
