@@ -1,0 +1,898 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="多线程,GCD," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Abner Chen" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="从iOS4时期，苹果引入了GCD技术，GCD(Grand Central Dispatch)是异步执行任务的技术之一。一般将应用程序中描述的线程管理用的代码在系统级中实现。开发者只需定义想执行的任务并追加到适当的Dispatch Queue中，GCD就能生成必要的线程并计划执行任务。而线程管理是作为系统的一部分来实现的，因此可统一管理，也可执行任务，这样大大提高了线程的效率。 多线程编程在iOS开">
+<meta name="keywords" content="多线程,GCD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS中GCD的使用">
+<meta property="og:url" content="https://abnerchen028.github.io/2015/11/19/iOSGCD/index.html">
+<meta property="og:site_name" content="Abner Chen">
+<meta property="og:description" content="从iOS4时期，苹果引入了GCD技术，GCD(Grand Central Dispatch)是异步执行任务的技术之一。一般将应用程序中描述的线程管理用的代码在系统级中实现。开发者只需定义想执行的任务并追加到适当的Dispatch Queue中，GCD就能生成必要的线程并计划执行任务。而线程管理是作为系统的一部分来实现的，因此可统一管理，也可执行任务，这样大大提高了线程的效率。 多线程编程在iOS开">
+<meta property="og:image" content="http://img.jessieedu.com/15110631212724.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/15110657305490.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/15133934969884.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/15136914746503.jpg">
+<meta property="og:updated_time" content="2019-02-26T07:20:31.244Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS中GCD的使用">
+<meta name="twitter:description" content="从iOS4时期，苹果引入了GCD技术，GCD(Grand Central Dispatch)是异步执行任务的技术之一。一般将应用程序中描述的线程管理用的代码在系统级中实现。开发者只需定义想执行的任务并追加到适当的Dispatch Queue中，GCD就能生成必要的线程并计划执行任务。而线程管理是作为系统的一部分来实现的，因此可统一管理，也可执行任务，这样大大提高了线程的效率。 多线程编程在iOS开">
+<meta name="twitter:image" content="http://img.jessieedu.com/15110631212724.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://abnerchen028.github.io/2015/11/19/iOSGCD/"/>
+
+
+
+
+
+  <title> iOS中GCD的使用 | Abner Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7e8ebd2e2ad74059479ce3f86f766bc6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Abner Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Coding Coding Coding !</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://abnerchen028.github.io/2015/11/19/iOSGCD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Abner Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/imgs/16740864.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Abner Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS中GCD的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-19T10:26:38+08:00">
+                2015-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/19/iOSGCD/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/19/iOSGCD/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从<code>iOS4</code>时期，苹果引入了<code>GCD</code>技术，<code>GCD</code>(<code>Grand Central Dispatch</code>)是异步执行任务的技术之一。一般将应用程序中描述的线程管理用的代码在系统级中实现。开发者只需定义想执行的任务并追加到适当的<code>Dispatch Queue</code>中，<code>GCD</code>就能生成必要的线程并计划执行任务。而线程管理是作为系统的一部分来实现的，因此可统一管理，也可执行任务，这样大大提高了线程的效率。</p>
+<h1 id="多线程编程"><a href="#多线程编程" class="headerlink" title="多线程编程"></a>多线程编程</h1><p>在<code>iOS</code>开发中，前期<code>CPU</code>均为单核设计。 源码编译后的机器语言在<code>CPU</code>上顺序执行。即使在<code>Objective-C</code>中的<code>if</code>和<code>for</code>等控制语句或函数调用的情况下，执行命令列的地址只是远离当前的位置，在<code>CPU</code>上执行的<code>CPU</code>命令就好比一条无分叉的大道，其执行不会出现分歧。如图所示：<br><img src="http://img.jessieedu.com/15110631212724.jpg" alt=""></p>
+<p>这里所说的一个<code>CPU</code>执行的<code>CPU</code>命令列为一条无分叉路径即为“线程”。多线程即为同时有多条无分叉的执行路径。基本上一个<code>CPU</code>核一次只能执行的<code>CPU</code>命令始终为1，为了实现多线程技术，<code>iOS</code>的核心<code>XUN</code>内核在发生操作系事件时会切换执行路径，执行中路径的状态保存到各自路径专用的内存中，从切换目标路径专用的内存块中恢复<code>CPU</code>寄存器信息，继续执行切换路径的<code>CPU</code>命令列被称为“上下文切换”。由于使用多线程的程序可以在某个线程和其他线程之间反复多次进行上下文切换，因此看上起就像一个<code>CPU</code>核能够并列的执行多个线程一样。当在具有多个<code>CPU</code>核情况下，就真的是提供了多个<code>CPU</code>核心并行执行多个线程的技术了。</p>
+<p>但是，多线程编程在实际上很容易发生各种问题。例如数据竞争（多个线程同时操作数据，导致数据不一致，数据库最能体现这一状况）、死锁（停止等待事件的线程导致多个线程互相持续等待）、内存消耗过大（开启太多线程）。</p>
+<h1 id="GCD中的API"><a href="#GCD中的API" class="headerlink" title="GCD中的API"></a>GCD中的API</h1><h2 id="Dispatch-Queue"><a href="#Dispatch-Queue" class="headerlink" title="Dispatch Queue"></a>Dispatch Queue</h2><p>在Apple的官方文档中，开发者需要做的事件添加到合适的Dispatch Queue中，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dispatch_async(queue, ^&#123;</div><div class="line"></div><div class="line">    // 要做的事件            </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>在<code>Dispatch Queue</code>中，任务遵循<code>FIFO</code>的顺序执行处理。<br><img src="http://img.jessieedu.com/15110657305490.jpg" alt=""></p>
+<p>但是在执行处理时存在两种<code>Dispath Queue</code>，如表所示：</p>
+<table>
+<thead>
+<tr>
+<th>种类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serial Dispatch Queue</td>
+<td>等待现在执行中处理结果</td>
+</tr>
+<tr>
+<td>Concurrent Dispatch Queue</td>
+<td>不等待现在执行的处理结果</td>
+</tr>
+</tbody>
+</table>
+<p>代码执行如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">void (^block1)(void) = ^&#123;</div><div class="line">    NSLog(@&quot;block1&quot;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">void (^block2)(void) = ^&#123;</div><div class="line">    NSLog(@&quot;block2&quot;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">void (^block3)(void) = ^&#123;</div><div class="line">    NSLog(@&quot;block3&quot;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">void (^block4)(void) = ^&#123;</div><div class="line">    NSLog(@&quot;block4&quot;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">dispatch_async(queue, block1);</div><div class="line">dispatch_async(queue, block2);</div><div class="line">dispatch_async(queue, block3);</div><div class="line">dispatch_async(queue, block4);</div></pre></td></tr></table></figure>
+<ul>
+<li>当 <code>queue</code> 为 <code>DISPATCH_QUEUE_SERIAL</code>模式打印结果为</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">block1</div><div class="line">block2</div><div class="line">block3</div><div class="line">block4</div></pre></td></tr></table></figure>
+<ul>
+<li>当 <code>queue</code> 为 <code>DISPATCH_QUEUE_CONCURRENT</code>模式打印结果为</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">block1</div><div class="line">block4</div><div class="line">block3</div><div class="line">block2</div></pre></td></tr></table></figure>
+<p>当变量<code>queue</code>为<code>DISPATCH_QUEUE_SERIAL</code>时候，因为需要等待现在执行中的任务结束才能进入到下一个任务，所以会顺序执行。而<code>queue</code>为<code>DISPATCH_QUEUE_CONCURRENT</code>时，无论当前任务是否执行完毕都会进行下一个任务的处理，虽然不用等待结束处理并且可以并行执行多个任务，但执行的处理数量取决于当前的处理数量和当前系统状态。即iOS和OS X基于Dispatch Queue中的处理数、CPU核数以及CPU负荷等状态来决定并行执行的处理数。<code>DISPATCH_QUEUE_SERIAL</code>类型只在一个一个线程中执行任务，而<code>DISPATCH_QUEUE_CONCURRENT</code>类型将使用多个线程执行。但是多个<code>DISPATCH_QUEUE_SERIAL</code>类型的线程时可以并行执行的，并不公用同一个线程，如图：<br><img src="http://img.jessieedu.com/15133934969884.jpg" alt=""></p>
+<p>如果大量开辟线程，正如上文讨论大到的，回造成内存的大量消耗，引起大量的上下文切换，大幅降低系统的响应性能。在数据访问过程中造成大量锁和等待的问题。</p>
+<h2 id="dispatch-queue-create"><a href="#dispatch-queue-create" class="headerlink" title="dispatch_queue_create"></a>dispatch_queue_create</h2><p>创建线程的一种方式就是通过<code>GCD</code>中的<code>API</code>，生成<code>Serial Dispatch Queue</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t serialQueue = dispatch_queue_create(&quot;com.chen.test&quot;, DISPATCH_QUEUE_SERIAL);</div></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t serialQueue = dispatch_queue_create(&quot;com.chen.test&quot;,NULL);</div></pre></td></tr></table></figure>
+<p>其中<code>com.chen.test</code>参数是线程的一个描述或者叫做线程名，方便在后期的调试或者<code>Crash</code>信息中获取到当前的线程信息，可以为<code>NULL</code>。</p>
+<p>通过：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t serialQueue = dispatch_queue_create(&quot;com.chen.test&quot;, DISPATCH_QUEUE_CONCURRENT);</div></pre></td></tr></table></figure>
+<p><del>创建一个<code>Concurrent Dispatch</code>类型的<code>Queue</code>。另外由于<code>Dispatch Queue</code>并没有在编译的时候加入引用计数的处理，创建的<code>queue</code>需要自己你去释放或持有</del></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">dispatch_retain(queue);</div><div class="line">dispatch_release(queue);</div></pre></td></tr></table></figure>
+<p><del>即<code>Dispatch Queue</code>也像<code>Objective-C</code>的引用计数式内存管理一样需要<code>dispatch_retain</code>和<code>dispatch_release</code>函数的引用计数来管理内存。假如创建一个函数并追加一个任务并马上释放该线程会不会出现问题那？并不会，在<code>dispatch_async</code>函数中追加<code>Blok</code>到<code>Queue</code>中，此时，相当于<code>Block</code>持有该<code>queue</code>，而<code>queue</code>持有一个<code>Block</code>，相互引用。当<code>Block</code>执行完毕，<code>queue</code>释放<code>Block</code>相互引用链断开，<code>queue</code>也被释放。</del><br>以上接口在<code>iOS6</code>中被禁用，从<code>iOS6</code>开始，<code>GCD</code>也被<code>ARC</code>所管理。</p>
+<h2 id="Main-Dispatch-Queue-Global-Dispatch-Queue"><a href="#Main-Dispatch-Queue-Global-Dispatch-Queue" class="headerlink" title="Main Dispatch Queue/Global Dispatch Queue"></a>Main Dispatch Queue/Global Dispatch Queue</h2><p>使用多线程第二种方式就是获取系统提供的<code>Dispatch Queue</code>。由于主线程只有一个，所以<code>Main Dispatch Queue</code>自然就是<code>Serial Dispatch Queue</code>。<code>Global Dispatc号Queue</code>为全局可用的<code>Concurrent Dispatch queue</code>，有4个优先级，分别如下:</p>
+<table>
+<thead>
+<tr>
+<th>种类</th>
+<th>iOS8之后</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DISPATCH_QUEUE_PRIORITY_HIGH</td>
+<td>QOS_CLASS_USER_INTERACTIVE</td>
+<td>高</td>
+</tr>
+<tr>
+<td>DISPATCH_QUEUE_PRIORITY_DEFAULT</td>
+<td>QOS_CLASS_DEFAULT</td>
+<td>默认</td>
+</tr>
+<tr>
+<td>DISPATCH_QUEUE_PRIORITY_LOW</td>
+<td>QOS_CLASS_UTILITY</td>
+<td>低</td>
+</tr>
+<tr>
+<td>DISPATCH_QUEUE_PRIORITY_BACKGROUND</td>
+<td>QOS_CLASS_BACKGROUND</td>
+<td>后台</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dispatch-set-target-queue"><a href="#dispatch-set-target-queue" class="headerlink" title="dispatch_set_target_queue"></a>dispatch_set_target_queue</h2><p>使用<code>dispatch_queue_create</code> 函数生成的<code>Dispatch Queue</code>默认是使用的<code>Global Dispatch Queue</code>相同的优先级，而<code>dispatch_set_target_queue</code>函数用来变更优先级：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t globleQueue = dispatch_queue_create(&quot;com.abner.test&quot;, NULL);</div><div class="line">        </div><div class="line">dispatch_queue_t backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);</div><div class="line">        </div><div class="line">dispatch_set_target_queue(globleQueue, backgroundQueue);</div></pre></td></tr></table></figure>
+<p>指定要变更执行优先级的Queue为<code>dispatch_set_target_queue</code>函数的第一个参数，指定要与要使用的执行优先级相同优先级的<code>Queue</code>为第二个参数。前提是第一个参数不是系统提供的<code>Main Queue</code>或<code>Globle Dispatch Queue</code>。否则将出现不可预知的情况。</p>
+<h2 id="dispatch-after"><a href="#dispatch-after" class="headerlink" title="dispatch_after"></a>dispatch_after</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</div><div class="line">           NSLog(@&quot;addTask&quot;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p><code>dispatch_after</code>在指定时间之后将任务通过<code>dispatch_async</code>函数添加到<code>Dispatch Queue</code>中，在<code>Main Queue</code>中的<code>RunLoop</code>执行中，是每经过<code>1/60</code>秒刷新一下，即在追加到线程之后的任务最快在<code>3</code>秒之后执行，最慢在<code>3+1/60</code>秒执行， 在时间延迟要求不高的地方使用是个便捷有效的方法。</p>
+<h2 id="Dispath-Group"><a href="#Dispath-Group" class="headerlink" title="Dispath Group"></a>Dispath Group</h2><p>现在有这样一个需求：</p>
+<blockquote>
+<p>有一张大图（10MB），如果一个线程请求比较慢，现在将这张图片切割成5份，大约每个片段为2MB，然后在下载完毕之后将5个片段组合成一个文件，展示给用户.</p>
+</blockquote>
+<p>此处如果使用<code>Serial Dispatch Queue</code>只需将下载任务按顺序添加，最后添加结束任务即可，但是这样违背了需求初衷，无法并列下载。但是使用<code>Concurrent Dispatch Queue</code>实现就显得很复杂。在这里就用到了<code>Dispath Group</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</div><div class="line">dispatch_group_t group = dispatch_group_create();</div><div class="line">        </div><div class="line">dispatch_group_async(group, queue, ^&#123;NSLog(@&quot;模块1&quot;); &#125;);</div><div class="line">dispatch_group_async(group, queue, ^&#123;NSLog(@&quot;模块2&quot;); &#125;);</div><div class="line">dispatch_group_async(group, queue, ^&#123;NSLog(@&quot;模块3&quot;); &#125;);</div><div class="line">dispatch_group_async(group, queue, ^&#123;NSLog(@&quot;模块4&quot;); &#125;);</div><div class="line">dispatch_group_async(group, queue, ^&#123;NSLog(@&quot;模块5&quot;); &#125;);</div><div class="line">        </div><div class="line">dispatch_group_notify(group, queue, ^&#123;NSLog(@&quot;finish&quot;); &#125;);</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">模块4</div><div class="line">模块5</div><div class="line">模块2</div><div class="line">模块1</div><div class="line">模块3</div><div class="line">finish</div></pre></td></tr></table></figure>
+<p>在<code>Dispatch Group</code>中也可以使用<code>dispatch_group_wait</code>函数仅等待全部任务执行结束止再往下执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch_group_wait(group, DISPATCH_TIME_FOREVER);</div></pre></td></tr></table></figure>
+<p>第二个参数为<code>dispatch_time_t</code>类型的值，只要<code>Group</code>中的任务没有执行结束，就一直等待，中途无法取消。当返回值为0的时候，表明经过特定时间后全部任务执行完毕。这里的“等待”意味着一旦调用该函数，该函数就处于调用而不返回的状态。即，使当前的线程停止，经过指定时间或任务结束之后停止。造成一种卡死的假象。</p>
+<h2 id="dispatch-sync"><a href="#dispatch-sync" class="headerlink" title="dispatch_sync"></a>dispatch_sync</h2><p><code>dispatch_async</code>函数意味着“非同步”,即将指定的<code>Block</code>“非同步”的追加到指定的<code>Dispatch Queue</code>中，<code>dispatch_async</code>函数不做任何等待，原理如图：<br><img src="http://img.jessieedu.com/15136914746503.jpg" alt=""></p>
+<p>而<code>dispatch_sync</code>函数在指定的处理执行结束之前，该函数不会返回。即<code>dispatch_group_wait</code>函数的简写版。在使用中应特别注意，容易引起死锁的问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">dispatch_sync(dispatch_get_main_queue(), ^&#123;</div><div class="line">           </div><div class="line">    NSLog(@&quot;block&quot;);</div><div class="line">&#125;);</div><div class="line">        </div><div class="line">NSLog(@&quot;finish&quot;);</div></pre></td></tr></table></figure>
+<p>该代码在<code>Main Dispatch Queue</code>中要执行指定的<code>Block</code>,并等待其执行结束。而其实在主线程中正在执行这些源代码，所以无法执行追加到<code>Main Dispatch Queue</code>的<code>Block</code>。</p>
+<h2 id="dispatch-barrier-async"><a href="#dispatch-barrier-async" class="headerlink" title="dispatch_barrier_async"></a>dispatch_barrier_async</h2><p>在访问数据库或者文件的时候，使用<code>Serial Dispatch Queue</code>可以避免数据竞争的问题，在并发处理中，如果读取任务只是与读取任务并行处理多个线程并行就不会出现问题。为了高校的进行访问，将读取任务追加到<code>Concurrent Dispatch Queue</code>中，写入处理在任一个读取没有执行的状况下，追加到<code>Serial Dispatch Queue</code>中即可，即在写入处理结束之前，读取处理不可操作。<code>dispatch_barrier_async</code>函数则实现了该功能。如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dispatch_async(queue, read1Block);</div><div class="line">dispatch_async(queue, read2Block&#125;);</div><div class="line">dispatch_async(queue, read2Block&#125;);</div><div class="line">dispatch_async(queue, read2Block&#125;);</div><div class="line">dispatch_barrier_async(queue, writingBlock);</div><div class="line">dispatch_async(queue, read2Block);</div><div class="line">dispatch_async(queue, read2Block);</div><div class="line">dispatch_async(queue, read2Block);</div></pre></td></tr></table></figure>
+<p>执行顺序:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">read2</div><div class="line">read1</div><div class="line">read3</div><div class="line">read4</div><div class="line">writing</div><div class="line">read6</div><div class="line">read5</div><div class="line">read7</div></pre></td></tr></table></figure>
+<p>使用<code>dispatch_barrier_async</code>函数会扽带追加到<code>Concurrent Dispatch Queue</code>上的并行任务处理全部结束之后再将指定的处理追加到该<code>Concurrent Dispatch Queue</code>中，然后在由<code>dispatch_barrier_async</code>函数追加的任务执行完毕后<code>Concurrent Dispatch Queue</code>才恢复为一般的动作，此时该线程中的任务恢复并行处理。在这里存在<code>dispatch_barrier_async</code>函数才想就会存在<code>dispatch_barrier_sync</code>函数。二者的区别就是前者不会等待自己的任执行完毕就接着执行下面的任务，而后者需要等到自己的任务执行完毕再执行后面添加的任务。</p>
+<h2 id="dispatch-apply"><a href="#dispatch-apply" class="headerlink" title="dispatch_apply"></a>dispatch_apply</h2><p><code>dispatch_apply</code>函数是<code>dispatch_sync</code>函数和<code>Dispatch Group</code>的关联<code>API</code>，该函数按照指定的次数将指定的<code>Block</code>追加到指定的<code>Dispatch Queue</code>中，并等待全部执行结束。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">NSArray *contentArray = @[@&quot;A&quot;, @&quot;B&quot;, @&quot;C&quot;, @&quot;D&quot;, @&quot;E&quot;];</div><div class="line">    </div><div class="line">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</div><div class="line">    </div><div class="line">dispatch_apply(contentArray.count, queue, ^(size_t idx) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;, contentArray[idx]);</div><div class="line">&#125;);</div><div class="line">NSLog(@&quot;finish&quot;);</div></pre></td></tr></table></figure>
+<p>执行结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">D</div><div class="line">A</div><div class="line">B</div><div class="line">C</div><div class="line">E</div><div class="line">finish</div></pre></td></tr></table></figure>
+<p>该方法起到一个遍历的作用，同时支持删除<code>contentArray</code>中的元素。</p>
+<h2 id="dispatch-suspend-dispatch-resume"><a href="#dispatch-suspend-dispatch-resume" class="headerlink" title="dispatch_suspend / dispatch_resume"></a>dispatch_suspend / dispatch_resume</h2><p>顾名思义，<code>dispatch_suspend</code>是暂停一个线程，而<code>dispatch_resume</code>是恢复一个线程。使用方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 暂停</div><div class="line">dispatch_suspend(queue);</div><div class="line">   </div><div class="line">// 恢复继续</div><div class="line">dispatch_resume(queue);</div></pre></td></tr></table></figure>
+<h2 id="Dispatch-Semaphore"><a href="#Dispatch-Semaphore" class="headerlink" title="Dispatch Semaphore"></a>Dispatch Semaphore</h2><p>在并行执行的处理更新数据时候，会造成内存异常导致程序异常退出，如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</div><div class="line">    </div><div class="line">NSMutableArray *conten = [NSMutableArray arrayWithCapacity:1000000];</div><div class="line">for(NSInteger i = 0; i &lt; 1000000000; i++)&#123;</div><div class="line">        </div><div class="line">    dispatch_async(queue, ^&#123;</div><div class="line">        [conten addObject:@(i)];</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Dispatch Semaphore</code>是持有计数的信号，该计数是多线程中的计数类型信号。使用方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 创建</div><div class="line">dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);</div><div class="line">// 等待信号量</div><div class="line">dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);</div><div class="line">// 发送一个信号量</div><div class="line">dispatch_semaphore_signal(semaphore);</div></pre></td></tr></table></figure>
+<p>具体应用场景举例：有一个可以容纳3个车的停车场，<code>dispatch_semaphore_create(3)</code>函数就代表创建这个停车场。<code>dispatch_semaphore_wait()</code>函数表示等待，如果内部已经有三辆车，后面的车将无法进入。即<code>wait</code>后面的任务将不再执行。当停车场内部的车辆为小于三辆车时，其他车辆才能进入。使用举例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">dispatch_group_t group = dispatch_group_create();</div><div class="line">dispatch_semaphore_t semaphore = dispatch_semaphore_create(5);</div><div class="line">dispatch_queue_t queue =    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</div><div class="line">for (int i = 0; i &lt; 20; i++)</div><div class="line">&#123;</div><div class="line">    NSInteger res = dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);</div><div class="line">    dispatch_group_async(group, queue, ^&#123;</div><div class="line">        NSLog(@&quot;async - %d&quot;,i);</div><div class="line">        dispatch_semaphore_signal(semaphore);</div><div class="line">        sleep(2);</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line">dispatch_group_wait(group, DISPATCH_TIME_FOREVER);</div></pre></td></tr></table></figure>
+<p>创建一个能容纳5辆车的停车场，此时一共有20辆车，每进入一辆车调用一下<code>dispatch_semaphore_signal()</code>函数，计数加一，当停车场内部的车辆出去一辆的时候计数减少1，通过<code>dispatch_semaphore_wait()</code>函数特定时间监测当前计数是否小于5，当小于5的时候其他车辆才能进入。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+            <a href="/tags/GCD/" rel="tag"># GCD</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/15/XcodeSimulatorNetError/" rel="next" title="Xcode模拟器无法联网问题的解决">
+                <i class="fa fa-chevron-left"></i> Xcode模拟器无法联网问题的解决
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/27/httpsauth/" rel="prev" title="HTTPS认证过程">
+                HTTPS认证过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=1eafef7fbbb07"></script>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/imgs/16740864.jpeg"
+               alt="Abner Chen" />
+          <p class="site-author-name" itemprop="name">Abner Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#多线程编程"><span class="nav-number">1.</span> <span class="nav-text">多线程编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GCD中的API"><span class="nav-number">2.</span> <span class="nav-text">GCD中的API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dispatch-Queue"><span class="nav-number">2.1.</span> <span class="nav-text">Dispatch Queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch-queue-create"><span class="nav-number">2.2.</span> <span class="nav-text">dispatch_queue_create</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Main-Dispatch-Queue-Global-Dispatch-Queue"><span class="nav-number">2.3.</span> <span class="nav-text">Main Dispatch Queue/Global Dispatch Queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch-set-target-queue"><span class="nav-number">2.4.</span> <span class="nav-text">dispatch_set_target_queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch-after"><span class="nav-number">2.5.</span> <span class="nav-text">dispatch_after</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dispath-Group"><span class="nav-number">2.6.</span> <span class="nav-text">Dispath Group</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch-sync"><span class="nav-number">2.7.</span> <span class="nav-text">dispatch_sync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch-barrier-async"><span class="nav-number">2.8.</span> <span class="nav-text">dispatch_barrier_async</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch-apply"><span class="nav-number">2.9.</span> <span class="nav-text">dispatch_apply</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch-suspend-dispatch-resume"><span class="nav-number">2.10.</span> <span class="nav-text">dispatch_suspend / dispatch_resume</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dispatch-Semaphore"><span class="nav-number">2.11.</span> <span class="nav-text">Dispatch Semaphore</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Abner Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://abner-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://abnerchen028.github.io/2015/11/19/iOSGCD/';
+          this.page.identifier = '2015/11/19/iOSGCD/';
+          this.page.title = 'iOS中GCD的使用';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://abner-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

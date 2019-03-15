@@ -1,0 +1,788 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CALayer," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Abner Chen" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="CALayer在我们正常开发中，这个是使用最多的。通过CALayer可以设置边框以及圆角、阴影等属性，Core Animation动画就是添加在CALayer之上的效果. CATextLayer通过CATextLayer可以封装自己的Label控件。 12345678910CATextLayer *textLayer = [CATextLayer layer];textLayer.string =">
+<meta name="keywords" content="CALayer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CALayer简单使用">
+<meta property="og:url" content="https://abnerchen028.github.io/2016/02/26/calayer/index.html">
+<meta property="og:site_name" content="Abner Chen">
+<meta property="og:description" content="CALayer在我们正常开发中，这个是使用最多的。通过CALayer可以设置边框以及圆角、阴影等属性，Core Animation动画就是添加在CALayer之上的效果. CATextLayer通过CATextLayer可以封装自己的Label控件。 12345678910CATextLayer *textLayer = [CATextLayer layer];textLayer.string =">
+<meta property="og:updated_time" content="2017-12-26T04:06:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CALayer简单使用">
+<meta name="twitter:description" content="CALayer在我们正常开发中，这个是使用最多的。通过CALayer可以设置边框以及圆角、阴影等属性，Core Animation动画就是添加在CALayer之上的效果. CATextLayer通过CATextLayer可以封装自己的Label控件。 12345678910CATextLayer *textLayer = [CATextLayer layer];textLayer.string =">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://abnerchen028.github.io/2016/02/26/calayer/"/>
+
+
+
+
+
+  <title> CALayer简单使用 | Abner Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7e8ebd2e2ad74059479ce3f86f766bc6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Abner Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Coding Coding Coding !</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://abnerchen028.github.io/2016/02/26/calayer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Abner Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/imgs/16740864.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Abner Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CALayer简单使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-26T20:50:42+08:00">
+                2016-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/02/26/calayer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/02/26/calayer/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="CALayer"><a href="#CALayer" class="headerlink" title="CALayer"></a>CALayer</h1><p>在我们正常开发中，这个是使用最多的。通过<code>CALayer</code>可以设置边框以及圆角、阴影等属性，<code>Core Animation</code>动画就是添加在<code>CALayer</code>之上的效果.</p>
+<h1 id="CATextLayer"><a href="#CATextLayer" class="headerlink" title="CATextLayer"></a>CATextLayer</h1><p>通过<code>CATextLayer</code>可以封装自己的<code>Label</code>控件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">CATextLayer *textLayer = [CATextLayer layer];</div><div class="line">textLayer.string = @&quot;CATextLayer&quot;;</div><div class="line">textLayer.font = CFBridgingRetain([UIFont systemFontOfSize:18]); // 设置字体 Helvetic</div><div class="line">textLayer.allowsFontSubpixelQuantization = YES;//允许字体 像素数字化</div><div class="line">textLayer.fontSize = 20; // 控制文字大小</div><div class="line">textLayer.foregroundColor = [UIColor redColor].CGColor; // 文字颜色</div><div class="line">textLayer.wrapped = YES;</div><div class="line">textLayer.bounds = (CGRect)&#123;&#123;0,0&#125;,&#123;100,100&#125;&#125;;</div><div class="line">textLayer.position = CGPointMake(100, 100);</div><div class="line">[self.view.layer addSublayer:textLayer];</div></pre></td></tr></table></figure>
+<h1 id="CAShapeLayer"><a href="#CAShapeLayer" class="headerlink" title="CAShapeLayer"></a>CAShapeLayer</h1><p><code>CAShapeLayer</code>和贝塞尔曲线接合可以画出做出很炫的动画以及各种不规则的效果。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">// 创建bezierPath曲线</div><div class="line">UIBezierPath *bezierPath = [UIBezierPath bezierPath];</div><div class="line">[bezierPath moveToPoint:CGPointMake(0, 0)];</div><div class="line">[bezierPath addCurveToPoint:CGPointMake(250, 400) controlPoint1:CGPointMake(200, 100) controlPoint2:CGPointMake(50, 350)];</div><div class="line">// 设置shapeLayer的path为贝塞尔曲线的路径</div><div class="line">CAShapeLayer *shapeLayer = [CAShapeLayer layer];</div><div class="line">shapeLayer.path = bezierPath.CGPath;</div><div class="line">shapeLayer.strokeColor = [UIColor redColor].CGColor; // 线的颜色</div><div class="line">shapeLayer.fillColor = [UIColor whiteColor].CGColor; // 起点终点连线和Path线包含进去的区域颜色</div><div class="line">shapeLayer.lineWidth = 4;</div><div class="line">//根据bezierPath 获取 CAShapeLayer</div><div class="line">CGPathRef pathRef = CGPathCreateCopyByStrokingPath(shapeLayer.path, NULL, bezierPath.lineWidth, kCGLineCapRound, kCGLineJoinRound, shapeLayer.miterLimit);</div><div class="line">//获取 路径的范围CGPathGetBoundingBox()</div><div class="line">shapeLayer.bounds = CGPathGetBoundingBox(pathRef);</div><div class="line">CGPathRelease(pathRef);</div><div class="line">shapeLayer.position = self.view.center;</div><div class="line">shapeLayer.backgroundColor = [UIColor orangeColor].CGColor; ／／ 整个layer的bgColor</div><div class="line">[self.view.layer addSublayer:shapeLayer];</div></pre></td></tr></table></figure>
+<h1 id="CATiledLayer"><a href="#CATiledLayer" class="headerlink" title="CATiledLayer"></a>CATiledLayer</h1><p>有些时候你可能需要绘制一个很大的图片，常见的例子就是一个高像素的照片或者是地球表面的详细地图。<code>iOS</code>应用通畅运行在内存受限的设备上，所以读取整个图片到内存中是不明智的。载入大图可能会相当地慢，那些对你看上去比较方便的做法（在主线程调用UIImage的-imageNamed:方法或者-imageWithContentsOfFile:方法）将会阻塞你的用户界面，至少会引起动画卡顿现象。要解决这个问题，我们就可以借助<code>CATiledLayer</code>，首先，我们将大图切成多个小图，并保存到本地。在<code>- (void)drawLayer:(CATiledLayer *)layer inContext:(CGContextRef)ctx</code>中取出相对应的图片并绘制出来。具体可以参考<a href="https://zsisme.gitbooks.io/ios-/content/chapter6/catiledLayer.html" target="_blank" rel="external">CATiledLayer</a>。</p>
+<h1 id="CAGradientLayer"><a href="#CAGradientLayer" class="headerlink" title="CAGradientLayer"></a>CAGradientLayer</h1><p><code>CAGradientLayer</code>是用来生成两种或更多颜色平滑渐变的。相比于<code>Core Graphics</code>，它最大的好处是使用了硬件加速。<code>startPoint</code>和<code>endPoint</code>决定了渐变的方向。这两个参数是以单位坐标系进行的定义的，即范围为{0,0}~{1,1}。使用<code>mask</code>来确定改变哪个图层的变化值。<br><code>color</code>属性可以包含很多颜色，默认情况下多个颜色值是均匀渲染在<code>layer</code>中，但是我们也可以通过<code>locations</code>参数调整。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">CAGradientLayer *gradientLayer = [CAGradientLayer layer];</div><div class="line">gradientLayer.frame = self.containerView.bounds;</div><div class="line">[self.containerView.layer addSublayer:gradientLayer];</div><div class="line">//set gradient colors</div><div class="line">gradientLayer.colors = @[(__bridge id)[UIColor redColor].CGColor, (__bridge id) [UIColor yellowColor].CGColor, (__bridge id)[UIColor greenColor].CGColor];</div><div class="line">//set locations</div><div class="line">gradientLayer.locations = @[@0.0, @0.25, @0.5];</div><div class="line">//set gradient start and end points</div><div class="line">gradientLayer.startPoint = CGPointMake(0, 0);</div><div class="line">gradientLayer.endPoint = CGPointMake(1, 1);</div><div class="line">当然，我们也可以将颜色变化做成动画的效果：</div><div class="line">CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@&quot;colors&quot;];</div><div class="line">animation.duration = 2;</div><div class="line">animation.repeatCount = MAXFLOAT;</div><div class="line">NSMutableArray *toValue = [NSMutableArray array];</div><div class="line">for (NSInteger i = 0; i &lt; count ; i ++) &#123;</div><div class="line">UIColor *color = [UIColor colorWithRed:arc4random_uniform(255)/255.0 green:arc4random_uniform(255)/255.0 blue:arc4random_uniform(255)/255.0 alpha:1];</div><div class="line">[toValue addObject:(__bridge id)color.CGColor];</div><div class="line">&#125;</div><div class="line">animation.autoreverses = YES;</div><div class="line">animation.toValue = toValue;</div><div class="line">[gradientLayer addAnimation:animation forKey:@&quot;gradientLayer&quot;];</div></pre></td></tr></table></figure>
+<h1 id="CAEmitterLayer"><a href="#CAEmitterLayer" class="headerlink" title="CAEmitterLayer"></a>CAEmitterLayer</h1><p><code>CAEmitterLayer</code>是一种基于<code>Core Animation</code>的粒子发生器。这里有一个使用<code>CAEmitterLayer</code>实现的特效，包括雪花，烟花，火焰，爱心等效果:<a href="https://zsisme.gitbooks.io/ios-/content/chapter6/6.14.png" target="_blank" rel="external">CAEmitterLayer</a></p>
+<h1 id="CATransformLayer"><a href="#CATransformLayer" class="headerlink" title="CATransformLayer"></a>CATransformLayer</h1><p><code>CATransformLayer</code>是一种提供<code>3D</code>动画效果的<code>layer</code>容器。向容器中填加不同的涂层，对不同的涂层进行组合来展示一个三维的效果。通过<code>m34</code>参数来设置视点位置，其中<code>m34</code>的值越小效果也就越逼真。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">struct CATransform3D</div><div class="line">&#123;</div><div class="line">  CGFloat m11, m12, m13, m14;</div><div class="line">  CGFloat m21, m22, m23, m24;</div><div class="line">  CGFloat m31, m32, m33, m34;</div><div class="line">  CGFloat m41, m42, m43, m44;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>从m11到m44定义的含义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">m11：x轴方向进行缩放</div><div class="line">m12：和m21一起决定z轴的旋转</div><div class="line">m13:和m31一起决定y轴的旋转</div><div class="line">m14:</div><div class="line">m21:和m12一起决定z轴的旋转</div><div class="line">m22:y轴方向进行缩放</div><div class="line">m23:和m32一起决定x轴的旋转</div><div class="line">m24:</div><div class="line">m31:和m13一起决定y轴的旋转</div><div class="line">m32:和m23一起决定x轴的旋转</div><div class="line">m33:z轴方向进行缩放</div><div class="line">m34:透视效果m34= -1/D，D越小，透视效果越明显，必须在有旋转效果的前提下，才会看到透视效果</div><div class="line">m41:x轴方向进行平移</div><div class="line">m42:y轴方向进行平移</div><div class="line">m43:z轴方向进行平移</div><div class="line">m44:初始为1</div></pre></td></tr></table></figure>
+<hr>
+<p>参考资料：<a href="https://www.gitbook.com/book/zsisme/ios-/details" target="_blank" rel="external">iOS核心动画高级技巧</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CALayer/" rel="tag"># CALayer</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/27/httpsauth/" rel="next" title="HTTPS认证过程">
+                <i class="fa fa-chevron-left"></i> HTTPS认证过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/26/pop/" rel="prev" title="POP动画库简单使用">
+                POP动画库简单使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=1eafef7fbbb07"></script>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/imgs/16740864.jpeg"
+               alt="Abner Chen" />
+          <p class="site-author-name" itemprop="name">Abner Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CALayer"><span class="nav-number">1.</span> <span class="nav-text">CALayer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CATextLayer"><span class="nav-number">2.</span> <span class="nav-text">CATextLayer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAShapeLayer"><span class="nav-number">3.</span> <span class="nav-text">CAShapeLayer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CATiledLayer"><span class="nav-number">4.</span> <span class="nav-text">CATiledLayer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAGradientLayer"><span class="nav-number">5.</span> <span class="nav-text">CAGradientLayer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAEmitterLayer"><span class="nav-number">6.</span> <span class="nav-text">CAEmitterLayer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CATransformLayer"><span class="nav-number">7.</span> <span class="nav-text">CATransformLayer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Abner Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://abner-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://abnerchen028.github.io/2016/02/26/calayer/';
+          this.page.identifier = '2016/02/26/calayer/';
+          this.page.title = 'CALayer简单使用';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://abner-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

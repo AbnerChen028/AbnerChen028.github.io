@@ -96,14 +96,14 @@
 <meta property="og:url" content="https://abnerchen028.github.io/2015/10/15/XcodeSimulatorNetError/index.html">
 <meta property="og:site_name" content="Abner Chen">
 <meta property="og:description" content="问题描述今天在使用Xcode调试的时候发现不能够连接到服务器了，数据返回的code为502。开始使用的时候以为是断网了但实际发现Mac是可以连接网络的。然后更换另一个项目另一个项目也无法连接到服务器。所以怀疑是项目服务器出了问题（公司所有的开发接口均为内网地址），但同事的却都可以连接到服务器。并且，我打开模拟器带的Safir的时候发现什么也打不开了。这说明我这里网络出现了问题。 解决方法一关闭模拟">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_3.png">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_6.png">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_7.png">
-<meta property="og:updated_time" content="2017-06-23T14:03:50.000Z">
+<meta property="og:image" content="http://img.jessieedu.com/Snip20160907_3.png">
+<meta property="og:image" content="http://img.jessieedu.com/Snip20160907_6.png">
+<meta property="og:image" content="http://img.jessieedu.com/Snip20160907_7.png">
+<meta property="og:updated_time" content="2019-02-26T07:20:31.244Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Xcode模拟器无法联网问题的解决">
 <meta name="twitter:description" content="问题描述今天在使用Xcode调试的时候发现不能够连接到服务器了，数据返回的code为502。开始使用的时候以为是断网了但实际发现Mac是可以连接网络的。然后更换另一个项目另一个项目也无法连接到服务器。所以怀疑是项目服务器出了问题（公司所有的开发接口均为内网地址），但同事的却都可以连接到服务器。并且，我打开模拟器带的Safir的时候发现什么也打不开了。这说明我这里网络出现了问题。 解决方法一关闭模拟">
-<meta name="twitter:image" content="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_3.png">
+<meta name="twitter:image" content="http://img.jessieedu.com/Snip20160907_3.png">
 
 
 
@@ -386,12 +386,12 @@
 <p>复位模拟器，重新运行项目，无法联网，方法失败。</p>
 <p>重启Mac，重新运行项目，无法联网，方法失败。</p>
 <h1 id="解决方法二"><a href="#解决方法二" class="headerlink" title="解决方法二"></a>解决方法二</h1><p>换一个思路，既然是网络出现的问题，就查看网络设置。<br>打开 <code>网络便好设置</code>,<code>ip</code> 和 <code>DNS</code> 都没问题,查看代理的时候出现了问题，如图:</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_3.png" alt=""></p>
+<p><img src="http://img.jessieedu.com/Snip20160907_3.png" alt=""></p>
 <p>将选中的两项选勾掉，再次运行，成功连接服务器！</p>
 <p>分析的得知，由于工作需要，在本地配置了<code>XX-Net</code>代理软件(决非广告)，在配置属性的时候，选择了全局代理：</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_6.png" alt=""></p>
+<p><img src="http://img.jessieedu.com/Snip20160907_6.png" alt=""></p>
 <p>然后将属性改为自动代理以后网络的设置：</p>
-<p><img src="http://orhh9hlxq.bkt.clouddn.com/Snip20160907_7.png" alt=""></p>
+<p><img src="http://img.jessieedu.com/Snip20160907_7.png" alt=""></p>
 <p>再次运行项目，联网正常！</p>
 
       
@@ -447,8 +447,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/06/22/uploadfiles/" rel="prev" title="iOS中的文件上传">
-                iOS中的文件上传 <i class="fa fa-chevron-right"></i>
+              <a href="/2015/11/19/iOSGCD/" rel="prev" title="iOS中GCD的使用">
+                iOS中GCD的使用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -530,7 +530,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -541,7 +541,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -552,7 +552,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -617,7 +617,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

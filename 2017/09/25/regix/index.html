@@ -89,16 +89,16 @@
 
 
 
-<meta name="description" content="#正则表达式学习笔记 学习地址 1.元字符常用元字符表达    元字符 说明     . 匹配除换行符意外的任意字符   \w 匹配字幕或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    ###关键词 \b该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符">
+<meta name="description" content="#正则表达式学习笔记 学习地址 元字符常用元字符表达    元字符 说明     . 匹配除换行符意外的任意字符   \w 匹配字幕或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    关键词 \b该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符号或者换行">
 <meta property="og:type" content="article">
 <meta property="og:title" content="regix">
 <meta property="og:url" content="https://abnerchen028.github.io/2017/09/25/regix/index.html">
 <meta property="og:site_name" content="Abner Chen">
-<meta property="og:description" content="#正则表达式学习笔记 学习地址 1.元字符常用元字符表达    元字符 说明     . 匹配除换行符意外的任意字符   \w 匹配字幕或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    ###关键词 \b该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符">
-<meta property="og:updated_time" content="2017-09-25T14:22:20.000Z">
+<meta property="og:description" content="#正则表达式学习笔记 学习地址 元字符常用元字符表达    元字符 说明     . 匹配除换行符意外的任意字符   \w 匹配字幕或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    关键词 \b该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符号或者换行">
+<meta property="og:updated_time" content="2017-12-26T03:49:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="regix">
-<meta name="twitter:description" content="#正则表达式学习笔记 学习地址 1.元字符常用元字符表达    元字符 说明     . 匹配除换行符意外的任意字符   \w 匹配字幕或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    ###关键词 \b该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符">
+<meta name="twitter:description" content="#正则表达式学习笔记 学习地址 元字符常用元字符表达    元字符 说明     . 匹配除换行符意外的任意字符   \w 匹配字幕或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    关键词 \b该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符号或者换行">
 
 
 
@@ -378,7 +378,7 @@
       
         <p>#正则表达式学习笔记</p>
 <p><a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">学习地址</a></p>
-<h2 id="1-元字符"><a href="#1-元字符" class="headerlink" title="1.元字符"></a>1.元字符</h2><p>常用元字符表达</p>
+<h2 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h2><p>常用元字符表达</p>
 <table>
 <thead>
 <tr>
@@ -417,7 +417,7 @@
 </tr>
 </tbody>
 </table>
-<p>###关键词 <code>\b</code><br>该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符号或者换行来分隔的，但是\b并不匹配这些单词分隔字符中的任何一个，它只匹配一个位置。</p>
+<h3 id="关键词-b"><a href="#关键词-b" class="headerlink" title="关键词 \b"></a>关键词 <code>\b</code></h3><p>该关键词代表着单词的开头或者结尾，也就是单词的分界处虽然通常英文的单词是由空格，标点符号或者换行来分隔的，但是\b并不匹配这些单词分隔字符中的任何一个，它只匹配一个位置。</p>
 <ul>
 <li>查找一个词</li>
 </ul>
@@ -426,16 +426,14 @@
 <li>精确查找一个词，不会查询出<code>him</code>、<code>history</code>等关键词</li>
 </ul>
 <p>例如：精确查找<code>hi</code>关键词<br>表达式： <code>\bhi\b</code></p>
-<p>###关键词 <code>*</code></p>
-<ul>
+<h3 id="关键词"><a href="#关键词" class="headerlink" title="关键词 *"></a>关键词 <code>*</code></h3><ul>
 <li>例如表达式：<code>\bhi\b.*\bLucy\b</code>表示<strong>先是一个单词hi,然后是任意个任意字符(但不能是换行)，最后是Lucy这个单词。</strong></li>
 </ul>
-<p>###关键词 <code>\d</code></p>
-<p><code>\d</code>表示匹配数字（0～9），后面可以通过大括号表示长度。</p>
+<h3 id="关键词-d"><a href="#关键词-d" class="headerlink" title="关键词 \d"></a>关键词 <code>\d</code></h3><p><code>\d</code>表示匹配数字（0～9），后面可以通过大括号表示长度。</p>
 <ul>
 <li>匹配一个表示号码的字符串<br>表达式：<code>0\d\d-\d\d\d\d\d\d\d\d</code><br>表示以0开头，后面跟两个数字，接着是一个连接符<code>-</code>，后面是8位的数字。<br>该表达式也可以使用如下表示：<code>0\d{2}-\d{8}</code></li>
 </ul>
-<p>###字符转义<br>如果要查找的字符串本身还有元字符的情况下需要用到转义，这里的转移和iOS一直，直接使用转义符<code>\</code>来实现。例如要查找<code>abc.com</code>，那么语法应该为<code>abc\.com</code>。</p>
+<h3 id="字符转义"><a href="#字符转义" class="headerlink" title="字符转义"></a>字符转义</h3><p>如果要查找的字符串本身还有元字符的情况下需要用到转义，这里的转移和iOS一直，直接使用转义符<code>\</code>来实现。例如要查找<code>abc.com</code>，那么语法应该为<code>abc\.com</code>。</p>
 <h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><ul>
 <li><p><code>\ba\w*\b</code>:匹配以字母<code>a</code>开头的单词。 先是以字母开头，然后是任意数量的字符或者数字。</p>
 </li>
@@ -446,7 +444,7 @@
 <li><p><code>^\d{5,12}$</code>:长度介于5～12的数字</p>
 </li>
 </ul>
-<h2 id="2-重复"><a href="#2-重复" class="headerlink" title="2.重复"></a>2.重复</h2><p>前面已经结合元字符了解过部分表示重复的表达式了。这里做一个小总结</p>
+<h2 id="重复"><a href="#重复" class="headerlink" title="重复"></a>重复</h2><p>前面已经结合元字符了解过部分表示重复的表达式了。这里做一个小总结</p>
 <table>
 <thead>
 <tr>
@@ -481,7 +479,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="3-字符类"><a href="#3-字符类" class="headerlink" title="3.字符类"></a>3.字符类</h2><p>除了系统预留的字母数字字符集合的元字符，我们还可以自定义集合。例如，我们要匹配元音字母就可以如下方式表示:</p>
+<h2 id="字符类"><a href="#字符类" class="headerlink" title="字符类"></a>字符类</h2><p>除了系统预留的字母数字字符集合的元字符，我们还可以自定义集合。例如，我们要匹配元音字母就可以如下方式表示:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[aeiou]</div></pre></td></tr></table></figure>
 <p>如果要匹配标点符号就可以用下面的方式表达：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[,.!]</div></pre></td></tr></table></figure>
@@ -494,13 +492,13 @@
 <li>010-12345678</li>
 <li>01012345678</li>
 </ul>
-<h2 id="4-分支条件"><a href="#4-分支条件" class="headerlink" title="4.分支条件"></a>4.分支条件</h2><p>在我们正常的编程中存在if … else 和 switch 语法来匹配不同条件下的实现，在正则中也存在分支编程。在字符类中，复杂表达式的解读中会存在一个问题，就是该正则表达式会匹配到<code>0102345678</code> 或者 <code>010-12345678</code>这类的不正确格式。为防止此类问题的出现我们就可以通过分支语法来实现。</p>
+<h2 id="分支条件"><a href="#分支条件" class="headerlink" title="分支条件"></a>分支条件</h2><p>在我们正常的编程中存在if … else 和 switch 语法来匹配不同条件下的实现，在正则中也存在分支编程。在字符类中，复杂表达式的解读中会存在一个问题，就是该正则表达式会匹配到<code>0102345678</code> 或者 <code>010-12345678</code>这类的不正确格式。为防止此类问题的出现我们就可以通过分支语法来实现。</p>
 <ul>
 <li><code>0\d{2}-\d{8}|0\d{3}-\d{7}</code>:表示可以匹配<code>010-12345678</code>，也可以匹配<code>0123-1234567</code>类型的数据。</li>
 <li><code>\(?0\d{2}\)?[- ]?\d{8}|0\d{2}[- ]?\d{8}</code>：该语法是对第三部分表达式的完善。</li>
 </ul>
 <p>注意：使用分支语法的时候，从左到右，匹配到某个分支之后，后面的分支不在匹配。</p>
-<h2 id="5-分组"><a href="#5-分组" class="headerlink" title="5.分组"></a>5.分组</h2><p>例如要匹配一个IP地址，简单的我们可以通过以下表达式：</p>
+<h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h2><p>例如要匹配一个IP地址，简单的我们可以通过以下表达式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(\d&#123;1,3&#125;\.)&#123;3&#125;\d&#123;1,3&#125;</div></pre></td></tr></table></figure>
 <p>这个表达式可以匹配出一个IP地址。但是，也可能匹配出<code>123.234.345.456</code>这类非正确IP地址来，也会将<code>1.2.3.4</code>这类的IP给遗漏，这里我们就需要使用分组来实现：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">((2[0-4]\d|25[0-5]|[01]?\d\d?)\.)&#123;3&#125;(2[0-4]\d|25[0-5]|[01]?\d\d?)</div></pre></td></tr></table></figure>
@@ -513,7 +511,7 @@
 <li>开头为 <code>0</code>或<code>1</code>的情，第二位随意，第三位可选。或者第一位是空，第二位<code>0~9</code>,第三位为空。</li>
 </ul>
 <p>这样，这个数字就被限定在了<code>0~255</code>之间。然后循环三次，再添加一位不带<code>.</code>，就能保证匹配出来的IP是正确的。</p>
-<h2 id="6-反义"><a href="#6-反义" class="headerlink" title="6.反义"></a>6.反义</h2><p>在查询不属于某个能简单定义的字符类的字符的时候，比如要想查询除了数字意外的语句，就能用到反义了。</p>
+<h2 id="反义"><a href="#反义" class="headerlink" title="反义"></a>反义</h2><p>在查询不属于某个能简单定义的字符类的字符的时候，比如要想查询除了数字意外的语句，就能用到反义了。</p>
 <p>常见的反义代码</p>
 <table>
 <thead>
@@ -550,8 +548,7 @@
 </tbody>
 </table>
 <p><strong>备注</strong>：在使用的时候请去掉<code>\</code>，因为在<code>markdown</code>下会被默认解析为 [^x]</p>
-<p>##7.正则表达式在iOS开发中应用</p>
-<ul>
+<h2 id="正则表达式在iOS开发中应用"><a href="#正则表达式在iOS开发中应用" class="headerlink" title="正则表达式在iOS开发中应用"></a>正则表达式在iOS开发中应用</h2><ul>
 <li>验证数据的有效性</li>
 </ul>
 <p>例如在iOS中，要检测用户注册输入的密码是否满足需求：<br>当前要求用户输入的密码包含数组和字母组合，长度为6～18位：</p>
@@ -612,6 +609,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/02/loadinitialize/" rel="prev" title="iOS开发中的 load 和 initialize 方法">
+                iOS开发中的 load 和 initialize 方法 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -692,7 +693,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -703,7 +704,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -714,7 +715,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -756,7 +757,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-元字符"><span class="nav-number">1.</span> <span class="nav-text">1.元字符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">1.1.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-重复"><span class="nav-number">2.</span> <span class="nav-text">2.重复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-字符类"><span class="nav-number">3.</span> <span class="nav-text">3.字符类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-分支条件"><span class="nav-number">4.</span> <span class="nav-text">4.分支条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-分组"><span class="nav-number">5.</span> <span class="nav-text">5.分组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-反义"><span class="nav-number">6.</span> <span class="nav-text">6.反义</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#元字符"><span class="nav-number">1.</span> <span class="nav-text">元字符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键词-b"><span class="nav-number">1.1.</span> <span class="nav-text">关键词 \b</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键词"><span class="nav-number">1.2.</span> <span class="nav-text">关键词 *</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键词-d"><span class="nav-number">1.3.</span> <span class="nav-text">关键词 \d</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符转义"><span class="nav-number">1.4.</span> <span class="nav-text">字符转义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">1.5.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重复"><span class="nav-number">2.</span> <span class="nav-text">重复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符类"><span class="nav-number">3.</span> <span class="nav-text">字符类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支条件"><span class="nav-number">4.</span> <span class="nav-text">分支条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组"><span class="nav-number">5.</span> <span class="nav-text">分组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反义"><span class="nav-number">6.</span> <span class="nav-text">反义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则表达式在iOS开发中应用"><span class="nav-number">7.</span> <span class="nav-text">正则表达式在iOS开发中应用</span></a></li></ol></div>
             
 
           </div>
@@ -779,7 +780,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

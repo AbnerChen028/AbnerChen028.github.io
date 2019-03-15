@@ -96,15 +96,15 @@
 <meta property="og:url" content="https://abnerchen028.github.io/2017/05/23/https/index.html">
 <meta property="og:site_name" content="Abner Chen">
 <meta property="og:description" content="通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：（图片来自网络） 此处，Alice表示Client端，Bob表示Server端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/publicKeyCrytography.png">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/man-in-the-middleAttack.png">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/14981030708039.jpg">
-<meta property="og:image" content="http://orhh9hlxq.bkt.clouddn.com/14981109907155.jpg">
-<meta property="og:updated_time" content="2017-06-23T14:22:50.000Z">
+<meta property="og:image" content="http://img.jessieedu.com/publicKeyCrytography.png">
+<meta property="og:image" content="http://img.jessieedu.com/man-in-the-middleAttack.png">
+<meta property="og:image" content="http://img.jessieedu.com/14981030708039.jpg">
+<meta property="og:image" content="http://img.jessieedu.com/14981109907155.jpg">
+<meta property="og:updated_time" content="2019-02-26T07:20:31.243Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS端HTTPS中间人攻击">
 <meta name="twitter:description" content="通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：（图片来自网络） 此处，Alice表示Client端，Bob表示Server端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个">
-<meta name="twitter:image" content="http://orhh9hlxq.bkt.clouddn.com/publicKeyCrytography.png">
+<meta name="twitter:image" content="http://img.jessieedu.com/publicKeyCrytography.png">
 
 
 
@@ -382,12 +382,12 @@
       
 
       
-        <p>通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：<br><img src="http://orhh9hlxq.bkt.clouddn.com/publicKeyCrytography.png" alt="publicKeyCrytography"><br>（图片来自网络）</p>
-<p>此处，Alice表示Client端，Bob表示Server端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个秘钥就是以后用来通信的钥匙。这样服务器端收到公钥加密的秘钥时就可以用私钥来解公钥从而获得秘钥。这样的话客户端和服务器端都获得了秘钥，信息交流相对是安全的。</p>
-<p>所谓的中间人攻击，证的过程中，出现了一个“中间人”拦截我们的信息，他有意想要知道你们的消息。我们将这个中间人称为Mallory。当服务器第一次给客户端发送公钥的时候，途径Mallory。Mallory知道你要进行密钥交换了，它把公钥扣了下来，假装自己是客户端，伪造了一个伪秘钥（对称加密产生的），然后用服务器发来的公钥加密了伪秘钥发还给服务器，这样服务器以为和客户端完成了密钥交换，实际上服务器是和Mallory完成了密钥交换（获得了伪秘钥）。同时Mallory假扮成服务器自行用非对称加密产生伪公钥和伪私钥，与客户端进行秘钥交换，拿到客户端发送过来的秘钥。现在客户端拿着秘钥，M拿着秘钥和为伪秘钥，服务器拿着伪秘钥，详细过程如图所示：<br><img src="http://orhh9hlxq.bkt.clouddn.com/man-in-the-middleAttack.png" alt="man-in-the-middleAttack"><br>（图片来自网络）</p>
-<p>目前各类网络工具去抓取分析数据的原理基本均是采用中间人攻击的方法来实现。下图为使用<code>Charles</code>抓取汽车之家<code>HTTPS</code>接口数据数据：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14981030708039.jpg" alt=""></p>
+        <p>通过HTTPS方式在客户端和服务器进行交互的过程，原理如图：<br><img src="http://img.jessieedu.com/publicKeyCrytography.png" alt="publicKeyCrytography"><br>（图片来自网络）</p>
+<p>此处，Alice表示<code>Client</code>端，Bob表示<code>Server</code>端。首先服务器端用非对称加密（RSA）产生公钥和私钥。然后把公钥发给客户端，路径或许有人会截取，但是没有用，因为用公钥加密的文件只有私钥可以解密，而私钥永远都不会离开服务器的。当公钥到达客户端之后，客户端会用对称加密产生一个秘钥并且用公钥来加密发送给服务器端，这个秘钥就是以后用来通信的钥匙。这样服务器端收到公钥加密的秘钥时就可以用私钥来解公钥从而获得秘钥。这样的话客户端和服务器端都获得了秘钥，信息交流相对是安全的。</p>
+<p>所谓的中间人攻击，证的过程中，出现了一个“中间人”拦截我们的信息，他有意想要知道你们的消息。我们将这个中间人称为Mallory。当服务器第一次给客户端发送公钥的时候，途径Mallory。Mallory知道你要进行密钥交换了，它把公钥扣了下来，假装自己是客户端，伪造了一个伪秘钥（对称加密产生的），然后用服务器发来的公钥加密了伪秘钥发还给服务器，这样服务器以为和客户端完成了密钥交换，实际上服务器是和Mallory完成了密钥交换（获得了伪秘钥）。同时Mallory假扮成服务器自行用非对称加密产生伪公钥和伪私钥，与客户端进行秘钥交换，拿到客户端发送过来的秘钥。现在客户端拿着秘钥，M拿着秘钥和为伪秘钥，服务器拿着伪秘钥，详细过程如图所示：<br><img src="http://img.jessieedu.com/man-in-the-middleAttack.png" alt="man-in-the-middleAttack"><br>（图片来自网络）</p>
+<p>目前各类网络工具去抓取分析数据的原理基本均是采用中间人攻击的方法来实现。下图为使用<code>Charles</code>抓取汽车之家<code>HTTPS</code>接口数据数据：<br><img src="http://img.jessieedu.com/14981030708039.jpg" alt=""></p>
 <p>对于iOS开发者角度，防止中间人攻击可以从两个方面着手：</p>
-<p>第一是通讯内容本身加密，无论是走<code>http</code>还是<code>https</code>，<code>request</code>和<code>response</code>的内容本身都要先做一次加密，这样即使<code>https</code>的流量被破解，攻击者还需要再攻破一层加密算法。我们一般使用 <code>AES256</code> 对内容做加密，这里<code>AES</code>密钥的管理也有两种方式，其一是在客户端使用固定的密钥，为了加大破解的难度，我们可以对密钥本身做多次加密处理，使用时再在内存里解密出来真正的密钥。其二是每次会话都使用不同的密钥，原理类似 <code>Forward Secrecy</code>，即使流量被记录，将来被暴力破解，也能极大的增加攻击者破解的时间成本。如果为<code>Apple</code>的一个接口：<br><img src="http://orhh9hlxq.bkt.clouddn.com/14981109907155.jpg" alt=""></p>
+<p>第一是通讯内容本身加密，无论是走<code>http</code>还是<code>https</code>，<code>request</code>和<code>response</code>的内容本身都要先做一次加密，这样即使<code>https</code>的流量被破解，攻击者还需要再攻破一层加密算法。我们一般使用 <code>AES256</code> 对内容做加密，这里<code>AES</code>密钥的管理也有两种方式，其一是在客户端使用固定的密钥，为了加大破解的难度，我们可以对密钥本身做多次加密处理，使用时再在内存里解密出来真正的密钥。其二是每次会话都使用不同的密钥，原理类似 <code>Forward Secrecy</code>，即使流量被记录，将来被暴力破解，也能极大的增加攻击者破解的时间成本。如果为<code>Apple</code>的一个接口：<br><img src="http://img.jessieedu.com/14981109907155.jpg" alt=""></p>
 <p>第二种就是大家所熟知的 ssl pinning。在客户端进行代码层面的证书校验，校验方式也有两种，一是证书本身校验，而是公钥校验。这两种方式对应到 AFNetworking 中的代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">enum &#123;</div><div class="line">     AFSSLPinningModeNone,</div><div class="line">     AFSSLPinningModePublicKey,</div><div class="line">     AFSSLPinningModeCertificate,</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <p>证书校验是文件级别的校验，客户端只信任若干个证书文件，这些证书文件是和客户端一起打包发布的，这种处理方式要面对的一个问题证书过期问题，为了避免证书过期导致的校验失败，客户端和服务器之间需要额外存在一个证书更新机制，其实做起来也比较简单，只需要服务器下发一个特定的错误码，触发一个客户端的新证书下载流程即可。</p>
@@ -438,8 +438,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/22/uploadfiles/" rel="next" title="iOS中的文件上传">
-                <i class="fa fa-chevron-left"></i> iOS中的文件上传
+              <a href="/2017/03/26/symbolicatecrash/" rel="next" title="使用symbolicatecrash分析crash文件">
+                <i class="fa fa-chevron-left"></i> 使用symbolicatecrash分析crash文件
               </a>
             
           </div>
@@ -522,7 +522,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -533,7 +533,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -544,7 +544,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -593,7 +593,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
