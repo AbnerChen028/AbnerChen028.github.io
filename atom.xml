@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://abnerchen028.github.io/"/>
-  <updated>2019-03-13T09:01:56.381Z</updated>
+  <updated>2019-03-15T09:23:03.190Z</updated>
   <id>https://abnerchen028.github.io/</id>
   
   <author>
@@ -14,6 +14,49 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>gitlab-runner 遇到的问题总结</title>
+    <link href="https://abnerchen028.github.io/2019/03/15/gitlab-group-runner/"/>
+    <id>https://abnerchen028.github.io/2019/03/15/gitlab-group-runner/</id>
+    <published>2019-03-15T08:20:13.000Z</published>
+    <updated>2019-03-15T09:23:03.190Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前在使用<code>gitlab-runner</code>的使用都是基于项目去做的，每一个项目创建一个<code>runner</code>。后来，项目逐渐多起来，开始了组件化之旅，N个项目，加上N个组件，每次创建一个组件或者创建一个项目都要搞一个<code>runner</code>, 费时费力费资源，改进迫在眉睫。</p>
+<p><a href="https://docs.gitlab.com/ee/ci/runners/#shared-specific-and-group-runners" target="_blank" rel="external">gitlab-runner官网</a>对于<code>runner</code>的说明可以分为<code>Shared</code>、<code>specific</code>、 <code>group</code>类型. 根据用户权限不同可以创建不同的类型<code>runner</code>. </p>
+<p><code>gitlab</code>关于<code>Group Runners</code>的描述：</p>
+<blockquote>
+<p>Group Runners are useful when you have multiple projects under one group and would like all projects to have access to a set of Runners. Group Runners process jobs using a FIFO queue.</p>
+</blockquote>
+<p>目前<code>gitlab</code>分为<code>安卓</code>、<code>iOS</code>、<code>H5</code>、 <code>后台</code>等，刚好满足了同平台对一个群组的关系，而<code>runner</code>在不同的平台使用的技术并不相同，比如<code>iOS</code>无法使用<code>docker</code>去构建，而后台、<code>H5</code>等完全可以使用<code>docker</code>去处理逻辑.</p>
+<p>下面以<code>iOS</code>团队创建共享<code>runner</code>为例：</p>
+<p>使用具有团队管理权限的用户登录<code>gitlab</code>。点击 <code>设置</code> -&gt; <code>CI/CD</code> -&gt; <code>Runner</code> -&gt; <code>展开</code>。<br><img src="http://img.jessieedu.com/20190315154459.png" alt=""></p>
+<p>设置<code>runner</code>. 没有安装<code>gitlab-runner</code>的可以参考<a href="https://docs.gitlab.com/runner/install/" target="_blank" rel="external">官网</a>安装教程。</p>
+<p>注册:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gitlab-runner register --run-untagged=true</div></pre></td></tr></table></figure>
+<p><strong>注意： 一定要加<code>--run-untagged=true</code>, 否则每个<code>build</code>里都要设置<code>tags</code>参数才能调用到<code>runner</code></strong></p>
+<p>根据提示依次输入，其中<code>URL</code>和<code>token</code>为上图中的打码部分内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):</div><div class="line">https://xxxxx.com</div><div class="line">Please enter the gitlab-ci token for this runner:</div><div class="line">Xxxxxx</div><div class="line">Please enter the gitlab-ci description for this runner:</div><div class="line">[xxx.local]:</div><div class="line">Please enter the gitlab-ci tags for this runner (comma separated):</div><div class="line">Mac</div><div class="line">Registering runner... succeeded                     runner=8GgVQ8jA</div><div class="line">Please enter the executor: docker-ssh+machine, parallels, shell,    ssh, virtualbox, docker+machine, docker, docker-ssh, kubernetes:</div><div class="line">shell</div><div class="line">Runner registered successfully. Feel free to start it, but if it's  running already the config should be automatically reloaded!</div></pre></td></tr></table></figure>
+<p>团队可以根据规模大小来创建相应个数的<code>runner</code>来满足开发需要。此处为了掩饰只创建了一个<code>runner</code>。</p>
+<p>创建完成。启动<code>runner</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gitlab-runner start</div></pre></td></tr></table></figure>
+<p>进入团队<code>Runner</code>设置页面，查看确保<code>Runner</code>创建成功，并处于运行状态。 点击<code>runner</code>进入详情:</p>
+<p><img src="http://img.jessieedu.com/20190315161132.png" alt=""></p>
+<p><code>runner</code>类型为<code>Group</code>，可以在无tags的工作流中运行。</p>
+<p>项目设置:</p>
+<p>进入到项目中的<code>Runner</code>配置页面。关闭<code>Share runner</code>：<br><img src="http://img.jessieedu.com/20190315161423.png" alt=""></p>
+<p>开启<code>Group runner</code>:<br><img src="http://img.jessieedu.com/20190315161523.png" alt=""></p>
+<p>到此，团队<code>runner</code>创建完毕。以后，再次添加新的项目或组件，只需要在<code>runner</code>配置中开启<code>Group runner</code>即可。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前在使用&lt;code&gt;gitlab-runner&lt;/code&gt;的使用都是基于项目去做的，每一个项目创建一个&lt;code&gt;runner&lt;/code&gt;。后来，项目逐渐多起来，开始了组件化之旅，N个项目，加上N个组件，每次创建一个组件或者创建一个项目都要搞一个&lt;code&gt;runne
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>从crash日志得到的一些收获</title>
@@ -46,11 +89,11 @@
       <category term="iOS开发" scheme="https://abnerchen028.github.io/categories/iOS%E5%BC%80%E5%8F%91/"/>
     
     
-      <category term="JSONModel" scheme="https://abnerchen028.github.io/tags/JSONModel/"/>
-    
       <category term="32bit" scheme="https://abnerchen028.github.io/tags/32bit/"/>
     
       <category term="64bit" scheme="https://abnerchen028.github.io/tags/64bit/"/>
+    
+      <category term="JSONModel" scheme="https://abnerchen028.github.io/tags/JSONModel/"/>
     
   </entry>
   
@@ -1482,42 +1525,6 @@
       <category term="多线程" scheme="https://abnerchen028.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
       <category term="GCD" scheme="https://abnerchen028.github.io/tags/GCD/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Xcode模拟器无法联网问题的解决</title>
-    <link href="https://abnerchen028.github.io/2015/10/15/XcodeSimulatorNetError/"/>
-    <id>https://abnerchen028.github.io/2015/10/15/XcodeSimulatorNetError/</id>
-    <published>2015-10-15T13:09:39.000Z</published>
-    <updated>2019-02-26T07:20:31.244Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>今天在使用Xcode调试的时候发现不能够连接到服务器了，数据返回的<code>code</code>为<code>502</code>。<br>开始使用的时候以为是断网了但实际发现Mac是可以连接网络的。然后更换另一个项目另一个项目也无法连接到服务器。所以怀疑是项目服务器出了问题（公司所有的开发接口均为内网地址），但同事的却都可以连接到服务器。并且，我打开模拟器带的Safir的时候发现什么也打不开了。这说明我这里网络出现了问题。</p>
-<h1 id="解决方法一"><a href="#解决方法一" class="headerlink" title="解决方法一"></a>解决方法一</h1><p>关闭模拟器，重新运行项目，无法联网，方法失败。</p>
-<p>复位模拟器，重新运行项目，无法联网，方法失败。</p>
-<p>重启Mac，重新运行项目，无法联网，方法失败。</p>
-<h1 id="解决方法二"><a href="#解决方法二" class="headerlink" title="解决方法二"></a>解决方法二</h1><p>换一个思路，既然是网络出现的问题，就查看网络设置。<br>打开 <code>网络便好设置</code>,<code>ip</code> 和 <code>DNS</code> 都没问题,查看代理的时候出现了问题，如图:</p>
-<p><img src="http://img.jessieedu.com/Snip20160907_3.png" alt=""></p>
-<p>将选中的两项选勾掉，再次运行，成功连接服务器！</p>
-<p>分析的得知，由于工作需要，在本地配置了<code>XX-Net</code>代理软件(决非广告)，在配置属性的时候，选择了全局代理：</p>
-<p><img src="http://img.jessieedu.com/Snip20160907_6.png" alt=""></p>
-<p>然后将属性改为自动代理以后网络的设置：</p>
-<p><img src="http://img.jessieedu.com/Snip20160907_7.png" alt=""></p>
-<p>再次运行项目，联网正常！</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h1&gt;&lt;p&gt;今天在使用Xcode调试的时候发现不能够连接到服务器了，数据返回的&lt;code&gt;code&lt;/code&gt;为&lt;code&gt;502&lt;/
-    
-    </summary>
-    
-      <category term="iOS开发" scheme="https://abnerchen028.github.io/categories/iOS%E5%BC%80%E5%8F%91/"/>
-    
-    
-      <category term="模拟器" scheme="https://abnerchen028.github.io/tags/%E6%A8%A1%E6%8B%9F%E5%99%A8/"/>
-    
-      <category term="联网失败" scheme="https://abnerchen028.github.io/tags/%E8%81%94%E7%BD%91%E5%A4%B1%E8%B4%A5/"/>
     
   </entry>
   

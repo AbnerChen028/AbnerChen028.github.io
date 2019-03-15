@@ -3,6 +3,39 @@
   
     
     <entry>
+      <title><![CDATA[gitlab-runner 遇到的问题总结]]></title>
+      <url>/2019/03/15/gitlab-group-runner/</url>
+      <content type="html"><![CDATA[<p>之前在使用<code>gitlab-runner</code>的使用都是基于项目去做的，每一个项目创建一个<code>runner</code>。后来，项目逐渐多起来，开始了组件化之旅，N个项目，加上N个组件，每次创建一个组件或者创建一个项目都要搞一个<code>runner</code>, 费时费力费资源，改进迫在眉睫。</p>
+<p><a href="https://docs.gitlab.com/ee/ci/runners/#shared-specific-and-group-runners" target="_blank" rel="external">gitlab-runner官网</a>对于<code>runner</code>的说明可以分为<code>Shared</code>、<code>specific</code>、 <code>group</code>类型. 根据用户权限不同可以创建不同的类型<code>runner</code>. </p>
+<p><code>gitlab</code>关于<code>Group Runners</code>的描述：</p>
+<blockquote>
+<p>Group Runners are useful when you have multiple projects under one group and would like all projects to have access to a set of Runners. Group Runners process jobs using a FIFO queue.</p>
+</blockquote>
+<p>目前<code>gitlab</code>分为<code>安卓</code>、<code>iOS</code>、<code>H5</code>、 <code>后台</code>等，刚好满足了同平台对一个群组的关系，而<code>runner</code>在不同的平台使用的技术并不相同，比如<code>iOS</code>无法使用<code>docker</code>去构建，而后台、<code>H5</code>等完全可以使用<code>docker</code>去处理逻辑.</p>
+<p>下面以<code>iOS</code>团队创建共享<code>runner</code>为例：</p>
+<p>使用具有团队管理权限的用户登录<code>gitlab</code>。点击 <code>设置</code> -&gt; <code>CI/CD</code> -&gt; <code>Runner</code> -&gt; <code>展开</code>。<br><img src="http://img.jessieedu.com/20190315154459.png" alt=""></p>
+<p>设置<code>runner</code>. 没有安装<code>gitlab-runner</code>的可以参考<a href="https://docs.gitlab.com/runner/install/" target="_blank" rel="external">官网</a>安装教程。</p>
+<p>注册:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gitlab-runner register --run-untagged=true</div></pre></td></tr></table></figure>
+<p><strong>注意： 一定要加<code>--run-untagged=true</code>, 否则每个<code>build</code>里都要设置<code>tags</code>参数才能调用到<code>runner</code></strong></p>
+<p>根据提示依次输入，其中<code>URL</code>和<code>token</code>为上图中的打码部分内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):</div><div class="line">https://xxxxx.com</div><div class="line">Please enter the gitlab-ci token for this runner:</div><div class="line">Xxxxxx</div><div class="line">Please enter the gitlab-ci description for this runner:</div><div class="line">[xxx.local]:</div><div class="line">Please enter the gitlab-ci tags for this runner (comma separated):</div><div class="line">Mac</div><div class="line">Registering runner... succeeded                     runner=8GgVQ8jA</div><div class="line">Please enter the executor: docker-ssh+machine, parallels, shell,    ssh, virtualbox, docker+machine, docker, docker-ssh, kubernetes:</div><div class="line">shell</div><div class="line">Runner registered successfully. Feel free to start it, but if it's  running already the config should be automatically reloaded!</div></pre></td></tr></table></figure>
+<p>团队可以根据规模大小来创建相应个数的<code>runner</code>来满足开发需要。此处为了掩饰只创建了一个<code>runner</code>。</p>
+<p>创建完成。启动<code>runner</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gitlab-runner start</div></pre></td></tr></table></figure>
+<p>进入团队<code>Runner</code>设置页面，查看确保<code>Runner</code>创建成功，并处于运行状态。 点击<code>runner</code>进入详情:</p>
+<p><img src="http://img.jessieedu.com/20190315161132.png" alt=""></p>
+<p><code>runner</code>类型为<code>Group</code>，可以在无tags的工作流中运行。</p>
+<p>项目设置:</p>
+<p>进入到项目中的<code>Runner</code>配置页面。关闭<code>Share runner</code>：<br><img src="http://img.jessieedu.com/20190315161423.png" alt=""></p>
+<p>开启<code>Group runner</code>:<br><img src="http://img.jessieedu.com/20190315161523.png" alt=""></p>
+<p>到此，团队<code>runner</code>创建完毕。以后，再次添加新的项目或组件，只需要在<code>runner</code>配置中开启<code>Group runner</code>即可。</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[从crash日志得到的一些收获]]></title>
       <url>/2019/02/26/jsonmodel/</url>
       <content type="html"><![CDATA[<p>最近在公司的日志中发现一些 <code>crash</code> 信息：</p>
@@ -28,11 +61,11 @@
         
         <tags>
             
-            <tag> JSONModel </tag>
-            
             <tag> 32bit </tag>
             
             <tag> 64bit </tag>
+            
+            <tag> JSONModel </tag>
             
         </tags>
         
@@ -1490,17 +1523,17 @@
   
     
     <entry>
-      <title><![CDATA[categories]]></title>
-      <url>/categories/index.html</url>
-      <content type="html"></content>
-    </entry>
-    
-    <entry>
       <title><![CDATA[关于]]></title>
       <url>/about/index.html</url>
       <content type="html"><![CDATA[<p>Email：<a href="mailto:cw_028@163.com／" target="_blank" rel="external">@cw_028@163.com</a></p>
 <p>GitHub：<a href="https://github.com/AbnerChen028/" target="_blank" rel="external">@AbnerChen028</a></p>
 ]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[categories]]></title>
+      <url>/categories/index.html</url>
+      <content type="html"></content>
     </entry>
     
   
